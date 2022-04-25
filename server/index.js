@@ -2,10 +2,20 @@ const express = require("express");
 const cors = require("cors");
 const https = require("https");
 const fs = require("fs");
-
+const { sequelize } = require('./models');
 const app = express();
 
 const HTTPS_PORT = process.env.HTTPS_PORT || 80;
+
+sequelize.sync({
+  force: false
+})
+.then(() => {
+  console.log('데이터베이스 연결 성공');
+})
+.catch((err) => {
+  console.error(err);
+})
 
 app.use('/',(req, res)=>{
   res.send('memory.json 화이팅 합시다.!!!!')
