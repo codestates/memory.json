@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-function Board() {
+function Landing() {
   return (
     <>
-      <div>Board</div>
+      <div>Landing</div>
     </>
   );
 }
 
-export default Board;
+export default Landing;
