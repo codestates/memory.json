@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --inspect app.js"
+    "start": "nodemon --inspect index.js"
   },
   "author": "",
   "license": "ISC",
@@ -22,9 +22,9 @@
     "mysql2": "^2.3.3",
     "path": "^0.12.7",
     "sequelize": "^6.18.0"
-    },
-    "devDependencies": {
+  },
+  "devDependencies": {
     "nodemon": "^2.0.15",
     "sequelize-cli": "^6.4.1"
-    } 
+  }
 }
