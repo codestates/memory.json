@@ -5,7 +5,7 @@ const fs = require("fs");
 
 const app = express();
 
-const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
+const HTTPS_PORT = process.env.HTTPS_PORT || 80;
 
 app.use('/',(req, res)=>{
   res.send('memory.json 화이팅 합시다.!!!!')
