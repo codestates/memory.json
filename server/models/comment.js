@@ -22,11 +22,13 @@ module.exports = (sequelize, DataTypes)=>{
   comment.associate = (db) => {
     db.comment.belongsTo(db.user, {
       foreignKey: "user_id",
-      sourceKey: "id"
+      sourceKey: "id",
+      onDelete: "CASCADE"
     })
     db.comment.belongsTo(db.history, {
       foreignKey: "history_id",
-      sourceKey: "id"      
+      sourceKey: "id",
+      onDelete: "CASCADE"      
     })
   }
 

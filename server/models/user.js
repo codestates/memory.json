@@ -48,7 +48,8 @@ module.exports = (sequelize, DataTypes)=>{
     })
     db.user.hasMany(db.place, {
       foreignKey: "user_id",
-      sourceKey: "id"      
+      sourceKey: "id",
+      onDelete: "CASCADE"
     })
   };
   
