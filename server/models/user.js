@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes)=>{
       allowNull: false //필수값
     },
     password: {
-      type:DataTypes.STRING(20),
+      type:DataTypes.STRING(200),
       allowNull: false //필수값
     },
     mobile: {
