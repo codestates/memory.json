@@ -78,7 +78,6 @@ function Router() {
         logoutIndicator={logoutIndicator}
         modalOpener={modalOpener}
       />{" "}
-      */}
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route
