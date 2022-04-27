@@ -23,7 +23,7 @@ function Router() {
 //<Routes> 내부에 유동적으로 보여줄 컴포넌트를 Route 경로와 함께 작성한다.
 
 function App() {
-  return <Router></Router>;
+  return <Router />;
 }
 
 export default App;
