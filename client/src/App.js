@@ -57,12 +57,12 @@ function Router() {
 
   return (
     <BrowserRouter>
-      <Nav
+      {/* <Nav
         isSignin={isSignin}
         loginIndicator={loginIndicator}
         logoutIndicator={logoutIndicator}
         modalOpener={modalOpener}
-      />
+      /> */}
 
       <Routes>
         <Route path="/" element={<Landing />} />

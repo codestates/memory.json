@@ -1,5 +1,8 @@
 import React from "react";
-
+import styled from "styled-components";
+import Signin from "../modals/Signin";
+import { FaSignInAlt } from "react-icons/fa";
+import Carousel from "../components/Carousel";
 // main 화면 css
 const MainContainer = styled.main`
   width: 100%;
@@ -108,11 +111,15 @@ function Main() {
       <MainContainer>
         <MainHeader>
           <img src="img/headerlogo.jpeg" alt="header logo"></img>
-          <MainNav></MainNav>
+          <MainNav>
+            <ul>
+              <FaSignInAlt />
+            </ul>
+          </MainNav>
         </MainHeader>
         <MainSection>
           <MainDiv>
-            <h1>이미지 슬라이더 들어갈 공간</h1>
+            <Carousel />
           </MainDiv>
         </MainSection>
       </MainContainer>
