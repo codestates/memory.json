@@ -71,10 +71,6 @@ function Signin({ isSignin, loginIndicator, modalOpener, modalCloser }) {
   //     });
   // };
 
-  const openSignup = () => {
-    setOpenSignin(false);
-    setOpensignup(true);
-  };
 
   return (
     <ModalArea>
@@ -83,7 +79,6 @@ function Signin({ isSignin, loginIndicator, modalOpener, modalCloser }) {
           <div>
             <div
               role="button"
-              onClick={closeFun}
               className="back-arrow"
               aria-hidden="true"
             >
@@ -110,7 +105,7 @@ function Signin({ isSignin, loginIndicator, modalOpener, modalCloser }) {
               <button className="login_button" type="button">
                 <span>로그인</span>
               </button>
-              <div onClick={openSignup}>회원가입</div>
+              {/* <div onClick={openSignup}>회원가입</div> */}
             </div>
           </form>
         </ModalView>

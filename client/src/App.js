@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Modal from "react-modal";
 
+
 //Page
 import Landing from "./pages/Landing";
 import Main from "./pages/Main";
@@ -12,7 +13,7 @@ import Board from "./pages/Board";
 import Signin from "./modals/Signin";
 import Signup from "./modals/Signup";
 //Component
-//nav //
+
 
 function Router() {
   const [isSignin, setIsSignin] = useState(false);
@@ -57,12 +58,12 @@ function Router() {
 
   return (
     <BrowserRouter>
-      <Nav
+      {/* <Nav
         isSignin={isSignin}
         loginIndicator={loginIndicator}
         logoutIndicator={logoutIndicator}
         modalOpener={modalOpener}
-      />
+      /> */}
 
       <Routes>
         <Route path="/" element={<Landing />} />

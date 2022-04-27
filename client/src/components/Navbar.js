@@ -11,4 +11,4 @@ function Nav() {
   return;
 }
 
-export default Nav;
+export default Navbar;
