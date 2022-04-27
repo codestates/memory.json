@@ -13,6 +13,7 @@ import Board from "./pages/Board";
 import Signin from "./modals/Signin";
 import Signup from "./modals/Signup";
 //Component
+import Navbar from "./components/Navbar"
 
 
 function Router() {
@@ -58,12 +59,12 @@ function Router() {
 
   return (
     <BrowserRouter>
-      {/* <Nav
+      <Navbar
         isSignin={isSignin}
         loginIndicator={loginIndicator}
         logoutIndicator={logoutIndicator}
         modalOpener={modalOpener}
-      /> */}
+      />
 
       <Routes>
         <Route path="/" element={<Landing />} />
