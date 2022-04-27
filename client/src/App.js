@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Modal from "react-modal";
+import axios from 'axios';
+
 
 //Page
 import Landing from "./pages/Landing";
@@ -12,15 +14,19 @@ import Board from "./pages/Board";
 import Signin from "./modals/Signin";
 import Signup from "./modals/Signup";
 //Component
-//nav //
+import Navbar from "./components/Navbar"
+
 
 function Router() {
+  const [userInfo, setUserInfo] = useState('');
+  //회원정보
   const [isSignin, setIsSignin] = useState(false);
   //로그인 상태
   const [isModal, setIsModal] = useState(false);
   //모달 상태
   const [signupModalOpen, setSignupModalOpen] = useState(false);
   //회원가입 모달
+  const [text, setText] = useState('');
 
   const loginIndicator = () => {
     setIsSignin(true);
@@ -28,7 +34,13 @@ function Router() {
   //로그인 실행
 
   const logoutIndicator = () => {
-    const logoutReq = () => {};
+    const logoutReq = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/users/logout");
+      } catch (e) {
+        console.log(e);
+      }
+    };
     logoutReq();
     setIsSignin(false);
   };
@@ -41,7 +53,7 @@ function Router() {
 
   const modalCloser = () => {
     setIsModal(false);
-    setSignupModalOpen(true);
+    setSignupModalOpen(false);
   };
   //모달 닫기
 
@@ -52,12 +64,18 @@ function Router() {
     setSignupModalOpen(false);
   };
 
+  const changeForm = () => {
+    setSignupModalOpen(!signupModalOpen);
+    modalOpener();
+  };
+
+
   //react-modal 실행시 적어야 하는 코드
   Modal.setAppElement("#root");
 
   return (
     <BrowserRouter>
-      <Nav
+      <Navbar
         isSignin={isSignin}
         loginIndicator={loginIndicator}
         logoutIndicator={logoutIndicator}
@@ -105,6 +123,7 @@ function Router() {
           modalCloser={modalCloser}
           setModalCloser={setModalCloser}
           loginIndicator={loginIndicator}
+          changeForm={changeForm} 
         />
       </Modal>
       <Modal
@@ -138,6 +157,7 @@ function Router() {
         <Signup
           setSignupModalCloser={setSignupModalCloser}
           loginIndicator={loginIndicator}
+          changeForm={changeForm} 
         />
       </Modal>
     </BrowserRouter>
