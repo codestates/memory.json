@@ -20,7 +20,8 @@ module.exports = (sequelize, DataTypes)=>{
   photo.associate = (db) => {
     db.photo.belongsTo(db.history, {
       foreignKey: "history_id",
-      sourceKey: "id"      
+      sourceKey: "id",
+      onDelete: "CASCADE"
     })
   }
 

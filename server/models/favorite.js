@@ -25,7 +25,8 @@ module.exports = (sequelize, DataTypes)=>{
     })
     db.favorite.belongsTo(db.history, {
       foreignKey: "history_id",
-      sourceKey: "id"  
+      sourceKey: "id",
+      onDelete: "CASCADE"
     })
   }
   
