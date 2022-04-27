@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 module.exports = async (req, res) => {
+    try{
   let {
     user_name,
     user_account,
@@ -32,17 +33,18 @@ module.exports = async (req, res) => {
     return res.status(409).send({data: null, message: '이미 사용중인 아이디입니다.' });
   }
   
-//   bcrypt.genSalt(saltRounds, (err, salt) => {
-//     if (err) {
-//       return res.status(500).send({ data: null, message: '비밀번호 해쉬화에 실패했습니다.' });
-//     }
-//     bcrypt.hash(password, salt, async (err, hash) => {
-//       if (err) {
-//         return res.status(500).send({ data: null, message: '비밀번호 해쉬화에 실패했습니다.' });
-//       }
-//       console.log(hash)
-//       password = hash;
+   bcrypt.genSalt(saltRounds, async (err, salt) => {
+    if (err) {
+      return res.status(500).send({ data: null, message: '비밀번호 해쉬화에 실패했습니다.' });
+    }
+    await bcrypt.hash(password, salt, (err, hash) => {
+      if (err) {
+        return res.status(500).send({ data: null, message: '비밀번호 해쉬화에 실패했습니다.' });
+      }
+      console.log(hash)
+      password = hash;
 
+      console.log('1')
 
       user.create ({
         user_name: user_name,
@@ -54,7 +56,12 @@ module.exports = async (req, res) => {
         age: age,
         sex: sex,
       });
+      console.log('2')
       return res.status(201).send({ data: null, message: `${user_name}님의 회원가입이 정상적으로 처리되었습니다.` });
-//     });
-//   });
+    });
+  });
+} catch (err) {
+    console.error(err)
+}
 };
+

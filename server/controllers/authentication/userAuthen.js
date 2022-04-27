@@ -1,5 +1,7 @@
 const { user } = require('../../models')
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
 
 module.exports = async (req, res) => {
   try {
@@ -11,9 +13,17 @@ module.exports = async (req, res) => {
       return null;
     };
 
+    // 토큰 테스트용
+    /* const { accessToken }= req.cookies;
+
+    if (!accessToken) {
+      return null;
+    } */
+
+
     // 액세스 토큰이 유효한지 검사하는 함수 구성 
     const checkAccessToken = (accessToken) => {
-      return jwt.verify(accessToken, ACCESS_SECRET);
+      return jwt.verify(accessToken, process.env.ACCESS_SECRET);
     } 
     
     const accessTokenData = checkAccessToken(accessToken);

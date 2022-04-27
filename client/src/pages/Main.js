@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Signin from "../modals/Signin";
 import { FaSignInAlt } from "react-icons/fa";
 import Carousel from "../components/Carousel";
+
 // main 화면 css
 const MainContainer = styled.main`
   width: 100%;
