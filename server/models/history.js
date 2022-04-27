@@ -42,11 +42,13 @@ module.exports = (sequelize, DataTypes)=>{
     })
     db.history.belongsTo(db.user, {
       foreignKey: "user_id",
-      sourceKey: "id"  
+      sourceKey: "id",
+      onDelete: "CASCADE"
     })
     db.history.belongsTo(db.place, {
       foreignKey: "place_id",
-      sourceKey: "id"  
+      sourceKey: "id",
+      onDelete: "CASCADE"
     })
   }
   

@@ -29,7 +29,8 @@ module.exports = (sequelize, DataTypes)=>{
     })
     db.place.belongsTo(db.user, {
       foreignKey: "user_id",
-      sourceKey: "id"      
+      sourceKey: "id",
+      onDelete: "CASCADE"
     })
   }
 

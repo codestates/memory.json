@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 
 // main 화면 css
 const MainContainer = styled.main`
