@@ -34,6 +34,7 @@
   height: 100%;
   align-content: space-around;
   align-items: center;
+  animation: memorylogo 10s ease-out 1s 1 normal both;
 }
 
 @keyframes App-logo-spin {
@@ -88,3 +89,17 @@
   padding: 5vh 10vw;
   border: 10px solid coral;
 }
+
+@keyframes memorylogo {
+  0% {
+    letter-spacing: -0.5em;
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+

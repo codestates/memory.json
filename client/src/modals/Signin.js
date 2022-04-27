@@ -1,31 +1,22 @@
-import React, { useState } from 'react';
-import Alert from './Alert';
-import styled from 'styled-components';
-import axios from 'axios';
+import React, { useState } from "react";
+import Alert from "./Alert";
+import styled from "styled-components";
+import axios from "axios";
 
-const ModalArea = styled.div`
-`;
-const Modalback = styled.div`
-`;
+const ModalArea = styled.div``;
+const Modalback = styled.div``;
 
-const ModalView = styled.div`
-`;
+const ModalView = styled.div``;
 
-const Input = styled.input`
-`;
+const Input = styled.input``;
 
-const InputPassword = styled.input`
-`;
+const InputPassword = styled.input``;
 
-const SignInBtn = styled.div`
-`;
+const SignInBtn = styled.div``;
 
-const SocialSignInBtn = styled.div`
-`;
+const SocialSignInBtn = styled.div``;
 
-const SignUpBtn = styled.div`
-`;
-
+const SignUpBtn = styled.div``;
 
 const MarginDiv = styled.div`
   display: flex;
@@ -33,12 +24,19 @@ const MarginDiv = styled.div`
 // ------------------------------------------------------------------------------------------
 axios.defaults.withCredentials = true;
 
-function Signin({ isSignin, setUserInfo, loginIndicator, modalOpener, modalCloser, changeForm }) {
+function Signin({
+  isSignin,
+  setUserInfo,
+  loginIndicator,
+  modalOpener,
+  modalCloser,
+  changeForm,
+}) {
   const [loginInfo, setLoginInfo] = useState({
-    user_account: '',
-    password: '',
+    user_account: "",
+    password: "",
   });
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [checkErr, setCheckErr] = useState(false);
 
   const handleErr = () => {
@@ -59,28 +57,33 @@ function Signin({ isSignin, setUserInfo, loginIndicator, modalOpener, modalClose
   //로그인 요청하는 곳
   const handleLogin = () => {
     if (!loginInfo.user_account || !loginInfo.password) {
-      setErrorMessage('아이디와 비밀번호를 입력하세요');
+      setErrorMessage("아이디와 비밀번호를 입력하세요");
       handleErr();
       return;
     }
 
     axios
-      .post("http://localhost:4000/users//signin", { id: loginInfo.user_account, password: loginInfo.password })
+      .post("http://localhost:4000/users//signin", {
+        id: loginInfo.user_account,
+        password: loginInfo.password,
+      })
       .then((result) => {
         if (result.data.message === "Login Success!") {
           modalOpener();
           loginIndicator();
-          axios.get("http://localhost:4000/users").then((data) => setUserInfo(data.data.data));
-          window.location.replace('/');
+          axios
+            .get("http://localhost:4000/users")
+            .then((data) => setUserInfo(data.data.data));
+          window.location.replace("/");
         }
       })
       .catch((err) => {
-        setErrorMessage('아이디 혹은 비밀번호가 틀립니다.');
+        setErrorMessage("아이디 혹은 비밀번호가 틀립니다.");
         handleErr();
       });
   };
 
-  //소셜 로그인 
+  //소셜 로그인
   // const socialLoginHandler = () => {
   //   let clientId = process.env.REACT_APP_CLIENT_ID;
   //   let redirectUri = process.env.REACT_APP_REDIRECT_URI;
@@ -109,7 +112,7 @@ function Signin({ isSignin, setUserInfo, loginIndicator, modalOpener, modalClose
                 <Input
                   type="id"
                   onKeyUp={loginPressEnter}
-                  onChange={handleInputValue('id')}
+                  onChange={handleInputValue("id")}
                   placeholder="아이디를 입력해주세요"
                 />
               </div>
@@ -118,16 +121,20 @@ function Signin({ isSignin, setUserInfo, loginIndicator, modalOpener, modalClose
                 <InputPassword
                   type="password"
                   onKeyUp={loginPressEnter}
-                  onChange={handleInputValue('password')}
+                  onChange={handleInputValue("password")}
                   placeholder="비밀번호를 입력해주세요"
                 />
               </div>
             </div>
 
-            <SignUpBtn onClick={() => changeForm()}>아직 아이디가 없으신가요?</SignUpBtn>
+            <SignUpBtn onClick={() => changeForm()}>
+              아직 아이디가 없으신가요?
+            </SignUpBtn>
             <SignInBtn onClick={handleLogin}>Sign In</SignInBtn>
 
-            {checkErr ? <Alert message={errorMessage} setCheckErr={clickErrBox} /> : null}
+            {checkErr ? (
+              <Alert message={errorMessage} setCheckErr={clickErrBox} />
+            ) : null}
 
             {/* <SocialSignInBtn onClick={socialLoginHandler}>
               <img

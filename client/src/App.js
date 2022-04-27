@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Modal from "react-modal";
-import axios from 'axios';
-
+import axios from "axios";
 
 //Page
 import Landing from "./pages/Landing";
@@ -14,11 +13,10 @@ import Board from "./pages/Board";
 import Signin from "./modals/Signin";
 import Signup from "./modals/Signup";
 //Component
-import Navbar from "./components/Navbar"
-
+import Navbar from "./components/Navbar";
 
 function Router() {
-  const [userInfo, setUserInfo] = useState('');
+  const [userInfo, setUserInfo] = useState("");
   //회원정보
   const [isSignin, setIsSignin] = useState(false);
   //로그인 상태
@@ -26,7 +24,7 @@ function Router() {
   //모달 상태
   const [signupModalOpen, setSignupModalOpen] = useState(false);
   //회원가입 모달
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
 
   const loginIndicator = () => {
     setIsSignin(true);
@@ -69,7 +67,6 @@ function Router() {
     modalOpener();
   };
 
-
   //react-modal 실행시 적어야 하는 코드
   Modal.setAppElement("#root");
 
@@ -80,8 +77,7 @@ function Router() {
         loginIndicator={loginIndicator}
         logoutIndicator={logoutIndicator}
         modalOpener={modalOpener}
-      />
-
+      />{" "}
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route
@@ -123,7 +119,7 @@ function Router() {
           modalCloser={modalCloser}
           setModalCloser={setModalCloser}
           loginIndicator={loginIndicator}
-          changeForm={changeForm} 
+          changeForm={changeForm}
         />
       </Modal>
       <Modal
@@ -157,7 +153,7 @@ function Router() {
         <Signup
           setSignupModalCloser={setSignupModalCloser}
           loginIndicator={loginIndicator}
-          changeForm={changeForm} 
+          changeForm={changeForm}
         />
       </Modal>
     </BrowserRouter>
