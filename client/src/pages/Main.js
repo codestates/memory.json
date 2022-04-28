@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Signin from "../modals/Signin";
 import { FaSignInAlt } from "react-icons/fa";
-import Carousel from "../components/Carousel";
+import MultipleItems from "../components/Carousel";
 import Button from "../components/Button";
 
 // main 화면 css
@@ -17,29 +17,28 @@ const MainContainer = styled.main`
 const MainHeader = styled.header`
   width: auto;
   height: 5%;
-  padding: 1vh 10vw;
+  padding: 1vh 5vw;
   display: flex;
   border: 10px solid pink;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 const MainSection = styled.section`
   width: auto;
-  height: 100%;
-  padding: 5vh 10vw;
+  height: 95%;
+  padding: 5vh 5vw;
   border: 10px solid yellow;
 `;
 
 const MainNav = styled.nav`
-  position: absolute;
-  top: 4vh;
-  right: 5vw;
   border: 10px solid skyblue;
 `;
 
 const MainDiv = styled.div`
   width: auto;
   height: 80%;
-  padding: 5vh 10vw;
+  padding: 5vh 5vw;
   border: 10px solid coral;
 `;
 
@@ -121,7 +120,7 @@ function Main() {
         </MainHeader>
         <MainSection>
           <MainDiv>
-            <Carousel />
+            <MultipleItems />
           </MainDiv>
         </MainSection>
       </MainContainer>
