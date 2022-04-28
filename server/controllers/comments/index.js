@@ -5,8 +5,8 @@ const registComment = require('./registComment');
 const changeComment = require('./changeComment');
 const deleteComment = require('./deleteComment');
 
-router.post('/', registComment);
-router.patch('/', changeComment);
-router.delete('/', deleteComment);
+router.post('/:historyId', registComment);
+router.patch('/:commentId', changeComment);
+router.delete('/:commentId', deleteComment);
 
 module.exports = router;

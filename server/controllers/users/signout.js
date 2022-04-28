@@ -1,16 +1,14 @@
-const { user } = require('../../models');
-const userAuthen = require('../authentication/userAuthen');
-const { sendAccessToken } = require('../tokenFunctions')
+const userAuthen = require("../authentication/userAuthen");
 
 module.exports = async (req, res) => {
-    // res.send('유저정보')
-  const accessTokenData = await userAuthen(req,res);
-  console.log(accessTokenData)
-  console.log(req)
+  const userInfo = await userAuthen(req, res);
 
-  if (!accessTokenData) {
+  if (!userInfo) {
     res.status(401).send({ data: null, message: " 권한이 없습니다" });
   } else {
-    sendAccessToken(res,accessTokenData.dataValues.username)
+    res
+      .cookie("accessToken", null, { maxAge: 0 })
+      .status(200)
+      .send({ data: null, message: "로그아웃이 정상적으로 완료되었습니다." });
   }
 };
