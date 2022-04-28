@@ -11,7 +11,7 @@ const NavArea = styled.div`
   background-color: blue;
 `;
 
-const InnerDiv = styled.div`
+const FirstDiv = styled.div`
   margin-left: 0%;
   width: 100%;
   height: 50px;
@@ -27,7 +27,7 @@ const ImageLog = styled.img`
   cursor: pointer;
 `;
 
-const DivStyle = styled.div`
+const SecondDiv = styled.div`
   display: flex;
   align-items: center;
   margin-right: 10%;
@@ -44,7 +44,6 @@ const ButtonStyle = styled.button`
   background-color: transparent;
 `;
 
-// 네이게이션바 구현 목록
 function Navbar({
   logoutIndicator,
   modalOpener,
@@ -76,7 +75,7 @@ function Navbar({
 
   return (
     <NavArea>
-        <InnerDiv>
+        <FirstDiv>
           <ImageLog
             src="../img/headerlogo.jpeg"
             alt="Image"
@@ -84,16 +83,16 @@ function Navbar({
               window.location.replace("/main");
             }}
           />
-          <DivStyle>
+          <SecondDiv>
             {/* 로그인 버튼 */}
-            <ButtonStyle type="button" onClick={modalOpener} style={{ color: "green", fontSize: "50px" }}>
+            <ButtonStyle type="button" onClick={modalOpener} style={{ color: "yellow", fontSize: "30px" }}>
               로그인버튼
             </ButtonStyle>
-          </DivStyle>
-        </InnerDiv>
+          </SecondDiv>
+        </FirstDiv>
         {successSignUp ? (
           <PopUp
-            text={`회원가입에 성공하셨습니다. 마이페이지 창에서 닉네임을 변경해주세요'`}
+            text={`회원가입에 성공하셨습니다.'`}
           />
         ) : null}
     </NavArea>
