@@ -23,6 +23,7 @@
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
     "path": "^0.12.7",
+    "qs": "^6.10.3",
     "sequelize": "^6.18.0"
   },
   "devDependencies": {
