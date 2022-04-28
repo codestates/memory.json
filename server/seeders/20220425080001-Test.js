@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     /**
      * Add seed commands here.
      *
@@ -10,10 +10,10 @@ module.exports = {
      *   name: 'John Doe',
      *   isBetaMember: false
      * }], {});
-    */
-    await queryInterface.bulkInsert('users', [
+     */
+    await queryInterface.bulkInsert("users", [
       {
-        id: 1,
+        id: 1001,
         user_name: "김갑판",
         user_account: "test1",
         password: "testpassword",
@@ -22,11 +22,11 @@ module.exports = {
         address: "testaddress1",
         age: 35,
         sex: "F",
-        createdAt: new Date,
-        updatedAt: new Date
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
-        id: 2,
+        id: 1002,
         user_name: "김돌쇠",
         user_account: "test2",
         password: "testpassword2",
@@ -35,11 +35,11 @@ module.exports = {
         address: "testaddress2",
         age: 31,
         sex: "F",
-        createdAt: new Date,
-        updatedAt: new Date
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
-        id: 3,
+        id: 1003,
         user_name: "김문석",
         user_account: "test3",
         password: "testpassword3",
@@ -48,21 +48,168 @@ module.exports = {
         address: "testaddress3",
         age: 21,
         sex: "M",
-        createdAt: new Date,
-        updatedAt: new Date
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
-    ])
+    ]);
 
+    await queryInterface.bulkInsert("places", [
+      {
+        id: 1001,
+        user_id: 1001,
+        place_name: "서울역",
+        place_address: "서울특별시 용산구 한강대로 405",
+        place_location: "37.556599, 126.972218",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 1002,
+        user_id: 1001,
+        place_name: "숭례문",
+        place_address: "서울특별시 중구 세종대로 40",
+        place_location: "37.559928, 126.974552",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 1003,
+        user_id: 1002,
+        place_name: "한국오카리나음악협회",
+        place_address: "서울특별시 용산구 청파로 93길 5, 2층",
+        place_location: "37.5535037, 126.9696068",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ]);
 
+    await queryInterface.bulkInsert("histories", [
+      {
+        id: 1001,
+        place_id: 1001,
+        user_id: 1001,
+        history_title: "히스토리 제목1",
+        history_content: "히스토리 내용1",
+        history_year: 1989,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 1002,
+        place_id: 1001,
+        user_id: 1002,
+        history_title: "히스토리 제목2",
+        history_content: "히스토리 내용2",
+        history_year: 1989,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 1003,
+        place_id: 1002,
+        user_id: 1003,
+        history_title: "히스토리 제목3",
+        history_content: "히스토리 내용3",
+        history_year: 1990,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ]);
+
+    await queryInterface.bulkInsert("comments", [
+      {
+        id: 1001,
+        history_id: 1001,
+        user_id: 1001,
+        comment_content: "댓글내용1",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 1002,
+        history_id: 1001,
+        user_id: 1002,
+        comment_content: "댓글내용2",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 1003,
+        history_id: 1002,
+        user_id: 1003,
+        comment_content: "댓글내용1",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ]);
+
+    await queryInterface.bulkInsert("photos", [
+      {
+        id: 1001,
+        history_id: 1001,
+        image_name: "test1",
+        thumbnail: "F",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 1002,
+        history_id: 1001,
+        image_name: "test2",
+        thumbnail: "T",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 1003,
+        history_id: 1002,
+        image_name: "test3",
+        thumbnail: "F",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ]);
+
+    await queryInterface.bulkInsert("favorites", [
+      {
+        id: 1001,
+        history_id: 1001,
+        user_id: 1001,
+        like: "T",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 1002,
+        history_id: 1001,
+        user_id: 1002,
+        like: "T",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 1003,
+        history_id: 1002,
+        user_id: 1001,
+        like: "F",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ]);
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     /**
      * Add commands to revert seed here.
      *
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('users', null, {})
-  }
+    await queryInterface.bulkDelete("users", null, {});
+    await queryInterface.bulkDelete("places", null, {});
+    await queryInterface.bulkDelete("histories", null, {});
+    await queryInterface.bulkDelete("comments", null, {});
+    await queryInterface.bulkDelete("photos", null, {});
+    await queryInterface.bulkDelete("favorites", null, {});
+  },
 };
