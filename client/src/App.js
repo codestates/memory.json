@@ -24,7 +24,6 @@ function Router() {
   //모달 상태
   const [signupModalOpen, setSignupModalOpen] = useState(false);
   //회원가입 모달
-  const [text, setText] = useState("");
 
   const loginIndicator = () => {
     setIsSignin(true);
@@ -34,7 +33,7 @@ function Router() {
   const logoutIndicator = () => {
     const logoutReq = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/users/logout");
+        const response = await axios.get("http://localhost:4000/users/signout");
       } catch (e) {
         console.log(e);
       }

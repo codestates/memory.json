@@ -49,8 +49,7 @@ function Navbar({
   modalOpener,
 }) {
   const [successSignUp, setSuccessSignUp] = useState(false);
-  const documentRef = useRef(document);
-
+  
   const getAccessToken = async (authorizationCode) => {
     let resp = await axios.post(`${process.env.REACT_APP_API_URL}users/auth`, {
       authorizationCode,
@@ -60,7 +59,7 @@ function Navbar({
     if (resp.status === 201) {
       setSuccessSignUp(true);
     } else {
-      window.location.replace("/");
+      window.location.replace("/main");
     }
   };
 
