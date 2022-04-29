@@ -75,14 +75,6 @@ function Main() {
   return (
     <OuterDiv ref={outerDivRef}>
       <MainContainer>
-        <MainHeader>
-          <img src="img/headerlogo.jpeg" alt="header logo"></img>
-          <MainNav>
-            <ul>
-              <FaSignInAlt />
-            </ul>
-          </MainNav>
-        </MainHeader>
         <MainSection>
           <MainDiv>
             <MultipleItems />
@@ -91,9 +83,6 @@ function Main() {
       </MainContainer>
       <Divider></Divider>
       <ServiceContainer>
-        <ServiceHeader>
-          <img src="img/headerlogo.jpeg" alt="header logo"></img>
-        </ServiceHeader>
         <ServiceSection>
           <ServiceDiv>
             <h1>서비스 소개 들어갈 공간</h1>
@@ -102,9 +91,6 @@ function Main() {
       </ServiceContainer>
       <Divider></Divider>
       <MapContainer>
-        <MapHeader>
-          <img src="img/headerlogo.jpeg" alt="header logo"></img>
-        </MapHeader>
         <MapSection>
           <MapDiv>
             <h1>지도 api를 불러올 공간</h1>
@@ -154,7 +140,7 @@ const MainSection = styled.section`
   width: auto;
   height: 95%;
   padding: 5vh 5vw;
-  border: 10px solid yellow;
+  background-color: #f1ddbf;
 `;
 
 const MainNav = styled.nav`
@@ -191,7 +177,7 @@ const ServiceSection = styled.section`
   width: auto;
   height: 100%;
   padding: 5vh 10vw;
-  border: 10px solid yellow;
+  background-color: #f1ddbf;
 `;
 
 const ServiceDiv = styled.div`
@@ -224,7 +210,7 @@ const MapSection = styled.section`
   width: auto;
   height: 100%;
   padding: 5vh 10vw;
-  border: 10px solid yellow;
+  background-color: #f1ddbf;
 `;
 
 const MapDiv = styled.div`

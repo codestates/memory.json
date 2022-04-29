@@ -7,49 +7,50 @@ import PopUp from "./Popup";
 const NavArea = styled.div`
   position: relative;
   width: 100%;
-  height: 100px;
-  background-color: blue;
+  height: 80px;
+  background-color: #f1ddbf;
+  border-bottom: 3px solid #525e75;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 const FirstDiv = styled.div`
-  margin-left: 0%;
-  width: 100%;
+  width: 100px;
   height: 50px;
-  display: flex;
-  background-color: yellow;
+  background-color: transparent;
+  margin: 1em 1em 1em 1em;
 `;
 
 const ImageLog = styled.img`
-  min-height: 50px;
+  width: 300px;
   height: 50px;
+  margin-top: 1%;
   margin-left: 5%;
   margin-bottom: 5%;
   cursor: pointer;
 `;
 
 const SecondDiv = styled.div`
-  display: flex;
-  align-items: center;
-  margin-right: 10%;
-  background-color: black;
+  width: 10%;
+  height: 50px;
+  margin: 1em 1em 1em 1em;
+  background-color: #4d4c7d;
+  border-radius: 15em;
   cursor: pointer;
 `;
 
 const ButtonStyle = styled.button`
-  border: none;
-  width: 300px;
-  height: 300px;
-  margin-left: 15px;
+  width: 100%;
+  height: 50px;
   cursor: pointer;
   background-color: transparent;
+  border: none;
 `;
 
-function Navbar({
-  logoutIndicator,
-  modalOpener,
-}) {
+function Navbar({ logoutIndicator, modalOpener }) {
   const [successSignUp, setSuccessSignUp] = useState(false);
-  
+
   const getAccessToken = async (authorizationCode) => {
     let resp = await axios.post(`${process.env.REACT_APP_API_URL}users/auth`, {
       authorizationCode,
@@ -74,26 +75,26 @@ function Navbar({
 
   return (
     <NavArea>
-        <FirstDiv>
-          <ImageLog
-            src="../img/headerlogo.jpeg"
-            alt="Image"
-            onClick={() => {
-              window.location.replace("/main");
-            }}
-          />
-          <SecondDiv>
-            {/* 로그인 버튼 */}
-            <ButtonStyle type="button" onClick={modalOpener} style={{ color: "yellow", fontSize: "30px" }}>
-              로그인버튼
-            </ButtonStyle>
-          </SecondDiv>
-        </FirstDiv>
-        {successSignUp ? (
-          <PopUp
-            text={`회원가입에 성공하셨습니다.'`}
-          />
-        ) : null}
+      <FirstDiv>
+        <ImageLog
+          src="../img/headerLogo.png"
+          alt="Image"
+          onClick={() => {
+            window.location.replace("/main");
+          }}
+        />
+      </FirstDiv>
+      {/* 로그인 버튼 */}
+      <SecondDiv>
+        <ButtonStyle
+          type="button"
+          onClick={modalOpener}
+          style={{ color: "white", fontSize: "120%" }}
+        >
+          로그인버튼
+        </ButtonStyle>
+      </SecondDiv>
+      {successSignUp ? <PopUp text={`회원가입에 성공하셨습니다.'`} /> : null}
     </NavArea>
   );
 }
