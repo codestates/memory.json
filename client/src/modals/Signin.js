@@ -175,11 +175,13 @@ function Signin({
 
   //로그인 요청을 보낼 데이터
   const handleInputValue = (key) => (e) => {
+    console.log(e)
     setLoginInfo({ ...loginInfo, [key]: e.target.value });
   };
 
   //처음 로그인 요청하는 곳
   const handleLogin = () => {
+    console.log(loginInfo)
     if (!loginInfo.user_account || !loginInfo.password) {
       setErrorMessage("아이디와 비밀번호를 입력하세요");
       handleErr();
@@ -187,8 +189,8 @@ function Signin({
     }
 
     axios
-      .post("http://localhost:4000/users//signin", {
-        id: loginInfo.user_account,
+      .post("http://localhost:4000/users/signin", {
+        user_account: loginInfo.user_account,
         password: loginInfo.password,
       })
       .then((result) => {
@@ -234,16 +236,16 @@ function Signin({
               <div>
                 <span>아이디</span>
                 <Input
-                  type="id"
+                  type="text"
                   onKeyUp={loginPressEnter}
-                  onChange={handleInputValue("id")}
+                  onChange={handleInputValue("user_account")}
                   placeholder="아이디를 입력해주세요"
                 />
               </div>
               <div>
                 <span>비밀번호</span>
                 <InputPassword
-                  type="password"
+                  type="text"
                   onKeyUp={loginPressEnter}
                   onChange={handleInputValue("password")}
                   placeholder="비밀번호를 입력해주세요"

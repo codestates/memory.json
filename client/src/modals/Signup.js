@@ -147,10 +147,11 @@ const postCodeStyle = styled.div`
 
 axios.defaults.withCredentials = true;
 
-function Signup({ changeForm, modalCloser, modalOpener, }) {
+function Signup({ changeForm, modalCloser, modalOpener }) {
+  // 회원가입 정보
   const [signupInfo, setSignupInfo] = useState({
     user_account: "",
-    nick_name: "",
+    user_name: "",
     password: "",
     checkedPassword: "",
     mobile: "",
@@ -158,19 +159,26 @@ function Signup({ changeForm, modalCloser, modalOpener, }) {
     age: "",
     sex: "",
   });
+
+  //유효성 검사 상태
   const [validateErr, setValidateErr] = useState("");
+  //회원가입 성공 여부
   const [successSignup, setSuccessSignup] = useState(false);
+  //주소 Api
+  const [address, setAddress] = useState(""); // 주소
+  const [addressDetail, setAddressDetail] = useState(""); // 상세주소
 
   //회원가입을 보낼 데이터
   const handleInputValue = (key) => (e) => {
     setSignupInfo({ ...signupInfo, [key]: e.target.value });
   };
+
   //회원가입 버튼을 눌렀을때
   const signupHandler = () => {
     let {
       user_account,
       password,
-      nick_name,
+      user_name,
       checkedPassword,
       mobile,
       address,
@@ -180,7 +188,7 @@ function Signup({ changeForm, modalCloser, modalOpener, }) {
     if (
       user_account &&
       password &&
-      nick_name &&
+      user_name &&
       !validateErr &&
       checkedPassword === password &&
       mobile &&
@@ -205,17 +213,19 @@ function Signup({ changeForm, modalCloser, modalOpener, }) {
         });
     }
   };
+
+  // 유효성 검사
   const validateCheck = (inputName) => {
     const idCheck = /^[a-z]+[a-z0-9]{5,19}$/g;
     const passwordCheck =
       /^.*(?=^.{6,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
-    let { user_account, password, nick_name, checkedPassword } = signupInfo;
+    let { user_account, password, user_name, checkedPassword } = signupInfo;
 
     if (inputName === "user_account") {
       return !idCheck.test(user_account);
     }
-    if (inputName === "nick_name") {
-      return nick_name.includes(" ") || nick_name === "";
+    if (inputName === "user_name") {
+      return user_name.includes(" ") || user_name === "";
     }
     if (inputName === "password") {
       return !passwordCheck.test(password);
@@ -237,12 +247,8 @@ function Signup({ changeForm, modalCloser, modalOpener, }) {
         setValidateErr("올바른 아이디를 입력해주세요");
       }
 
-      if (inputName === "nick_name") {
-        setValidateErr("닉네임에 공백이 있어선 안됩니다.");
-      }
-
       if (inputName === "user_name") {
-        setValidateErr("이름에 공백이 있어선 안됩니다.");
+        setValidateErr("닉네임에 공백이 있어선 안됩니다.");
       }
 
       if (inputName === "checkedPassword") {
@@ -257,7 +263,7 @@ function Signup({ changeForm, modalCloser, modalOpener, }) {
       }
     } else {
       setValidateErr("");
-      if (inputName === "nick_name") {
+      if (inputName === "user_name") {
         axios
           .get("")
           .then((ok) => setValidateErr(""))
@@ -278,18 +284,21 @@ function Signup({ changeForm, modalCloser, modalOpener, }) {
       }
     }
   };
+
+  //---------------------------------------------------------------------------------
+
   // 팝업창 상태 관리
-  const [isPopupOpen, setIsPopupOpen] = useState(false)
- 
-	// 팝업창 열기
-    const openPostCode = () => {
-        setIsPopupOpen(true)
-    }
- 
-	// 팝업창 닫기
-    const closePostCode = () => {
-        setIsPopupOpen(false)
-    }
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  // 팝업창 열기
+  const openPostCode = () => {
+    setIsPopupOpen(true);
+  };
+
+  // 팝업창 닫기
+  const closePostCode = () => {
+    setIsPopupOpen(false);
+  };
 
   return (
     <ModalArea>
@@ -311,9 +320,9 @@ function Signup({ changeForm, modalCloser, modalOpener, }) {
           <Input
             type="text"
             onBlur={() => {
-              checkedInfo("nick_name");
+              checkedInfo("user_name");
             }}
-            onChange={handleInputValue("nick_name")}
+            onChange={handleInputValue("user_name")}
             placeholder="닉네임을 입력해주세요"
           />
         </div>
@@ -348,23 +357,41 @@ function Signup({ changeForm, modalCloser, modalOpener, }) {
         </div>
         <div>
           <span>주소</span>
+          <Input
+            type="text"
+            value={`${addressDetail}` + `${address}`}
+            placeholder="주소"
+            disabled="disabled"
+          />
           <div>
-        	{/* 버튼 클릭 시 팝업 생성 */}
-            <button type='button' onClick={openPostCode}>우편번호 검색</button>
+            {/* 버튼 클릭 시 팝업 생성 */}
+            <button type="button" onClick={openPostCode}>
+              우편번호 검색
+            </button>
             {/* 팝업 div */}
-            <div id='popupDom'>
-                {isPopupOpen && (
-                    <PopupDom>
-                        <PopupPostCode onClose={closePostCode} />
-                    </PopupDom>
-                )}
+            <div id="popupDom">
+              {isPopupOpen && (
+                <PopupDom>
+                  <PopupPostCode
+                    onClose={closePostCode}
+                    setAddress={setAddress}
+                    setAddressDetail={setAddressDetail}
+                  />
+                </PopupDom>
+              )}
             </div>
-        </div>
+          </div>
+          <span>상세 주소</span>
+          <Input
+            type="text"
+            onChange={handleInputValue("moreDetail address")}
+            placeholder="상세주소를 입력해주세요"
+          />
         </div>
         <div>
           <span>생년월일</span>
           <Input
-            type="age"
+            type="text"
             onChange={handleInputValue("age")}
             placeholder="생년월일을 입력해주세요"
           />
@@ -372,7 +399,7 @@ function Signup({ changeForm, modalCloser, modalOpener, }) {
         <div>
           <span>성별</span>
           <Input
-            type="sex"
+            type="text"
             onChange={handleInputValue("sex")}
             placeholder="성별을 입력해주세요 ex)남:M, 여:F"
           />
