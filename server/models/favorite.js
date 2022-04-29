@@ -21,7 +21,8 @@ module.exports = (sequelize, DataTypes)=>{
   favorite.associate = (db) => {
     db.favorite.belongsTo(db.user, {
       foreignKey: "user_id",
-      sourceKey: "id"
+      sourceKey: "id",
+      onDelete: "CASCADE"
     })
     db.favorite.belongsTo(db.history, {
       foreignKey: "history_id",
