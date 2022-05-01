@@ -13,8 +13,7 @@ const PostCodeStyle = styled.div`
 
 const PopupPostCode = (props) => {
 
-  // 우편번호 검색 후 주소 클릭 시 실행될 함수, data callback 용
-  console.log("props",props)
+  // 우편번호 검색 후 주소 클릭 시 실행 함수
   const handlePostCode = (data) => {
     let fullAddress = data.address;
     let extraAddress = "";
@@ -33,9 +32,9 @@ const PopupPostCode = (props) => {
 
     console.log(fullAddress);
     console.log(data.zonecode);
-    
+
     props.onClose();
-    props.setAddress(data.zonecode);
+    props.setZoneCode(data.zonecode);
     props.setAddressDetail(fullAddress);
   };
 
