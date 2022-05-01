@@ -141,7 +141,6 @@ const Modalback = styled.div`
 `;
 
 function Signup({ changeForm, modalCloser, modalOpener }) {
-
   const navigate = useNavigate();
 
   //유효성 검사 상태
@@ -154,14 +153,14 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
 
   // 회원가입 정보
   const [signupInfo, setSignupInfo] = useState({
-    user_account: "",
     user_name: "",
+    user_account: "",
     password: "",
     checkedPassword: "",
     mobile: "",
     email: "",
     address: "",
-    age: "",
+    age: 0,
     sex: "",
   });
   console.log("signupInfo", signupInfo);
@@ -175,31 +174,6 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
   // const handleInputAddress = (e) => {
   //   setSignupInfo({ ...signupInfo, [e.target.name]: e.target.value });
   // };
-
-  //회원가입 버튼을 눌렀을때
-  const signupHandler = () => {
-    console.log("handler", signupInfo)
-    const isExist_1 = Object.keys(signupInfo).includes('user_account');
-    const isExist_2 = Object.keys(signupInfo).includes('password');
-    const isExist_3 = Object.keys(signupInfo).includes('user_name');
-    if ( isExist_1 && isExist_2 && isExist_3 === true  ) {
-      axios
-        .post(
-          "http://localhost:4000/users/signup", 
-          signupInfo,)
-        .then((res) => {
-          console.log("res",res);
-          setSuccessSignup(true);
-          modalCloser();
-          modalOpener();
-          navigate("/main");
-        })
-        .catch((err) => {
-          console.log(err);
-          setValidateErr("회원가입에 실패하였습니다!");
-        });
-    }
-  };
 
   // 유효성 검사
   const validateCheck = (inputName) => {
@@ -295,6 +269,44 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
         }
         setValidateErr("");
       }
+    }
+  };
+
+  //회원가입 버튼을 눌렀을때
+  const signupHandler = () => {
+    let { user_name, user_account, password } = signupInfo;
+    console.log("handler", signupInfo);
+    if (user_name && user_account && password !== undefined) {
+      axios
+        .post(
+          "http://localhost:4000/users/signup",
+          {
+            user_name: signupInfo.user_name,
+            user_account: signupInfo.user_account,
+            password: signupInfo.password,
+            mobile: signupInfo.mobile,
+            email: signupInfo.email,
+            address: signupInfo.address,
+            age: signupInfo.age,
+            sex: signupInfo.sex,
+          },
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        )
+        .then((res) => {
+          console.log("res", res);
+          setSuccessSignup(true);
+          modalCloser();
+          modalOpener();
+          navigate("/main");
+        })
+        .catch((err) => {
+          console.log(err);
+          setValidateErr("회원가입에 실패하였습니다!");
+        });
+    }else{
+      setValidateErr("아이디, 닉네임, 비밀번호는 반드시 기입해주세요")
     }
   };
 
@@ -430,9 +442,9 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
         </div>
 
         <div style={{ color: "red" }}>{validateErr}</div>
-        
+
         <SignUpBtn onClick={() => signupHandler()}>회원 가입 하기</SignUpBtn>
-        
+
         <SignInBtn
           onClick={() => {
             changeForm();
@@ -441,7 +453,7 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
           이미 가입하셨다면 여기를 눌러주세요.
         </SignInBtn>
       </SignUpArea>
-      
+
       <Modalback onClick={() => modalCloser()}></Modalback>
       {successSignup ? <Popup text={`회원가입에 성공하셨습니다.`} /> : null}
     </ModalArea>
@@ -457,4 +469,3 @@ export default Signup;
 // axios
 // 소셜 회원가입
 // 닉네임 중복 알려주기
-
