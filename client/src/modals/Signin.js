@@ -8,7 +8,7 @@ const ModalArea = styled.div`
   height: 100%;
   text-align: center;
   z-index: 999;
-  font-family: 'font-css';
+  font-family: "font-css";
 `;
 const Modalback = styled.div`
   z-index: -1;
@@ -65,7 +65,7 @@ const Input = styled.input`
   &:focus {
     animation: boxShadow 0.3s backwards;
 
-    box-shadow: 0 0 0 2px #008e43;
+    box-shadow: 0 0 0 2px #c4ddff;
   }
 `;
 
@@ -74,7 +74,7 @@ const InputPassword = styled.input`
   display: block;
   font-family: Arial;
   ::placeholder {
-    font-family: 'font-css';
+    font-family: "font-css";
   }
 
   width: 80%;
@@ -98,20 +98,19 @@ const InputPassword = styled.input`
   &:focus {
     animation: boxShadow 0.3s backwards;
 
-    box-shadow: 0 0 0 2px #008e43;
+    box-shadow: 0 0 0 2px #c4ddff;
   }
 `;
 
 const SignInBtn = styled.div`
+  width: 60%;
+  height: 1vh;
   color: white;
   font-weight: 700;
-  font-size: 1em;
-  margin: 0.5em;
-  padding: 1em;
-  margin-bottom: 5rem;
-  margin-top: 1rem;
-  background-color: #697f6e;
-  border: 4px solid blue;
+  font-size: 20px;
+  padding: 10px 10px 20px 10px;
+  margin: 20px 40px 30px 70px;
+  background-color: #c4ddff;
   border-radius: 5em;
   cursor: pointer;
 `;
@@ -119,26 +118,24 @@ const SignInBtn = styled.div`
 const SocialSignInBtn = styled.div`
   width: 100%;
   height: 18%;
-
   cursor: pointer;
   font-size: 1.2rem;
   font-weight: bold;
   color: white;
   :hover {
-    border: 2px solid #fee518;
+    border: 100% solid #fee518;
   }
 `;
 
 const SignUpBtn = styled.div`
-  width: 100%;
-  height: 5%;
-  padding-top: 30px;
-  padding-bottom: 30px;
+  width: 60%;
+  height: 1vh;
+  padding: 10px 10px 20px 10px;
+  margin: 20px 40px 10px 70px;
   cursor: pointer;
-  font-size: 1.3rem;
-  color: black;
-  background: linear-gradient( to top, yellow, red );
-  border: 4px solid blue;
+  font-size: 20px;
+  color: white;
+  background-color: #c4ddff;
   border-radius: 5em;
 `;
 
@@ -214,7 +211,7 @@ function Signin({
     let clientId = process.env.REACT_APP_CLIENT_ID;
     let redirectUri = process.env.REACT_APP_REDIRECT_URI;
     window.location.assign(
-      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`,
+      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`
     );
     modalOpener();
     modalCloser();
@@ -252,9 +249,8 @@ function Signin({
                 />
               </div>
             </div>
-            <SignUpBtn onClick={() => changeForm()}>
-              처음 오셨나요?? 여기를 눌러서 회원가입을 해주세요 !
-            </SignUpBtn>
+
+            <SignUpBtn onClick={() => changeForm()}>회원가입</SignUpBtn>
             <SignInBtn onClick={handleLogin}>Sign In</SignInBtn>
 
             {checkErr ? (
@@ -264,7 +260,13 @@ function Signin({
               <img
                 src="../img/kakao_login_medium_narrow.png"
                 alt="login"
-                style={{ position: 'relative', width: '100%', top: '-9%', zIndex: '-1', backgroundColor: '#fee518' }}
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  top: "-9%",
+                  zIndex: "-1",
+                  backgroundColor: "#fee518",
+                }}
               />
             </SocialSignInBtn>
           </ModalView>
