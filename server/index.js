@@ -12,7 +12,7 @@ const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
 app.use(express.json());
 app.use(
   cors({
-    origin: "*",
+    origin: true,
     credentials: true,
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
   })
@@ -26,7 +26,7 @@ app.use("/", (req, res) => {
 
 sequelize
   .sync({
-    force: false,
+    force: true,
   })
   .then(() => {
     console.log("데이터베이스 연결 성공");

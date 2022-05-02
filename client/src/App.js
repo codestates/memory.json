@@ -121,6 +121,8 @@ function Router() {
       >
         <Signup
           setSignupModalCloser={setSignupModalCloser}
+          modalCloser={modalCloser}
+          modalOpener={modalOpener}
           loginIndicator={loginIndicator}
           changeForm={changeForm}
         />
