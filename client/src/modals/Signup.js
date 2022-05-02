@@ -8,7 +8,7 @@ const ModalArea = styled.div`
   height: 100%;
   text-align: center;
   z-index: 999;
-  font-family: 'font-css';
+  font-family: "font-css";
 `;
 
 const SignUpArea = styled.div`
@@ -63,7 +63,7 @@ const InputPassword = styled.input`
   font-family: Arial;
   display: block;
   ::placeholder {
-    font-family: 'font-css';
+    font-family: "font-css";
   }
 
   width: 80%;
@@ -91,15 +91,16 @@ const InputPassword = styled.input`
 `;
 
 const SignUpBtn = styled.div`
-  margin-top: 15px;
-  width: 100%;
-  height: 18%;
-  padding-top: 4%;
-  font-size: 2rem;
-
+  width: 60%;
+  height: 1vh;
+  color: white;
+  font-weight: 700;
+  font-size: 20px;
+  padding: 10px 10px 20px 10px;
+  margin: 20px 40px 30px 70px;
+  background-color: #c4ddff;
+  border-radius: 5em;
   cursor: pointer;
-
-  color: black;
 
   background: #008e43;
   :hover {
@@ -108,13 +109,16 @@ const SignUpBtn = styled.div`
 `;
 
 const SignInBtn = styled.div`
-  width: 100%;
-  height: 18%;
-  padding-top: 4%;
+  width: 60%;
+  height: 1vh;
+  color: white;
+  font-weight: 700;
+  font-size: 20px;
+  padding: 10px 10px 20px 10px;
+  margin: 20px 40px 30px 70px;
+  background-color: #c4ddff;
+  border-radius: 5em;
   cursor: pointer;
-  font-size: 2rem;
-
-  color: black;
   :hover {
     border: 2px solid #fee518;
   }
