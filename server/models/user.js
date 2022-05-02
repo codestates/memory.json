@@ -2,15 +2,12 @@ module.exports = (sequelize, DataTypes)=>{
   const user = sequelize.define('user', { 
     user_name: {
       type:DataTypes.STRING(100),
-      allowNull: false //필수값
     },
     user_account: {
       type:DataTypes.STRING(100),
-      allowNull: false //필수값
     },
     password: {
       type:DataTypes.STRING(200),
-      allowNull: false //필수값
     },
     mobile: {
       type:DataTypes.STRING(20) 
