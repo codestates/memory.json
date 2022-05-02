@@ -68,7 +68,7 @@ module.exports = async (req, res) => {
     // 성공 응답
     return res.status(200).json({
       data: { accessToken },
-      message: 'ok'
+      message: "Login Success!"
     });
 
   } catch (err) {
