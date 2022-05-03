@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import PopUp from "./Popup";
@@ -11,8 +11,8 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 function Navbar({ logoutIndicator, modalOpener }) {
   const [successSignUp, setSuccessSignUp] = useState(false);
-  
-  const navigate = useNavigate()
+
+  const navigate = useNavigate();
 
   const getAccessToken = async (authorizationCode) => {
     let resp = await axios.post(`${serverUrl}users/social`, {
@@ -22,7 +22,7 @@ function Navbar({ logoutIndicator, modalOpener }) {
     if (resp.status === 201) {
       setSuccessSignUp(true);
     } else {
-     navigate("/main");
+      navigate("/main");
     }
   };
   // 소셜로 부터 리디렉션 됬을때 접근코드를 서버에게보냄.

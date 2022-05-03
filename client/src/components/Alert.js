@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const AlterBoxStyle = styled.div`
   position: fixed;
@@ -11,7 +11,7 @@ const AlterBoxStyle = styled.div`
 
   text-align: center;
   vertical-align: middle;
-  background-color:whitesmoke;
+  background-color: whitesmoke;
   padding: 2em 2.4em 2em 2.4em;
   border-radius: 40px;
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.4);
@@ -29,7 +29,8 @@ function Alert({ message, setCheckErr = () => {} }) {
     <AlterBoxStyle
       onClick={() => {
         setCheckErr(false);
-      }}>
+      }}
+    >
       {message}
     </AlterBoxStyle>
   );

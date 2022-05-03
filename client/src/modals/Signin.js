@@ -176,7 +176,6 @@ const MarginDiv = styled.div`
 axios.defaults.withCredentials = true;
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
-
 // ------------------------------------------------------------------------------------------
 
 function Signin({
@@ -187,7 +186,7 @@ function Signin({
   modalCloser,
   changeForm,
 }) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   // 로그인 상태 정보
   const [loginInfo, setLoginInfo] = useState({
     user_account: "",
@@ -274,9 +273,7 @@ function Signin({
   const googleSigninHandler = () => {
     let clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
     let redirectUri = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
-    window.location.assign(
-      
-    );
+    window.location.assign();
     modalOpener();
     modalCloser();
   };
@@ -342,5 +339,5 @@ function Signin({
 
 export default Signin;
 
-// 해결해야 하는 부분 
+// 해결해야 하는 부분
 // 구글 소셜 로그인 카카오 소셜
