@@ -17,11 +17,11 @@
   display:flex;
   position:fixed;
   top:0;
-  left:-100%;
+  right:-100%;
   transition: 850ms;
 }
 .nav-menu.active {
-  left: 0;
+  right: 0;
   transition: 350ms;
 }
 .nav-text{
@@ -35,7 +35,7 @@
 .nav-text a {
   text-decoration: none;
   color: #f5f5f5;
-  font-size: 18px;
+  font-size: 22px;
   width: 95%;
   height: 100%;
   display: flex;
