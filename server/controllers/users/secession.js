@@ -15,6 +15,7 @@ module.exports = async (req, res) => {
     };
     console.log(userInfo.dataValues);
 
+    // DB에서 유저 삭제
     await user.destroy({
       where: {id: userInfo.dataValues.id }
     });
