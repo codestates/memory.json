@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Alert from "../components/Alert";
 import styled from "styled-components";
 import axios from "axios";
@@ -186,7 +185,6 @@ function Signin({
   modalCloser,
   changeForm,
 }) {
-  const navigate = useNavigate();
   // 로그인 상태 정보
   const [loginInfo, setLoginInfo] = useState({
     user_account: "",
@@ -238,6 +236,7 @@ function Signin({
         if (res.data.message === "Login Success!") {
           modalOpener();
           loginIndicator();
+          console.log({isSignin})
           const accessToken = res.data.data.accessToken;
           axios
             .get(`${serverUrl}users`, {
@@ -248,7 +247,7 @@ function Signin({
               const userInformation = res.data.data;
               setUserInfo(userInformation);
             });
-          navigate("/main");
+          window.location.replace("/main");
         }
       })
       .catch((err) => {
@@ -263,7 +262,7 @@ function Signin({
     let clientId = process.env.REACT_APP_KAKAO_CLIENT_ID;
     let redirectUri = process.env.REACT_APP_KAKAO_REDIRECT_URI;
     window.location.assign(
-      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`
+      `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
     );
     modalOpener();
     modalCloser();
@@ -273,7 +272,9 @@ function Signin({
   const googleSigninHandler = () => {
     let clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
     let redirectUri = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
-    window.location.assign();
+    window.location.assign(
+      `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&include_granted_scopes=true&scope=openid%20email%20profile`
+    );
     modalOpener();
     modalCloser();
   };
@@ -324,9 +325,7 @@ function Signin({
               <KakaoIcon src="../img/kakao_login_medium_narrow.png" />
             </SocialSignInBtn>
 
-            <SocialSignInBtn
-              href={process.env.REACT_APP_SERVER_API + `/user/auth/google`}
-            >
+            <SocialSignInBtn onClick={googleSigninHandler}>
               <GoogleIcon src="../img/googlesocaillogin.png" />
             </SocialSignInBtn>
           </ModalView>
@@ -340,4 +339,3 @@ function Signin({
 export default Signin;
 
 // 해결해야 하는 부분
-// 구글 소셜 로그인 카카오 소셜

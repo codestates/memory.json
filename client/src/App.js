@@ -104,6 +104,7 @@ function Router() {
           setModalCloser={setModalCloser}
           loginIndicator={loginIndicator}
           changeForm={changeForm}
+          setUserInfo={setUserInfo}
         />
       </Modal>
       <Modal
