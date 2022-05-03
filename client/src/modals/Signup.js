@@ -1,164 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styled, { keyframes } from "styled-components";
+import { keyframes } from "styled-components";
 import axios from "axios";
 import Popup from "../components/Popup";
 import PopupDom from "../components/PopupDom";
 import PopupPostCode from "../components/PopupPostCode";
+import * as S from "./Singup.style";
 
 axios.defaults.withCredentials = true;
 const serverUrl = process.env.REACT_APP_SERVER_URL;
-
-const ModalArea = styled.div`
-  position: relative;
-  height: 100%;
-  text-align: center;
-  z-index: 999;
-  font-family: "font-css";
-`;
-
-const SignUpArea = styled.div`
-  z-index: 999;
-  width: 40vmin;
-  height: 90vmin;
-  min-height: 400px;
-  background: white;
-  box-shadow: 0 0 15px #333;
-  position: fixed;
-  margin: -0.9vh auto;
-  padding-top: 1vh;
-  left: 0;
-  right: 0;
-`;
-
-const Input = styled.input`
-  ::placeholder {
-    font-size: 1.1rem;
-  }
-  font-size: 1.1em;
-  font-weight: normal;
-  display: block;
-
-  width: 80%;
-  margin-bottom: 0.5rem;
-  margin-left: 10%;
-  margin-right: 10%;
-  height: 45px;
-
-  -webkit-transition: box-shadow 0.3s;
-  transition: box-shadow 0.3s;
-  transition: 0.25s linear;
-  text-align: center;
-
-  color: black;
-  border: 0;
-  outline: 0;
-  background: #eee;
-  box-shadow: 0 0 0 2px transparent;
-
-  &:focus {
-    animation: boxShadow 0.3s backwards;
-
-    box-shadow: 0 0 0 2px #008e43;
-  }
-`;
-
-const InputPassword = styled.input`
-  font-size: 1.1em;
-  font-weight: normal;
-  font-family: Arial;
-  display: block;
-  ::placeholder {
-    font-family: "font-css";
-  }
-
-  width: 80%;
-  margin-bottom: 0.5rem;
-  margin-left: 10%;
-  margin-right: 10%;
-  height: 45px;
-
-  -webkit-transition: box-shadow 0.3s;
-  transition: box-shadow 0.3s;
-  transition: 0.25s linear;
-  text-align: center;
-
-  color: black;
-  border: 0;
-  outline: 0;
-  background: #eee;
-  box-shadow: 0 0 0 2px transparent;
-
-  &:focus {
-    animation: boxShadow 0.3s backwards;
-
-    box-shadow: 0 0 0 2px #008e43;
-  }
-`;
-
-const SignUpBtn = styled.div`
-<<<<<<< HEAD
-  width: 60%;
-  height: 1vh;
-  color: white;
-  font-weight: 700;
-  font-size: 20px;
-  padding: 10px 10px 20px 10px;
-  margin: 20px 40px 30px 70px;
-  background-color: #c4ddff;
-  border-radius: 5em;
-=======
-  margin-top: 15px;
-  width: 100%;
-  height: 5%;
-  padding-top: 4%;
-  font-size: 2rem;
-
->>>>>>> 887e8093f808e3083303083ae1be2e8ca9c6f199
-  cursor: pointer;
-
-  background: #008e43;
-  :hover {
-    border: 2px solid #008e43;
-  }
-`;
-
-const SignInBtn = styled.div`
-<<<<<<< HEAD
-  width: 60%;
-  height: 1vh;
-  color: white;
-  font-weight: 700;
-  font-size: 20px;
-  padding: 10px 10px 20px 10px;
-  margin: 20px 40px 30px 70px;
-  background-color: #c4ddff;
-  border-radius: 5em;
-=======
-  width: 100%;
-  height: 5%;
-  padding-top: 4%;
->>>>>>> 887e8093f808e3083303083ae1be2e8ca9c6f199
-  cursor: pointer;
-  :hover {
-    border: 2px solid #fee518;
-  }
-  background: #fee518;
-`;
-
-const Modalback = styled.div`
-  z-index: 900;
-  position: fixed;
-  margin: 0;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.3);
-  place-items: center;
-`;
 
 function Signup({ changeForm, modalCloser, modalOpener }) {
   const navigate = useNavigate();
@@ -250,7 +100,7 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
     }
     if (inputName === "sex") {
       if (sex !== "F" && sex !== "M") {
-        return '성별은 F 또는 M 만 입력할 수 있습니다.';
+        return "성별은 F 또는 M 만 입력할 수 있습니다.";
       }
     }
   };
@@ -371,12 +221,12 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
   //---------------------------------------------------------------------------------
 
   return (
-    <ModalArea>
-      <SignUpArea>
+    <S.ModalArea>
+      <S.SignUpArea>
         <h1>회원가입</h1>
         <div>
           <span>아이디(필수)</span>
-          <Input
+          <S.Input
             type="text"
             onBlur={() => {
               checkedInfo("user_account");
@@ -387,7 +237,7 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
         </div>
         <div>
           <span>닉네임(필수)</span>
-          <Input
+          <S.Input
             type="text"
             onBlur={() => {
               checkedInfo("user_name");
@@ -398,7 +248,7 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
         </div>
         <div>
           <span>비밀번호(필수)</span>
-          <InputPassword
+          <S.InputPassword
             type="password"
             onBlur={() => {
               checkedInfo("password");
@@ -409,7 +259,7 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
         </div>
         <div>
           <span>비밀번호 확인(필수)</span>
-          <InputPassword
+          <S.InputPassword
             type="password"
             onBlur={() => {
               checkedInfo("checkedPassword");
@@ -420,7 +270,7 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
         </div>
         <div>
           <span>휴대폰 번호</span>
-          <Input
+          <S.Input
             type="text"
             onBlur={() => {
               checkedInfo("mobile");
@@ -431,7 +281,7 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
         </div>
         <div>
           <span>이메일</span>
-          <Input
+          <S.Input
             type="email"
             onBlur={() => {
               checkedInfo("email");
@@ -442,7 +292,7 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
         </div>
         <div>
           <span>주소</span>
-          <Input
+          <S.Input
             type="text"
             value={`${addressDetail} ${zoneCode}`}
             placeholder="주소"
@@ -469,7 +319,7 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
         </div>
         <div>
           <span>상세 주소</span>
-          <Input
+          <S.Input
             type="text"
             onChange={handleInputAddress("address")}
             placeholder="상세주소를 입력하세요"
@@ -477,7 +327,7 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
         </div>
         <div>
           <span>나이</span>
-          <Input
+          <S.Input
             type="number"
             min="0"
             max="100"
@@ -487,7 +337,7 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
         </div>
         <div>
           <span>성별</span>
-          <Input
+          <S.Input
             type="text"
             onBlur={() => {
               checkedInfo("sex");
@@ -499,28 +349,27 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
 
         <div style={{ color: "red" }}>{validateErr}</div>
 
-        <SignUpBtn onClick={() => signupHandler()}>회원 가입 하기</SignUpBtn>
+        <S.SignUpBtn onClick={() => signupHandler()}>
+          회원 가입 하기
+        </S.SignUpBtn>
 
-        <SignInBtn
+        <S.SignInBtn
           onClick={() => {
             changeForm();
           }}
         >
           이미 가입하셨다면 여기를 눌러주세요.
-        </SignInBtn>
-      </SignUpArea>
+        </S.SignInBtn>
+      </S.SignUpArea>
 
-      <Modalback onClick={modalCloser}></Modalback>
+      <S.Modalback onClick={modalCloser}></S.Modalback>
       {successSignup ? <Popup text={`회원가입에 성공하셨습니다.`} /> : null}
-    </ModalArea>
+    </S.ModalArea>
   );
 }
 
 export default Signup;
-<<<<<<< HEAD
-=======
 
 // 해결해야 하는부분
 // 주소 api를 결정하고, 상세주소를 치면 address에 올바른 값이 들어간다. 하지만 중간에 도로명 지도 api를 수정하려고 누르고 상세주소를 건들리지 않으면 주소명이 바뀌지 않는다.
 // 중복 조회
->>>>>>> 887e8093f808e3083303083ae1be2e8ca9c6f199
