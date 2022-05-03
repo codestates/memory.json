@@ -1,59 +1,12 @@
 import React, { useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import axios from "axios";
 import PopUp from "./Popup";
-
-// 스타일컴퍼넌트
-const NavArea = styled.div`
-  position: relative;
-  width: 100%;
-  height: 80px;
-  background-color: #f1ddbf;
-  border-bottom: 3px solid #525e75;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const FirstDiv = styled.div`
-  width: 100px;
-  height: 50px;
-  background-color: transparent;
-  margin: 1em 1em 1em 1em;
-`;
-
-const ImageLog = styled.img`
-  width: 300px;
-  height: 50px;
-  margin-top: 1%;
-  margin-left: 5%;
-  margin-bottom: 5%;
-  cursor: pointer;
-`;
-
-const SecondDiv = styled.div`
-  width: 10%;
-  height: 50px;
-  margin: 1em 1em 1em 1em;
-  background-color: #4d4c7d;
-  border-radius: 15em;
-  cursor: pointer;
-`;
-
-const ButtonStyle = styled.button`
-  width: 100%;
-  height: 50px;
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
-`;
-// ------------------------------------------------------------------------------------------
+import * as S from "./Navbar.style";
 
 // axios 설정 / 전역변수 가져오기
 axios.defaults.withCredentials = true;
 const serverUrl = process.env.REACT_APP_SERVER_URL;
-
 // ------------------------------------------------------------------------------------------
 
 function Navbar({ logoutIndicator, modalOpener }) {
@@ -82,28 +35,28 @@ function Navbar({ logoutIndicator, modalOpener }) {
   }, []);
 
   return (
-    <NavArea>
-      <FirstDiv>
-        <ImageLog
-          src="../img/headerLogo.png"
+    <S.NavArea>
+      <S.FirstDiv>
+        <S.ImageLog
+          src="../img/memorylogo.png"
           alt="Image"
           onClick={() => {
             navigate("/main");
           }}
         />
-      </FirstDiv>
+      </S.FirstDiv>
       {/* 로그인 버튼 */}
-      <SecondDiv>
-        <ButtonStyle
+      <S.SecondDiv>
+        <S.ButtonStyle
           type="button"
           onClick={modalOpener}
-          style={{ color: "white", fontSize: "120%" }}
+          style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
         >
           로그인버튼
-        </ButtonStyle>
-      </SecondDiv>
+        </S.ButtonStyle>
+      </S.SecondDiv>
       {successSignUp ? <PopUp text={`회원가입에 성공하셨습니다.'`} /> : null}
-    </NavArea>
+    </S.NavArea>
   );
 }
 

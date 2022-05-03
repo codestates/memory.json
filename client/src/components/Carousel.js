@@ -4,6 +4,12 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+import styled from "styled-components";
+
+const H2 = styled.h2`
+  color: white;
+`;
+
 export default class MultipleItems extends Component {
   render() {
     const settings = {
@@ -15,7 +21,7 @@ export default class MultipleItems extends Component {
     };
     return (
       <div>
-        <h2> Past & Future </h2>
+        <H2>Past & Future</H2>
         <Slider {...settings}>
           <div>
             <img src="img/seoul1.png" alt="서울과거사진" />
