@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Alert from "../components/Alert";
 import styled from "styled-components";
 import axios from "axios";
@@ -115,18 +116,6 @@ const SignInBtn = styled.div`
   cursor: pointer;
 `;
 
-const SocialSignInBtn = styled.div`
-  width: 100%;
-  height: 18%;
-  cursor: pointer;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: white;
-  :hover {
-    border: 100% solid #fee518;
-  }
-`;
-
 const SignUpBtn = styled.div`
   width: 60%;
   height: 1vh;
@@ -139,11 +128,55 @@ const SignUpBtn = styled.div`
   border-radius: 5em;
 `;
 
+const SocialSignInBtn = styled.div`
+  width: 100%;
+  height: 50px;
+  background: white;
+  border: 2px solid #108dee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  color: white;
+  padding: 5px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  box-sizing: border-box;
+  position: relative;
+
+  :hover::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.07);
+  }
+`;
+
+const KakaoIcon = styled.img`
+  z-index: 999;
+  height: 40px;
+  width: 50%;
+`;
+
+const GoogleIcon = styled.img`
+  z-index: 999;
+  height: 40px;
+  width: 50%;
+`;
+
 const MarginDiv = styled.div`
   display: flex;
 `;
 // ------------------------------------------------------------------------------------------
+
+// axios 설정 / 전역변수 가져오기
 axios.defaults.withCredentials = true;
+const serverUrl = process.env.REACT_APP_SERVER_URL;
+
+// ------------------------------------------------------------------------------------------
 
 function Signin({
   isSignin,
@@ -153,63 +186,82 @@ function Signin({
   modalCloser,
   changeForm,
 }) {
+  const navigate = useNavigate();
+  // 로그인 상태 정보
   const [loginInfo, setLoginInfo] = useState({
     user_account: "",
     password: "",
   });
-  const [errorMessage, setErrorMessage] = useState("");
-  const [checkErr, setCheckErr] = useState(false);
-
-  const handleErr = () => {
-    setCheckErr(true);
-    setTimeout(() => {
-      setCheckErr(false);
-    }, 3000);
-  };
-  const clickErrBox = () => {
-    setCheckErr(false);
-  };
 
   //로그인 요청을 보낼 데이터
   const handleInputValue = (key) => (e) => {
-    console.log(e)
+    // console.log(e);
     setLoginInfo({ ...loginInfo, [key]: e.target.value });
   };
 
+  // 에러 메세지 상태변수
+  const [errorMessage, setErrorMessage] = useState("");
+  // 에러 발생 표기
+  const [checkErr, setCheckErr] = useState(false);
+
+  // 에러 핸들러
+  const errorHandler = () => {
+    setCheckErr(true);
+    setTimeout(() => {
+      setCheckErr(false);
+    }, 2000);
+  };
+  const clickError = () => {
+    setCheckErr(false);
+  };
+
   //처음 로그인 요청하는 곳
-  const handleLogin = () => {
-    console.log(loginInfo)
+  const signinHandler = () => {
+    // console.log(loginInfo);
     if (!loginInfo.user_account || !loginInfo.password) {
       setErrorMessage("아이디와 비밀번호를 입력하세요");
-      handleErr();
+      errorHandler();
       return;
     }
-
     axios
-      .post("http://localhost:4000/users/signin", {
-        user_account: loginInfo.user_account,
-        password: loginInfo.password,
-      })
-      .then((result) => {
-        if (result.data.message === "Login Success!") {
+      .post(
+        `${serverUrl}users/signin`,
+        {
+          user_account: loginInfo.user_account,
+          password: loginInfo.password,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      )
+      .then((res) => {
+        if (res.data.message === "Login Success!") {
           modalOpener();
           loginIndicator();
+          const accessToken = res.data.data.accessToken;
           axios
-            .get("http://localhost:4000/users")
-            .then((data) => setUserInfo(data.data.data));
-          window.location.replace("/");
+            .get(`${serverUrl}users`, {
+              headers: { authorization: `Bearer ${accessToken}` },
+            })
+            .then((res) => {
+              console.log("getres", res.data.data);
+              const userInformation = res.data.data;
+              setUserInfo(userInformation);
+            });
+          navigate("/main");
         }
       })
       .catch((err) => {
+        console.log(err);
         setErrorMessage("아이디 혹은 비밀번호가 틀립니다.");
-        handleErr();
+        errorHandler();
       });
   };
 
-  //소셜 로그인
-  const kakaoloiginhandler = () => {
-    let clientId = process.env.REACT_APP_CLIENT_ID;
-    let redirectUri = process.env.REACT_APP_REDIRECT_URI;
+  //카카오 소셜 로그인
+  const kakaoSigninHandler = () => {
+    let clientId = process.env.REACT_APP_KAKAO_CLIENT_ID;
+    let redirectUri = process.env.REACT_APP_KAKAO_REDIRECT_URI;
     window.location.assign(
       `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`
     );
@@ -217,9 +269,18 @@ function Signin({
     modalCloser();
   };
 
+  //구글 소셜 로그인
+  const googleSigninHandler = () => {
+    let clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    let redirectUri = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
+    window.location.assign();
+    modalOpener();
+    modalCloser();
+  };
+
   const loginPressEnter = (e) => {
     if (e.keyCode === 13) {
-      handleLogin();
+      signinHandler();
     }
   };
 
@@ -234,6 +295,7 @@ function Signin({
                 <span>아이디</span>
                 <Input
                   type="text"
+                  autoComplete="on"
                   onKeyUp={loginPressEnter}
                   onChange={handleInputValue("user_account")}
                   placeholder="아이디를 입력해주세요"
@@ -242,7 +304,8 @@ function Signin({
               <div>
                 <span>비밀번호</span>
                 <InputPassword
-                  type="text"
+                  type="password"
+                  autoComplete="on"
                   onKeyUp={loginPressEnter}
                   onChange={handleInputValue("password")}
                   placeholder="비밀번호를 입력해주세요"
@@ -251,26 +314,23 @@ function Signin({
             </div>
 
             <SignUpBtn onClick={() => changeForm()}>회원가입</SignUpBtn>
-            <SignInBtn onClick={handleLogin}>Sign In</SignInBtn>
+            <SignInBtn onClick={signinHandler}>로그인</SignInBtn>
 
             {checkErr ? (
-              <Alert message={errorMessage} setCheckErr={clickErrBox} />
+              <Alert message={errorMessage} setCheckErr={clickError} />
             ) : null}
-            <SocialSignInBtn onClick={kakaoloiginhandler}>
-              <img
-                src="../img/kakao_login_medium_narrow.png"
-                alt="login"
-                style={{
-                  position: "relative",
-                  width: "100%",
-                  top: "-9%",
-                  zIndex: "-1",
-                  backgroundColor: "#fee518",
-                }}
-              />
+
+            <SocialSignInBtn onClick={kakaoSigninHandler}>
+              <KakaoIcon src="../img/kakao_login_medium_narrow.png" />
+            </SocialSignInBtn>
+
+            <SocialSignInBtn
+              href={process.env.REACT_APP_SERVER_API + `/user/auth/google`}
+            >
+              <GoogleIcon src="../img/googlesocaillogin.png" />
             </SocialSignInBtn>
           </ModalView>
-          <Modalback onClick={() => modalCloser()}></Modalback>
+          <Modalback onClick={modalCloser}></Modalback>
         </MarginDiv>
       )}
     </ModalArea>
@@ -278,3 +338,6 @@ function Signin({
 }
 
 export default Signin;
+
+// 해결해야 하는 부분
+// 구글 소셜 로그인 카카오 소셜
