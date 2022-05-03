@@ -11,16 +11,14 @@ const AlterBoxStyle = styled.div`
 
   text-align: center;
   vertical-align: middle;
-  background-color: mediumvioletred;
+  background-color:whitesmoke;
   padding: 2em 2.4em 2em 2.4em;
-  border-radius: 4px;
+  border-radius: 40px;
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.4);
-  color: white;
+  color: black;
   font-size: 1.2em;
   font-weight: bold;
-  /* white-space: nowrap; */
-  font-family: font-css;
-  font-size: 2rem;
+  font-size: 1rem;
 
   transition-duration: 300ms;
   z-index: 999;

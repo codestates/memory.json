@@ -275,7 +275,7 @@ function Signin({
     let clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
     let redirectUri = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
     window.location.assign(
-      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`
+      
     );
     modalOpener();
     modalCloser();
@@ -330,7 +330,7 @@ function Signin({
             <SocialSignInBtn
               href={process.env.REACT_APP_SERVER_API + `/user/auth/google`}
             >
-              <GoogleIcon src="../img/googlesociallogin.png" />
+              <GoogleIcon src="../img/googlesocaillogin.png" />
             </SocialSignInBtn>
           </ModalView>
           <Modalback onClick={modalCloser}></Modalback>
