@@ -1,42 +1,38 @@
 import React from "react";
 import styled from "styled-components";
-import Navi from "../modals/Navi";
+import MapArea from "../components/Map";
+import SearchPlace from "../components/SearchPlace";
 
 function Board() {
   return (
-    <BoardContainer>
-      <BoardSection>
-        <BoardDiv>
-          <Map></Map>
-        </BoardDiv>
-      </BoardSection>
-    </BoardContainer>
+    <MapContainer>
+      <MapSection>
+        <MapDiv>
+          <SearchPlace></SearchPlace>
+          <MapArea></MapArea>
+        </MapDiv>
+      </MapSection>
+    </MapContainer>
   );
 }
 
 export default Board;
 
-const Map = styled.div`
-  width: 500px;
-  height: 400px;
-`;
-
-const BoardContainer = styled.div`
+const MapContainer = styled.div`
   width: 100%;
   height: 90vh;
-  background: white;
   display: flex;
   flex-direction: column;
 `;
 
-const BoardSection = styled.section`
+const MapSection = styled.section`
   width: auto;
   height: 95%;
   padding: 5vh 5vw;
   background-color: #082032;
 `;
 
-const BoardDiv = styled.div`
+const MapDiv = styled.div`
   width: auto;
   height: 85%;
   padding: 5vh 5vw;
