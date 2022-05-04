@@ -7,7 +7,7 @@ module.exports = {
   },
 
   sendAccessToken: (res, accessToken) => {
-    res.cookie('accessToken', accessToken, { httpOnly: true });
+    res.cookie('accessToken', accessToken, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7 });
   },
 
   sendAccessTokenWithUserInfo: (res, accessToken, data) => {
