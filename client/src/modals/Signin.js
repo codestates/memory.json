@@ -261,6 +261,7 @@ function Signin({
   //카카오 소셜 로그인
   const kakaoSigninHandler = () => {
     let clientId = process.env.REACT_APP_KAKAO_CLIENT_ID;
+    console.log(clientId)
     let redirectUri = process.env.REACT_APP_KAKAO_REDIRECT_URI;
     window.location.assign(
       `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`

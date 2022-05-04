@@ -46,7 +46,7 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
     );
     console.log(res);
     logoutIndicator();
-    if (res.status === 201) {
+    if (res.status === 200) {
       setSuccessSignUp(true);
     } else {
       window.location.replace("/main");
@@ -60,6 +60,7 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
       {
         authorizationCode,
       },
+      { withCredentials: true },
       {
         headers: {
           "Content-type": "application/json",
@@ -68,7 +69,7 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
     );
     console.log(res);
     logoutIndicator();
-    if (res.status === 201) {
+    if (res.status === 200) {
       setSuccessSignUp(true);
     } else {
       window.location.replace("/main");
