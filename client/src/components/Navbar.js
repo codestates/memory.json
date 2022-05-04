@@ -9,30 +9,70 @@ axios.defaults.withCredentials = true;
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 // ------------------------------------------------------------------------------------------
 
-function Navbar({ logoutIndicator, modalOpener }) {
+function Navbar({ isSignin, logoutIndicator, modalOpener }) {
   const [successSignUp, setSuccessSignUp] = useState(false);
 
   const navigate = useNavigate();
 
-  const getAccessToken = async (authorizationCode) => {
-    let resp = await axios.post(`${serverUrl}users/social`, {
-      authorizationCode,
-    });
-    logoutIndicator();
-    if (resp.status === 201) {
-      setSuccessSignUp(true);
-    } else {
-      navigate("/main");
-    }
-  };
-  // 소셜로 부터 리디렉션 됬을때 접근코드를 서버에게보냄.
+  // 리디렉션 됬을때 접근코드를 서버에게보냄.
   useEffect(() => {
-    let url = new URL(window.location.href);
-    let authorizationCode = url.searchParams.get("code");
-    if (authorizationCode) {
-      getAccessToken(authorizationCode);
+    const href = window.location.href;
+    console.log(href);
+    let params = new URL(href).searchParams;
+    let authorizationCode = params.get("code");
+    let authorizationScope = params.get("scope");
+    console.log(authorizationCode)
+    console.log(authorizationScope)
+    if (authorizationScope === null) {
+      kakaoGetAccessToken(authorizationCode);
+    } else {
+      googleGetAccessToken(authorizationCode);
     }
   }, []);
+
+  // 카카오 로그인 코드 전송
+  const kakaoGetAccessToken = async (authorizationCode) => {
+    let res = await axios.post(
+      `${serverUrl}users/socialByKakao`,
+      {
+        authorizationCode,
+      },
+      {
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+        },
+      }
+    );
+    console.log(res);
+    logoutIndicator();
+    if (res.status === 201) {
+      setSuccessSignUp(true);
+    } else {
+      window.location.replace("/main");
+    }
+  };
+
+  // 구글 로그인 코드 전송
+  const googleGetAccessToken = async (authorizationCode) => {
+    let res = await axios.post(
+      `${serverUrl}users/socialByGoogle`,
+      {
+        authorizationCode,
+      },
+      {
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+        },
+      }
+    );
+    console.log(res);
+    logoutIndicator();
+    if (res.status === 201) {
+      setSuccessSignUp(true);
+    } else {
+      window.location.replace("/main");
+    }
+  };
 
   return (
     <S.NavArea>
@@ -47,13 +87,23 @@ function Navbar({ logoutIndicator, modalOpener }) {
       </S.FirstDiv>
       {/* 로그인 버튼 */}
       <S.SecondDiv>
-        <S.ButtonStyle
-          type="button"
-          onClick={modalOpener}
-          style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
-        >
-          로그인버튼
-        </S.ButtonStyle>
+        {isSignin ? (
+          <S.ButtonStyle
+            type="button"
+            onClick={logoutIndicator}
+            style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
+          >
+            로그아웃
+          </S.ButtonStyle>
+        ) : (
+          <S.ButtonStyle
+            type="button"
+            onClick={modalOpener}
+            style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
+          >
+            로그인
+          </S.ButtonStyle>
+        )}
       </S.SecondDiv>
       {successSignUp ? <PopUp text={`회원가입에 성공하셨습니다.'`} /> : null}
     </S.NavArea>
