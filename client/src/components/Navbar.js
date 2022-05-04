@@ -1,27 +1,32 @@
-import React, { useState, useEffect, useRef } from "react";
-import styled from "styled-components";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import PopUp from "./Popup";
 import * as S from "./Navbar.style";
 
+// axios 설정 / 전역변수 가져오기
+axios.defaults.withCredentials = true;
+const serverUrl = process.env.REACT_APP_SERVER_URL;
+// ------------------------------------------------------------------------------------------
+
 function Navbar({ logoutIndicator, modalOpener }) {
   const [successSignUp, setSuccessSignUp] = useState(false);
 
+  const navigate = useNavigate();
+
   const getAccessToken = async (authorizationCode) => {
-    let resp = await axios.post(`${process.env.REACT_APP_API_URL}users/auth`, {
+    let resp = await axios.post(`${serverUrl}users/social`, {
       authorizationCode,
     });
     logoutIndicator();
-
     if (resp.status === 201) {
       setSuccessSignUp(true);
     } else {
-      window.location.replace("/main");
+      navigate("/main");
     }
   };
-
+  // 소셜로 부터 리디렉션 됬을때 접근코드를 서버에게보냄.
   useEffect(() => {
-    // 소셜로 부터 리디렉션 됬을때 접근코드를 서버에게보냄.
     let url = new URL(window.location.href);
     let authorizationCode = url.searchParams.get("code");
     if (authorizationCode) {
@@ -36,7 +41,7 @@ function Navbar({ logoutIndicator, modalOpener }) {
           src="../img/memorylogo.png"
           alt="Image"
           onClick={() => {
-            window.location.replace("/main");
+            navigate("/main");
           }}
         />
       </S.FirstDiv>

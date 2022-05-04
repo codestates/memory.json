@@ -5,7 +5,6 @@ const {
 } = require('../tokenFunctions');
 const dotenv = require('dotenv');
 dotenv.config();
-const jwt = require('jsonwebtoken');
 
 module.exports = async (req, res) => {
   try{
@@ -46,7 +45,6 @@ module.exports = async (req, res) => {
     // users 테이블 고유 id와 user_account를 담아 토큰을 생성 후 클라이언트에 저장함
     const accessToken = generateAccessToken({
       id: userInfo.dataValues.id,
-      user_account
     });
     // console.log(accessToken);
   
@@ -59,11 +57,7 @@ module.exports = async (req, res) => {
     console.log(accessTokenData) */
   
     // 토큰 쿠키로 보냄
-    const cookieOptions = {
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-      httpOnly: true
-    };
-    res.cookie('accessToken', accessToken, cookieOptions);
+    sendAccessToken(res, accessToken);
     
     // 성공 응답
     return res.status(200).json({
