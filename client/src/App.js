@@ -40,6 +40,7 @@ function Router() {
     };
     logoutReq();
     setIsSignin(false);
+    console.log(isSignin)
   };
   //로그아웃 실행
 

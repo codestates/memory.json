@@ -17,19 +17,45 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
   // 리디렉션 됬을때 접근코드를 서버에게보냄.
   useEffect(() => {
     const href = window.location.href;
-    console.log(isSignin)
-    console.log(href)
+    console.log(href);
     let params = new URL(href).searchParams;
     let authorizationCode = params.get("code");
-    if (authorizationCode) {
-      getAccessToken(authorizationCode);
+    let authorizationScope = params.get("scope");
+    console.log(authorizationCode)
+    console.log(authorizationScope)
+    if (authorizationScope === null) {
+      kakaoGetAccessToken(authorizationCode);
+    } else {
+      googleGetAccessToken(authorizationCode);
     }
   }, []);
 
   // 카카오 로그인 코드 전송
-  const getAccessToken = async (authorizationCode) => {
+  const kakaoGetAccessToken = async (authorizationCode) => {
     let res = await axios.post(
       `${serverUrl}users/socialByKakao`,
+      {
+        authorizationCode,
+      },
+      {
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+        },
+      }
+    );
+    console.log(res);
+    logoutIndicator();
+    if (res.status === 201) {
+      setSuccessSignUp(true);
+    } else {
+      window.location.replace("/main");
+    }
+  };
+
+  // 구글 로그인 코드 전송
+  const googleGetAccessToken = async (authorizationCode) => {
+    let res = await axios.post(
+      `${serverUrl}users/socialByGoogle`,
       {
         authorizationCode,
       },
@@ -62,12 +88,12 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
       {/* 로그인 버튼 */}
       <S.SecondDiv>
         {isSignin ? (
-          <S.ButtonStyle 
-          type="button"
-          onClick={logoutIndicator}
-          style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
+          <S.ButtonStyle
+            type="button"
+            onClick={logoutIndicator}
+            style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
           >
-          로그아웃
+            로그아웃
           </S.ButtonStyle>
         ) : (
           <S.ButtonStyle
@@ -75,7 +101,7 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
             onClick={modalOpener}
             style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
           >
-            로그인버튼
+            로그인
           </S.ButtonStyle>
         )}
       </S.SecondDiv>

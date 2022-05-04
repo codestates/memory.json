@@ -215,7 +215,7 @@ function Signin({
 
   //처음 로그인 요청하는 곳
   const signinHandler = () => {
-    // console.log(loginInfo);
+    console.log("x",loginInfo);
     if (!loginInfo.user_account || !loginInfo.password) {
       setErrorMessage("아이디와 비밀번호를 입력하세요");
       errorHandler();
@@ -236,7 +236,7 @@ function Signin({
         if (res.data.message === "Login Success!") {
           modalOpener();
           loginIndicator();
-          console.log({isSignin})
+          
           const accessToken = res.data.data.accessToken;
           axios
             .get(`${serverUrl}users`, {
@@ -248,6 +248,7 @@ function Signin({
               setUserInfo(userInformation);
             });
           window.location.replace("/main");
+          console.log("d",isSignin)
         }
       })
       .catch((err) => {
