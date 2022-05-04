@@ -87,13 +87,13 @@ function Main() {
         </S.ServiceSection>
       </S.ServiceContainer>
       <S.Divider></S.Divider>
-      <S.MapContainer>
-        <S.MapSection>
-          <S.MapDiv>
+      <S.ViewContainer>
+        <S.ViewSection>
+          <S.ViewDiv>
             <h1>지도 api를 불러올 공간</h1>
-          </S.MapDiv>
-        </S.MapSection>
-      </S.MapContainer>
+          </S.ViewDiv>
+        </S.ViewSection>
+      </S.ViewContainer>
     </S.OuterDiv>
   );
 }

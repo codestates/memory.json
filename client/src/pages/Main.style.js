@@ -68,7 +68,7 @@ const ServiceDiv = styled.div`
 
 // map 페이지 css
 
-const MapContainer = styled.div`
+const ViewContainer = styled.div`
   width: 100%;
   height: 100vh;
   background: white;
@@ -77,14 +77,14 @@ const MapContainer = styled.div`
   overflow-y: hidden;
 `;
 
-const MapSection = styled.section`
+const ViewSection = styled.section`
   width: auto;
   height: 100%;
   padding: 5vh 10vw;
   background-color: #082032;
 `;
 
-const MapDiv = styled.div`
+const ViewDiv = styled.div`
   width: auto;
   height: 80%;
   padding: 5vh 10vw;
@@ -102,7 +102,7 @@ export {
   ServiceContainer,
   ServiceDiv,
   ServiceSection,
-  MapContainer,
-  MapDiv,
-  MapSection,
+  ViewContainer,
+  ViewDiv,
+  ViewSection,
 };
