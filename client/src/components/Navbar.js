@@ -37,6 +37,7 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
       {
         authorizationCode,
       },
+      { withCredentials: true },
       {
         headers: {
           "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
@@ -45,7 +46,7 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
     );
     console.log(res);
     logoutIndicator();
-    if (res.status === 201) {
+    if (res.status === 200) {
       setSuccessSignUp(true);
     } else {
       window.location.replace("/main");
@@ -59,15 +60,16 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
       {
         authorizationCode,
       },
+      { withCredentials: true },
       {
         headers: {
-          "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+          "Content-type": "application/json",
         },
       }
     );
     console.log(res);
     logoutIndicator();
-    if (res.status === 201) {
+    if (res.status === 200) {
       setSuccessSignUp(true);
     } else {
       window.location.replace("/main");
