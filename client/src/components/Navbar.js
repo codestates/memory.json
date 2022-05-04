@@ -21,8 +21,8 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
     let params = new URL(href).searchParams;
     let authorizationCode = params.get("code");
     let authorizationScope = params.get("scope");
-    console.log(authorizationCode)
-    console.log(authorizationScope)
+    console.log(authorizationCode);
+    console.log(authorizationScope);
     if (authorizationScope === null) {
       kakaoGetAccessToken(authorizationCode);
     } else {
@@ -37,6 +37,7 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
       {
         authorizationCode,
       },
+      { withCredentials: true },
       {
         headers: {
           "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
@@ -61,7 +62,7 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
       },
       {
         headers: {
-          "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+          "Content-type": "application/json",
         },
       }
     );
