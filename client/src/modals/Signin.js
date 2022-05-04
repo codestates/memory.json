@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Alert from "../components/Alert";
 import styled from "styled-components";
 import axios from "axios";
@@ -186,7 +185,6 @@ function Signin({
   modalCloser,
   changeForm,
 }) {
-  const navigate = useNavigate();
   // 로그인 상태 정보
   const [loginInfo, setLoginInfo] = useState({
     user_account: "",
@@ -217,7 +215,7 @@ function Signin({
 
   //처음 로그인 요청하는 곳
   const signinHandler = () => {
-    // console.log(loginInfo);
+    console.log("x",loginInfo);
     if (!loginInfo.user_account || !loginInfo.password) {
       setErrorMessage("아이디와 비밀번호를 입력하세요");
       errorHandler();
@@ -238,6 +236,7 @@ function Signin({
         if (res.data.message === "Login Success!") {
           modalOpener();
           loginIndicator();
+          
           const accessToken = res.data.data.accessToken;
           axios
             .get(`${serverUrl}users`, {
@@ -248,7 +247,8 @@ function Signin({
               const userInformation = res.data.data;
               setUserInfo(userInformation);
             });
-          navigate("/main");
+          window.location.replace("/main");
+          console.log("d",isSignin)
         }
       })
       .catch((err) => {
@@ -263,7 +263,7 @@ function Signin({
     let clientId = process.env.REACT_APP_KAKAO_CLIENT_ID;
     let redirectUri = process.env.REACT_APP_KAKAO_REDIRECT_URI;
     window.location.assign(
-      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`
+      `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
     );
     modalOpener();
     modalCloser();
@@ -273,11 +273,14 @@ function Signin({
   const googleSigninHandler = () => {
     let clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
     let redirectUri = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
-    window.location.assign();
+    let scope ='profile%20https://www.googleapis.com/auth/userinfo.profile%20https://www.googleapis.com/auth/user.gender.read%20https://www.googleapis.com/auth/user.emails.read%20https://www.googleapis.com/auth/user.birthday.read%20https://www.googleapis.com/auth/user.addresses.read%20https://www.googleapis.com/auth/user.phonenumbers.read'
+    window.location.assign(
+      `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${redirectUri}&prompt=consent&response_type=code&client_id=${clientId}&scope=${scope}&access_type=offline`
+    );
     modalOpener();
     modalCloser();
   };
-
+  
   const loginPressEnter = (e) => {
     if (e.keyCode === 13) {
       signinHandler();
@@ -324,9 +327,7 @@ function Signin({
               <KakaoIcon src="../img/kakao_login_medium_narrow.png" />
             </SocialSignInBtn>
 
-            <SocialSignInBtn
-              href={process.env.REACT_APP_SERVER_API + `/user/auth/google`}
-            >
+            <SocialSignInBtn onClick={googleSigninHandler}>
               <GoogleIcon src="../img/googlesocaillogin.png" />
             </SocialSignInBtn>
           </ModalView>
@@ -340,4 +341,3 @@ function Signin({
 export default Signin;
 
 // 해결해야 하는 부분
-// 구글 소셜 로그인 카카오 소셜

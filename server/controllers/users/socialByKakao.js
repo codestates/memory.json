@@ -1,5 +1,10 @@
 const axios = require("axios");
 const qs = require("qs");
+const { user } = require("../../models");
+const {
+  generateAccessToken,
+  sendAccessToken
+} = require('../tokenFunctions');
 require("dotenv").config();
 
 module.exports = async (req, res) => {
@@ -10,7 +15,7 @@ module.exports = async (req, res) => {
     const bodyData = {
       grant_type: "authorization_code",
       client_id: process.env.KAKAO_ID,
-      redirect_uri: "http://localhost:3000/mypage",
+      redirect_uri: "http://localhost:3000/main",
       code: authorizationCode,
     };
     // console.log(bodyData)
@@ -50,7 +55,47 @@ module.exports = async (req, res) => {
         Authorization: `Bearer ${kakaoAccessToken}`,
       },
     });
-    console.log(tokenUserRes.data);
+    // console.log(tokenUserRes.data);
+
+    // 카카오에서 보낸 정보를 바탕으로 회원가입을 시키고 우리만의 토큰을 만듦.
+    // 그러기위해 DB에 일치하는 데이터가 있는지 확인한다.
+    const { email, profile } = tokenUserRes.data.kakao_account;
+    const social_id = tokenUserRes.data.id;
+
+    const userInfo = await user.findOne({
+      where: { social_id: social_id },
+    });
+
+    // 회원이 존재하지 않는 경우 DB에 데이터 추가 후 로그인 처리
+    if (!userInfo) {
+      const newUserInfo = await user.create({
+        user_name: profile.nickname,
+        email,
+        social_id: social_id,
+        provider: "kakao",
+      });
+      // console.log(newUserInfo);
+
+      // 토큰을 발급하고 쿠키에 저장한다.
+      const newAccessToken = generateAccessToken({
+        id: newUserInfo.dataValues.id,
+      });
+      sendAccessToken(res, newAccessToken);
+      
+      // 응답 전송
+      return res.status(201).json({
+        data: {
+          accessToken: newAccessToken
+        },
+        message: "ok"
+      })
+    } 
+
+    // 회원이 존재하는 경우 로그인 처리
+    // const newAccessToken = getAccessToken()
+
+  
+    
 
     res.send("소셜로그인");
     // 카카오 구현
