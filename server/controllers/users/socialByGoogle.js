@@ -39,35 +39,30 @@ module.exports = async (req, res) => {
     });
     // console.log(socialInfo)
     const social_id = socialInfo.data.id
-    console.log(social_id)
+    // console.log(social_id)
+    // console.log(socialInfo)
     const sameAccount = await user.findOne({
       where: {
         social_id: social_id,
       }
     })
-    console.log(sameAccount)
+    // console.log(sameAccount)
+    // console.log(socialInfo.data)
     if (!sameAccount) {
       user.create({
-            user_name: socialInfo.name,
+            user_name: socialInfo.data.name,
             social_id: social_id,
-            email: socialInfo.email,
+            email: socialInfo.data.email,
+            provider: 'google'
           }).then(data=>{
             const accessToken = generateAccessToken({id: data.dataValues.id})
-            const cookieOptions = {
-              maxAge: 1000 * 60 * 60 * 24 * 7,
-              httpOnly: true
-            };
-            res.cookie('accessToken', accessToken, cookieOptions);
-            return res.status(200).send({data:data.dataValues, message: 'ok'})
+            sendAccessToken(res,accessToken);
+            return res.status(200).send({data:data.dataValues, message: '회원가입 및 로그인 완료'})
           })
     } else {
       const accessToken = generateAccessToken({id: sameAccount.dataValues.id})
-      const cookieOptions = {
-        maxAge: 1000 * 60 * 60 * 24 * 7,
-        httpOnly: true
-      };
-      res.cookie('accessToken', accessToken, cookieOptions);
-      return res.status(200).send({data:data.dataValues, message: 'ok'})
+      sendAccessToken(res,accessToken)
+      return res.status(200).send({data:sameAccount.dataValues, message: '기존회원 로그인 완료'})
     }
     // return res.send({ data: socialInfo.data, message: "ok" });
   } catch (err) {
