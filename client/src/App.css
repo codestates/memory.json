@@ -1,0 +1,107 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.landingLogo {
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  align-content: space-around;
+  align-items: center;
+  animation: memorylogo 10s ease-out 1s 1 normal both;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 메인페이지 css */
+
+.mainContainer {
+  width: 100%;
+  height: 100vh;
+  background: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContainer header {
+  width: auto;
+  height: 5%;
+  padding: 1vh 10vw;
+  display: flex;
+  border: 10px solid pink;
+}
+
+.mainContainer header nav {
+  position: absolute;
+  top: 4vh;
+  right: 5vw;
+  border: 10px solid skyblue;
+}
+
+.mainContainer header img {
+  justify-content: left;
+  align-content: space-around;
+}
+
+.mainContainer section {
+  width: auto;
+  height: 100%;
+  padding: 5vh 10vw;
+  border: 10px solid yellow;
+}
+
+.mainContainer section div {
+  width: auto;
+  height: 80%;
+  padding: 5vh 10vw;
+  border: 10px solid coral;
+}
+
+@keyframes memorylogo {
+  0% {
+    letter-spacing: -0.5em;
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+
