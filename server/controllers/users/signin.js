@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const { user } = require('../../models');
 const {
   generateAccessToken,
+  sendAccessToken
 } = require('../tokenFunctions');
 const dotenv = require('dotenv');
 dotenv.config();
