@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Popup from "../components/Popup";
 import PopupDom from "../components/PopupDom";
 import PopupPostCode from "../components/PopupPostCode";
 import * as S from "./Singup.style";
@@ -10,13 +8,16 @@ import * as S from "./Singup.style";
 axios.defaults.withCredentials = true;
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
-function Signup({ changeForm, modalCloser, modalOpener }) {
-  const navigate = useNavigate();
-
+function Signup({
+  sucessSignup,
+  modalCloser,
+  modalOpener,
+  changeForm,
+  signupIndicator,
+}) {
   //유효성 검사 상태
   const [validateErr, setValidateErr] = useState("");
-  //회원가입 성공 여부
-  const [successSignup, setSuccessSignup] = useState(false);
+
   //주소 Api
   const [zoneCode, setZoneCode] = useState(""); // zoneCode
   const [addressDetail, setAddressDetail] = useState(""); // 검색주소
@@ -187,13 +188,14 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
         )
         .then((res) => {
           console.log("res", res);
-          setSuccessSignup(true);
+          signupIndicator();
+          console.log(sucessSignup)
           modalCloser();
           modalOpener();
-          navigate("/main");
+          window.location.replace("/");
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err.response.data.message);
           setValidateErr("회원가입에 실패하였습니다!");
         });
     } else {
@@ -358,12 +360,10 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
             changeForm();
           }}
         >
-          이미 가입하셨다면 여기를 눌러주세요.
+          이미 회원이신가요?
         </S.SignInBtn>
       </S.SignUpArea>
-
       <S.Modalback onClick={modalCloser}></S.Modalback>
-      {successSignup ? <Popup text={`회원가입에 성공하셨습니다.`} /> : null}
     </S.ModalArea>
   );
 }

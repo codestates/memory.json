@@ -42,6 +42,7 @@ const PopUpmessage = styled.div`
   z-index: 999;
 `;
 
+
 const XDivStyle = styled.div`
   position: absolute;
   right: 0;
@@ -52,17 +53,36 @@ const XDivStyle = styled.div`
   font-size: 40px;
 `;
 
+const OkDivStyle = styled.div`
+  right: 30;
+  top: 0;
+  margin-right: 40px;
+  margin-top: 5px;
+  border-color: skyblue ;
+  cursor: pointer;
+  font-size: 20px;
+`;
+const CancelDivStyle = styled.div`
+  right: 30;
+  top: 0;
+  margin-right: 40px;
+  margin-top: 5px;
+  border-color: skyblue ;
+  cursor: pointer;
+  font-size: 20px;
+`;
+
 function PopUp({ text, type }) {
   const handleClosePopUp = () => {
-    window.location.replace('/');
+    window.location.href= "main";
   };
   return (
     <>
       {type ? (
         <PopUpmessage>
           <div>{text}</div>
-          <XDivStyle onClick={handleClosePopUp}>확인</XDivStyle>
-          <XDivStyle onClick={handleClosePopUp}>취소</XDivStyle>
+          <OkDivStyle  onClick={handleClosePopUp}>확인</OkDivStyle >
+          <CancelDivStyle onClick={handleClosePopUp}>취소</CancelDivStyle>
         </PopUpmessage>
       ) : (
         <PopUpmessage>

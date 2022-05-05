@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Alert from "../components/Alert";
 import styled from "styled-components";
 import axios from "axios";
+import Popup from "../components/Popup";
 
 const ModalArea = styled.div`
   position: relative;
@@ -179,11 +180,14 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 function Signin({
   isSignin,
-  setUserInfo,
-  loginIndicator,
+  isModal,
+  userInfo,
   modalOpener,
   modalCloser,
+  setModalCloser,
+  loginIndicator,
   changeForm,
+  setUserInfo
 }) {
   // 로그인 상태 정보
   const [loginInfo, setLoginInfo] = useState({
@@ -207,15 +211,15 @@ function Signin({
     setCheckErr(true);
     setTimeout(() => {
       setCheckErr(false);
-    }, 2000);
+    }, 3000);
   };
   const clickError = () => {
     setCheckErr(false);
   };
 
-  //처음 로그인 요청하는 곳
+  //처음
   const signinHandler = () => {
-    console.log("x",loginInfo);
+    // console.log("x", loginInfo);
     if (!loginInfo.user_account || !loginInfo.password) {
       setErrorMessage("아이디와 비밀번호를 입력하세요");
       errorHandler();
@@ -233,27 +237,42 @@ function Signin({
         }
       )
       .then((res) => {
-        if (res.data.message === "Login Success!") {
+        console.log("res", res)
+        if (res.status === 200) {
           modalOpener();
           loginIndicator();
-          
           const accessToken = res.data.data.accessToken;
+          console.log(accessToken)
           axios
             .get(`${serverUrl}users`, {
               headers: { authorization: `Bearer ${accessToken}` },
             })
             .then((res) => {
-              console.log("getres", res.data.data);
-              const userInformation = res.data.data;
-              setUserInfo(userInformation);
+              console.log("로그인상태", isSignin );
+              console.log(res.data)
+              if(res.status === 200) {
+                const data = res.data.data
+                setUserInfo({...userInfo, address: data.address,
+                age: data.age,
+                createdAt: data.createdAt,
+                email: data.email,
+                id: data.id,
+                mobile: data.mobile,
+                provider: data.provider,
+                sex: data.sex,
+                social_id: data.social_id,
+                updatedAt: data.updatedAt,
+                user_account: data.user_account,
+                user_name: data.user_name })
+              }
+              console.log(userInfo)              
             });
-          window.location.replace("/main");
-          console.log("d",isSignin)
+          // window.location.replace("/main");
         }
       })
       .catch((err) => {
-        console.log(err);
-        setErrorMessage("아이디 혹은 비밀번호가 틀립니다.");
+        console.log(err.response)
+        setErrorMessage(`${err.response.data.message}`);
         errorHandler();
       });
   };
@@ -261,7 +280,7 @@ function Signin({
   //카카오 소셜 로그인
   const kakaoSigninHandler = () => {
     let clientId = process.env.REACT_APP_KAKAO_CLIENT_ID;
-    console.log(clientId)
+    console.log(clientId);
     let redirectUri = process.env.REACT_APP_KAKAO_REDIRECT_URI;
     window.location.assign(
       `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
@@ -274,7 +293,8 @@ function Signin({
   const googleSigninHandler = () => {
     let clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
     let redirectUri = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
-    let scope ='profile%20https://www.googleapis.com/auth/userinfo.profile%20https://www.googleapis.com/auth/user.gender.read%20https://www.googleapis.com/auth/user.emails.read%20https://www.googleapis.com/auth/user.birthday.read%20https://www.googleapis.com/auth/user.addresses.read%20https://www.googleapis.com/auth/user.phonenumbers.read'
+    let scope =
+      "profile%20https://www.googleapis.com/auth/userinfo.profile%20https://www.googleapis.com/auth/user.gender.read%20https://www.googleapis.com/auth/user.emails.read%20https://www.googleapis.com/auth/user.birthday.read%20https://www.googleapis.com/auth/user.addresses.read%20https://www.googleapis.com/auth/user.phonenumbers.read";
     window.location.assign(
       `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${redirectUri}&prompt=consent&response_type=code&client_id=${clientId}&scope=${scope}&access_type=offline`
     );
@@ -287,6 +307,7 @@ function Signin({
       signinHandler();
     }
   };
+  
 
   return (
     <ModalArea>
@@ -335,10 +356,10 @@ function Signin({
           <Modalback onClick={modalCloser}></Modalback>
         </MarginDiv>
       )}
+      {isSignin ? <Popup text={`로그인에 성공하였습니다.`} type ="check" /> : null}
     </ModalArea>
   );
 }
 
 export default Signin;
 
-// 해결해야 하는 부분

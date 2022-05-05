@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import PopUp from "./Popup";
+import Popup from "./Popup";
 import * as S from "./Navbar.style";
 
 // axios 설정 / 전역변수 가져오기
@@ -9,20 +9,28 @@ axios.defaults.withCredentials = true;
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 // ------------------------------------------------------------------------------------------
 
-function Navbar({ isSignin, logoutIndicator, modalOpener }) {
-  const [successSignUp, setSuccessSignUp] = useState(false);
+function Navbar({
+  isSignin,
+  userInfo,
+  successSignup,
+  setUserInfo,
+  loginIndicator,
+  logoutIndicator,
+  modalOpener,
+  signupIndicator,
+}) {
 
   const navigate = useNavigate();
 
   // 리디렉션 됬을때 접근코드를 서버에게보냄.
   useEffect(() => {
     const href = window.location.href;
-    console.log(href);
+    // console.log(href);
     let params = new URL(href).searchParams;
     let authorizationCode = params.get("code");
     let authorizationScope = params.get("scope");
-    console.log(authorizationCode)
-    console.log(authorizationScope)
+    // console.log(authorizationCode)
+    // console.log(authorizationScope)
     if (authorizationScope === null) {
       kakaoGetAccessToken(authorizationCode);
     } else {
@@ -44,10 +52,11 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
         },
       }
     );
-    console.log(res);
+    // console.log(res);
     logoutIndicator();
     if (res.status === 200) {
-      setSuccessSignUp(true);
+      signupIndicator();
+      loginIndicator();
     } else {
       window.location.replace("/main");
     }
@@ -67,10 +76,13 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
         },
       }
     );
-    console.log(res);
+    // console.log(res);
     logoutIndicator();
     if (res.status === 200) {
-      setSuccessSignUp(true);
+      console.log(res.status);
+      signupIndicator(true);
+      loginIndicator();
+      console.log(isSignin)
     } else {
       window.location.replace("/main");
     }
@@ -89,15 +101,7 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
       </S.FirstDiv>
       {/* 로그인 버튼 */}
       <S.SecondDiv>
-        {isSignin ? (
-          <S.ButtonStyle
-            type="button"
-            onClick={logoutIndicator}
-            style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
-          >
-            로그아웃
-          </S.ButtonStyle>
-        ) : (
+        {!isSignin ?  (
           <S.ButtonStyle
             type="button"
             onClick={modalOpener}
@@ -105,9 +109,17 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
           >
             로그인
           </S.ButtonStyle>
+        ):(
+          <S.ButtonStyle
+            type="button"
+            onClick={logoutIndicator}
+            style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
+          >
+            로그아웃
+          </S.ButtonStyle>
         )}
       </S.SecondDiv>
-      {successSignUp ? <PopUp text={`회원가입에 성공하셨습니다.'`} /> : null}
+      {successSignup ? <Popup text={`회원가입에 성공하셨습니다.`}  /> : null}
     </S.NavArea>
   );
 }
