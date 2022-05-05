@@ -1,15 +1,13 @@
 const axios = require("axios");
 const qs = require("qs");
 const { user } = require("../../models");
-const {
-  generateAccessToken,
-  sendAccessToken
-} = require('../tokenFunctions');
+const { generateAccessToken, sendAccessToken } = require("../tokenFunctions");
 require("dotenv").config();
 
 module.exports = async (req, res) => {
   // console.log(req.body.authorizationCode);
   try {
+    console.log("hello");
     const { authorizationCode } = req.body;
     // bodyData를 담고
     const bodyData = {
@@ -19,18 +17,6 @@ module.exports = async (req, res) => {
       code: authorizationCode,
     };
     // console.log(bodyData)
-
-    //그것을 JSON 형식이 아니라 쿼리 문으로 변환해줌.
-    // 이거 이해안되면 qs라는 모듈 까아서 쿼리문으로 바꿔야됨!
-    // const queryStringBody = Object.keys(bodyData)
-    // .map(k=> encodeURIComponent(k)+"="+encodeURI(bodyData[k]))
-    // .join("&")
-    // console.log(queryStringBody)
-    /* grant_type=authorization_code&
-    client_id=ebddf51f098fb6d9a16ffce5dc300b32&
-    redirect_uri=http://localhost:3000/mypage&
-    code=cawQ7hLfaU8lejPIeSi7ZAfSLsVHQnYqtAoKRlpudr7GU5mj-e3-94MlQLHzivYLKOcb2Qo9c5sAAAGAa6HCJw */
-    // console.log(qs.stringify(bodyData))
 
     // 인가코드를 가지고 kakao 측에 토큰 요청
     const kakaoTokenRes = await axios({
@@ -66,7 +52,11 @@ module.exports = async (req, res) => {
       where: { social_id: social_id },
     });
 
-    // 회원이 존재하지 않는 경우 DB에 데이터 추가 후 로그인 처리
+    /**
+     *
+     * [회원이 존재하지 않는 경우 로그인 처리]
+     *
+     */
     if (!userInfo) {
       const newUserInfo = await user.create({
         user_name: profile.nickname,
@@ -81,25 +71,39 @@ module.exports = async (req, res) => {
         id: newUserInfo.dataValues.id,
       });
       sendAccessToken(res, newAccessToken);
-      
+
       // 응답 전송
       return res.status(201).json({
         data: {
-          accessToken: newAccessToken
+          accessToken: newAccessToken,
         },
-        message: "ok"
-      })
-    } 
+        message: "ok",
+      });
+    }
 
-    // 회원이 존재하는 경우 로그인 처리
-    // const newAccessToken = getAccessToken()
+    /**
+     *
+     * [회원이 존재하는 경우 로그인 처리]
+     *
+     */
 
-  
-    
+    // 토큰을 발급하고 쿠키에 저장한다.
+    const accessToken = getAccessToken(userInfo.dataValues);
+    sendAccessToken(res, accessToken);
 
-    res.send("소셜로그인");
+    return res.status(200).json({
+      data: {
+        accessToken,
+      },
+      message: "Login Success!",
+    });
+
     // 카카오 구현
   } catch (err) {
     console.error(err);
+    return res.status(500).json({
+      data: null,
+      message: "내부서버 오류입니다!",
+    });
   }
 };
