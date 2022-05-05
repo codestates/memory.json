@@ -88,7 +88,7 @@ module.exports = async (req, res) => {
      */
 
     // 토큰을 발급하고 쿠키에 저장한다.
-    const accessToken = getAccessToken(userInfo.dataValues);
+    const accessToken = generateAccessToken(userInfo.dataValues);
     sendAccessToken(res, accessToken);
 
     return res.status(200).json({
