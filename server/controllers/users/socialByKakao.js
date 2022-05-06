@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
     const bodyData = {
       grant_type: "authorization_code",
       client_id: process.env.KAKAO_ID,
-      redirect_uri: "http://localhost:3000/main",
+      redirect_uri: process.env.KAKAO_REDIRECT_URI,
       code: authorizationCode,
     };
     // console.log(bodyData)
