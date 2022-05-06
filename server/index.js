@@ -8,11 +8,12 @@ const cookieParser = require("cookie-parser");
 const controllers = require("./controllers");
 
 const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
+const HTTP_PORT = process.env.HTTP_PORT || 4000;
 
 app.use(express.json());
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: process.env.CLIENT_HOST || 'http://localhost:3000',
     credentials: true,
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
   })
@@ -44,7 +45,7 @@ if (fs.existsSync("./key.pem") && fs.existsSync("./cert.pem")) {
   server = https.createServer(credentials, app);
   server.listen(HTTPS_PORT, () => console.log("https server runnning"));
 } else {
-  server = app.listen(HTTPS_PORT, () => console.log("http server runnning"));
+  server = app.listen(HTTP_PORT, () => console.log("http server runnning"));
 }
 
 module.exports = server;
