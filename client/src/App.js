@@ -14,6 +14,7 @@ import Signin from "./modals/Signin";
 import Signup from "./modals/Signup";
 //Component
 import Navbar from "./components/Navbar";
+import Newhistory from "./pages/Newhistory";
 
 function Router() {
   const [userInfo, setUserInfo] = useState("");
@@ -40,7 +41,7 @@ function Router() {
     };
     logoutReq();
     setIsSignin(false);
-    console.log(isSignin)
+    console.log(isSignin);
   };
   //로그아웃 실행
 
@@ -85,6 +86,7 @@ function Router() {
           element={<Main isSignin={isSignin} modalOpener={modalOpener} />}
         />
         <Route path="/board" element={<Board />} />
+        <Route path="/Newhistory" element={<Newhistory />} />
       </Routes>
       <Modal
         style={{

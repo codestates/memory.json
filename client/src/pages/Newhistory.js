@@ -1,27 +1,20 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import Button from "../components/Button";
-import MapArea from "../components/Map";
-import SearchPlace from "../components/SearchPlace";
+import * as S from "./Main.style";
+import PostBoard from "../modals/PostBoard";
 
-function Board() {
+function Newhistory() {
   return (
     <MapContainer>
       <MapSection>
         <MapDiv>
-          <NavLink to="/Newhistory">
-            <Button>New History</Button>
-          </NavLink>
-          <SearchPlace></SearchPlace>
-          <MapArea></MapArea>
+          <PostBoard></PostBoard>
         </MapDiv>
       </MapSection>
     </MapContainer>
   );
 }
-
-export default Board;
+export default Newhistory;
 
 const MapContainer = styled.div`
   width: 100%;
@@ -42,6 +35,6 @@ const MapDiv = styled.div`
   height: 85%;
   padding: 5vh 5vw;
   border: 5px solid #2c394b;
-  background-color: #082032;
+  background-color: #2c394b;
   box-shadow: 15px 15px 10px #334756;
 `;
