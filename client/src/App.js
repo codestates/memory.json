@@ -33,7 +33,7 @@ function Router() {
   const logoutIndicator = () => {
     const logoutReq = async () => {
       try {
-        const response = await axios.get(SERVER_URL);
+        const response = await axios.get(process.env.SERVER_URL);
       } catch (e) {
         console.log(e);
       }
