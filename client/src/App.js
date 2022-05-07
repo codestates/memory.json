@@ -14,6 +14,7 @@ import Signin from "./modals/Signin";
 import Signup from "./modals/Signup";
 //Component
 import Navbar from "./components/Navbar";
+import Newhistory from "./pages/Newhistory";
 
 //Redux
 import { useDispatch, useSelector } from "react-redux";
@@ -84,11 +85,10 @@ function Router() {
   };
   //로그아웃 실행
 
-
   //회원정보
-  const signupIndicator = () =>{
+  const signupIndicator = () => {
     dispatch(signupAction);
-  }
+  };
 
   //react-modal 실행시 적어야 하는 코드
   Modal.setAppElement("#root");
@@ -100,6 +100,7 @@ function Router() {
         <Route path="/" element={<Landing />} />
         <Route path="/main" element={<Main />} />
         <Route path="/board" element={<Board />} />
+        <Route path="/Newhistory" element={<Newhistory />} />
       </Routes>
       <Modal
         style={{
@@ -131,14 +132,14 @@ function Router() {
           },
         }}
         isOpen={isSignupModal}
-        onRequestClose={() =>modalCloser()}
+        onRequestClose={() => modalCloser()}
       >
         <Signup
-        modalOpener={modalOpener}
-        modalCloser={modalCloser}
-        changeformToSignin={changeformToSignin}
-        signupIndicator={signupIndicator}
-         />
+          modalOpener={modalOpener}
+          modalCloser={modalCloser}
+          changeformToSignin={changeformToSignin}
+          signupIndicator={signupIndicator}
+        />
       </Modal>
     </BrowserRouter>
   );

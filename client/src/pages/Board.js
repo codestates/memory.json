@@ -1,5 +1,7 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import Button from "../components/Button";
 import MapArea from "../components/Map";
 import SearchPlace from "../components/SearchPlace";
 
@@ -8,6 +10,9 @@ function Board() {
     <MapContainer>
       <MapSection>
         <MapDiv>
+          <NavLink to="/Newhistory">
+            <Button>New History</Button>
+          </NavLink>
           <SearchPlace></SearchPlace>
           <MapArea></MapArea>
         </MapDiv>

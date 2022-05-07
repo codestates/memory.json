@@ -103,7 +103,7 @@ function Navbar({
       </S.FirstDiv>
       {/* 로그인 버튼 */}
       <S.SecondDiv>
-        {!isSignin ?  (
+        {!isSignin ? (
           <S.ButtonStyle
             type="button"
             onClick={modalOpener}
@@ -111,7 +111,7 @@ function Navbar({
           >
             로그인
           </S.ButtonStyle>
-        ):(
+        ) : (
           <S.ButtonStyle
             type="button"
             onClick={logoutIndicator}
