@@ -74,7 +74,7 @@ function Router() {
   const logoutIndicator = () => {
     const logoutReq = async () => {
       try {
-        const res = await axios.get(`${serverUrl}users/signout`);
+        const res = await axios.get(`${process.env.SERVER_URL}users/signout`);
         console.log(res)
       } catch (err) {
         console.log(err);
