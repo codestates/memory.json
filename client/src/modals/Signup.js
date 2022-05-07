@@ -9,10 +9,9 @@ axios.defaults.withCredentials = true;
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 function Signup({
-  sucessSignup,
   modalCloser,
   modalOpener,
-  changeForm,
+  changeformToSignin,
   signupIndicator,
 }) {
   //유효성 검사 상태
@@ -31,7 +30,7 @@ function Signup({
     mobile: "",
     email: "",
     address: "",
-    age: "",
+    age: 0,
     sex: "",
   });
   console.log("signupInfo", signupInfo);
@@ -167,7 +166,11 @@ function Signup({
 
   //회원가입 버튼을 눌렀을때 서버 교신
   const signupHandler = () => {
-    let { user_name, user_account, password } = signupInfo;
+    let { user_name, user_account, password, checkedPassword } = signupInfo;
+    if (password !== checkedPassword) {
+      setValidateErr("아이디와 비밀번호가 같지 않습니다.");
+      return;
+    }
     if (user_name && user_account && password !== undefined) {
       axios
         .post(
@@ -189,13 +192,13 @@ function Signup({
         .then((res) => {
           console.log("res", res);
           signupIndicator();
-          console.log(sucessSignup)
           modalCloser();
           modalOpener();
+          alert("회원가입에 성공하셨습니다!");
           window.location.replace("/");
         })
         .catch((err) => {
-          console.log(err.response.data.message);
+          console.log(err);
           setValidateErr("회원가입에 실패하였습니다!");
         });
     } else {
@@ -355,11 +358,7 @@ function Signup({
           회원 가입 하기
         </S.SignUpBtn>
 
-        <S.SignInBtn
-          onClick={() => {
-            changeForm();
-          }}
-        >
+        <S.SignInBtn onClick={changeformToSignin}>
           이미 회원이신가요?
         </S.SignInBtn>
       </S.SignUpArea>
@@ -370,6 +369,3 @@ function Signup({
 
 export default Signup;
 
-// 해결해야 하는부분
-// 주소 api를 결정하고, 상세주소를 치면 address에 올바른 값이 들어간다. 하지만 중간에 도로명 지도 api를 수정하려고 누르고 상세주소를 건들리지 않으면 주소명이 바뀌지 않는다.
-// 중복 조회

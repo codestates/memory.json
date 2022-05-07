@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import Alert from "../components/Alert";
 import styled from "styled-components";
 import axios from "axios";
-import Popup from "../components/Popup";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { signinAction } from "../store/actions";
 
 const ModalArea = styled.div`
   position: relative;
@@ -178,17 +180,12 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 // ------------------------------------------------------------------------------------------
 
-function Signin({
-  isSignin,
-  isModal,
-  userInfo,
-  modalOpener,
-  modalCloser,
-  setModalCloser,
-  loginIndicator,
-  changeForm,
-  setUserInfo
-}) {
+function Signin({ changeformToSignup, modalCloser, modalOpener }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const signinState = useSelector((state) => state.authReducer);
+  const { isSignin } = signinState;
+
   // 로그인 상태 정보
   const [loginInfo, setLoginInfo] = useState({
     user_account: "",
@@ -237,44 +234,35 @@ function Signin({
         }
       )
       .then((res) => {
-        console.log("res", res)
+        // console.log(res)
         if (res.status === 200) {
-          modalOpener();
-          loginIndicator();
+          console.log(res.data.data);
           const accessToken = res.data.data.accessToken;
-          console.log(accessToken)
-          axios
-            .get(`${serverUrl}users`, {
-              headers: { authorization: `Bearer ${accessToken}` },
-            })
-            .then((res) => {
-              console.log("로그인상태", isSignin );
-              console.log(res.data)
-              if(res.status === 200) {
-                const data = res.data.data
-                setUserInfo({...userInfo, address: data.address,
-                age: data.age,
-                createdAt: data.createdAt,
-                email: data.email,
-                id: data.id,
-                mobile: data.mobile,
-                provider: data.provider,
-                sex: data.sex,
-                social_id: data.social_id,
-                updatedAt: data.updatedAt,
-                user_account: data.user_account,
-                user_name: data.user_name })
-              }
-              console.log(userInfo)              
-            });
-          // window.location.replace("/main");
+          console.log(accessToken);
+          dispatch(signinAction);
+          // axios
+          //   .get(`${serverUrl}users`, {
+          //     headers: { authorization: `Bearer ${accessToken}` },
+          //   })
+          //   .then((res) => {
+          //     console.log("getres", res);
+          //     if (res.status === 200) {
+          //       const userInfomation = res.data.data;
+          //       console.log(userInfomation);
+          //       dispatch(userInfoAction(userInfomation.address));
+          //     }
+          //   });
+          modalCloser();
+          alert("로그인에 성공하셨습니다!");
+          navigate("/main");
         }
       })
       .catch((err) => {
-        console.log(err.response)
+        console.log(err);
         setErrorMessage(`${err.response.data.message}`);
         errorHandler();
       });
+    console.log("로그인상태", isSignin);
   };
 
   //카카오 소셜 로그인
@@ -285,8 +273,6 @@ function Signin({
     window.location.assign(
       `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
     );
-    modalOpener();
-    modalCloser();
   };
 
   //구글 소셜 로그인
@@ -298,8 +284,6 @@ function Signin({
     window.location.assign(
       `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${redirectUri}&prompt=consent&response_type=code&client_id=${clientId}&scope=${scope}&access_type=offline`
     );
-    modalOpener();
-    modalCloser();
   };
 
   const loginPressEnter = (e) => {
@@ -307,7 +291,6 @@ function Signin({
       signinHandler();
     }
   };
-  
 
   return (
     <ModalArea>
@@ -338,7 +321,7 @@ function Signin({
               </div>
             </div>
 
-            <SignUpBtn onClick={() => changeForm()}>회원가입</SignUpBtn>
+            <SignUpBtn onClick={() => changeformToSignup()}>회원가입</SignUpBtn>
             <SignInBtn onClick={signinHandler}>로그인</SignInBtn>
 
             {checkErr ? (
@@ -356,10 +339,20 @@ function Signin({
           <Modalback onClick={modalCloser}></Modalback>
         </MarginDiv>
       )}
-      {isSignin ? <Popup text={`로그인에 성공하였습니다.`} type ="check" /> : null}
     </ModalArea>
   );
 }
 
 export default Signin;
+
+
+// 우선 토큰을 저장 시키고 정보 요청을 할때 불러서 요청한다 get cookies에 있다.
+// 그리고 유저정보를 가지고 오는 리듀서를 사용할건지 말건지에 대한 고민이 필요하다.
+
+// 소셜로그인 구현
+
+// 로그아웃 구현
+// 회원탈퇴 구현
+// 마이페이지 버튼 구현
+// 마이페이지 구현
 

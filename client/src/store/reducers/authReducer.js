@@ -12,13 +12,13 @@ const auth = (prevState = userInfoState, action) => {
     case SIGN_IN:
       state = {
         ...prevState,
-        isLogin: true,
+        isSignin: true,
       };
       break;
     case LOG_OUT:
       state = {
         ...userInfoState,
-        isLogin: false,
+        isSignin: false,
       };
       break;
     case SIGN_OUT:

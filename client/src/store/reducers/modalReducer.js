@@ -3,6 +3,8 @@ import {
   SIGN_UP_MODAL_ON,
   MODAL_OFF,
   SIGN_OUT_MODAL_ON,
+  SIGN_IN_ON_SIGN_UP_OFF_MODAL,
+  SIGN_UP_ON_SIGN_IN_OFF_MODAL,
   LOG_OUT_MODAL_ON,
 } from "../actions/actionTypes";
 
@@ -27,6 +29,12 @@ const modalReducer = (prevState = initialState, action) => {
       break;
     case LOG_OUT_MODAL_ON:
       state = { ...prevState, isLogoutModal: true };
+      break;
+    case SIGN_IN_ON_SIGN_UP_OFF_MODAL:
+      state = { ...prevState, isSigninModal: true, isSignupModal: false };
+      break;
+    case SIGN_UP_ON_SIGN_IN_OFF_MODAL:
+      state = { ...prevState, isSignupModal: true, isSigninModal: false };
       break;
     case MODAL_OFF:
       state = { ...initialState };

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Popup from "./Popup";
 import * as S from "./Navbar.style";
+import { useDispatch, useSelector } from "react-redux";
+import { signinAction } from "../store/actions";
 
 // axios 설정 / 전역변수 가져오기
 axios.defaults.withCredentials = true;
@@ -10,17 +11,16 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 // ------------------------------------------------------------------------------------------
 
 function Navbar({
-  isSignin,
-  userInfo,
-  successSignup,
-  setUserInfo,
-  loginIndicator,
-  logoutIndicator,
   modalOpener,
+  logoutIndicator,
   signupIndicator,
 }) {
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const signinState = useSelector((state) => state.authReducer);
+  const { isSignin } = signinState;
+  const signupState = useSelector((state) => state.signupReducer);
+  const { signup } = signupState;
 
   // 리디렉션 됬을때 접근코드를 서버에게보냄.
   useEffect(() => {
@@ -56,7 +56,8 @@ function Navbar({
     logoutIndicator();
     if (res.status === 200) {
       signupIndicator();
-      loginIndicator();
+      dispatch(signinAction);
+      alert("회원가입에 성공하셨습니다!");
     } else {
       window.location.replace("/main");
     }
@@ -80,9 +81,9 @@ function Navbar({
     logoutIndicator();
     if (res.status === 200) {
       console.log(res.status);
-      signupIndicator(true);
-      loginIndicator();
-      console.log(isSignin)
+      signupIndicator();
+      dispatch(signinAction);
+      alert("회원가입에 성공하셨습니다!");
     } else {
       window.location.replace("/main");
     }
@@ -119,7 +120,6 @@ function Navbar({
           </S.ButtonStyle>
         )}
       </S.SecondDiv>
-      {successSignup ? <Popup text={`회원가입에 성공하셨습니다.`}  /> : null}
     </S.NavArea>
   );
 }
