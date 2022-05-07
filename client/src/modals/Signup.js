@@ -21,6 +21,9 @@ function Signup({
   const [zoneCode, setZoneCode] = useState(""); // zoneCode
   const [addressDetail, setAddressDetail] = useState(""); // 검색주소
 
+  // 글자 유무 상태
+  const [text, setText] = useState("");
+
   // 회원가입 정보
   const [signupInfo, setSignupInfo] = useState({
     user_name: "",
@@ -35,19 +38,30 @@ function Signup({
   });
   console.log("signupInfo", signupInfo);
 
-  //회원가입을 보낼 데이터
+  //회원가입 데이터
   const handleInputValue = (key) => (e) => {
     // console.log("e",e)
     // console.log("key",key)
     setSignupInfo({ ...signupInfo, [key]: e.target.value });
   };
 
-  //주소를 가져올 데이터
+  //주소 데이터
   const handleInputAddress = (key) => (e) => {
     let firstAddress = `${addressDetail} ${zoneCode}`;
     let lastAddress = e.target.value;
-    let allAddress = firstAddress + lastAddress;
-    setSignupInfo({ ...signupInfo, [key]: allAddress });
+    setText(e.target.value);
+    setSignupInfo({ ...signupInfo, [key]: firstAddress + lastAddress });
+  };
+
+  const onReset = () => {
+    setText("");
+  };
+
+  //나이 데이터
+  const handleInputAge = (key) => (e) => {
+    console.log(e.target.value);
+    let ageValue = parseInt(e.target.value);
+    setSignupInfo({ ...signupInfo, [key]: ageValue });
   };
 
   // 유효성 검사
@@ -85,7 +99,7 @@ function Signup({
         return "숫자와 특수문자가 포함되어야 합니다.";
       }
       if (passwordCheck.test(password) && password !== checkedPassword) {
-        return "일치하지 않습니다";
+        return "아이디와 비밀번호가 같지 않습니다.";
       }
     }
     if (inputName === "mobile") {
@@ -142,7 +156,7 @@ function Signup({
       setValidateErr("");
       if (inputName === "password") {
         if (password !== checkedPassword && checkedPassword !== "") {
-          return setValidateErr("비밀번호가 일치하지 않습니다");
+          return setValidateErr("아이디와 비밀번호가 같지 않습니다.");
         }
         setValidateErr("");
       }
@@ -152,9 +166,13 @@ function Signup({
 
   //회원가입 버튼을 눌렀을때 서버 교신
   const signupHandler = () => {
-    let { user_name, user_account, password, checkedPassword } = signupInfo;
+    let { user_name, user_account, password, checkedPassword, age } = signupInfo;
     if (password !== checkedPassword) {
       setValidateErr("아이디와 비밀번호가 같지 않습니다.");
+      return;
+    }
+    if(typeof age !== 'number'){
+      setValidateErr("나이에 숫자를 입력해주세요");
       return;
     }
     if (user_name && user_account && password !== undefined) {
@@ -291,7 +309,13 @@ function Signup({
           />
           <div>
             {/* 버튼 클릭 시 팝업 생성 */}
-            <button type="button" onClick={openPostCode}>
+            <button
+              type="button"
+              onClick={() => {
+                openPostCode();
+                onReset();
+              }}
+            >
               우편번호 검색
             </button>
             {/* 팝업 div */}
@@ -312,6 +336,7 @@ function Signup({
           <span>상세 주소</span>
           <S.Input
             type="text"
+            value={text}
             onChange={handleInputAddress("address")}
             placeholder="상세주소를 입력하세요"
           />
@@ -319,10 +344,9 @@ function Signup({
         <div>
           <span>나이</span>
           <S.Input
-            type="number"
-            min="0"
-            max="100"
-            onChange={handleInputValue("age")}
+            type="text"
+            pattern="^[0-9]+$"
+            onChange={handleInputAge("age")}
             placeholder="나이를 입력해주세요 ex) 25"
           />
         </div>
@@ -354,4 +378,3 @@ function Signup({
 }
 
 export default Signup;
-

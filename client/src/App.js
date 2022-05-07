@@ -12,6 +12,8 @@ import Board from "./pages/Board";
 //Modal
 import Signin from "./modals/Signin";
 import Signup from "./modals/Signup";
+import Mypage from "./modals/Mypage";
+
 //Component
 import Navbar from "./components/Navbar";
 import Newhistory from "./pages/Newhistory";
@@ -35,6 +37,7 @@ axios.defaults.withCredentials = true;
 
 function Router() {
   const dispatch = useDispatch();
+  const accessToken = localStorage.getItem("accessToken");
 
   const modalState = useSelector((state) => state.modalReducer);
   const signinState = useSelector((state) => state.authReducer);
@@ -72,16 +75,25 @@ function Router() {
   };
 
   const logoutIndicator = () => {
-    const logoutReq = async () => {
-      try {
-        const response = await axios.get(`${process.env.SERVER_URL}/signout`);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    logoutReq();
-    dispatch(logoutAction);
-    console.log(isSignin);
+    axios
+      .post(
+        `${process.env.SERVER_URL}/signout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .then((res) => {
+        localStorage.setItem("accessToken", "");
+        dispatch(logoutAction);
+        dispatch(modalOff);
+        window.location.replace("/main");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   //로그아웃 실행
 
@@ -95,7 +107,12 @@ function Router() {
 
   return (
     <BrowserRouter>
-      <Navbar modalOpener={modalOpener} modalCloser={modalCloser} logoutIndicator={logoutIndicator} signupIndicator={signupIndicator} />{" "}
+      <Navbar
+        modalOpener={modalOpener}
+        modalCloser={modalCloser}
+        logoutIndicator={logoutIndicator}
+        signupIndicator={signupIndicator}
+      />{" "}
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/main" element={<Main />} />
@@ -150,3 +167,6 @@ function App() {
 }
 
 export default App;
+
+// 회원탈퇴 구현 //
+// 마이페이지 구현 get user 정보 axios 요청

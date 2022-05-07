@@ -237,8 +237,8 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
         // console.log(res)
         if (res.status === 200) {
           console.log(res.data.data);
-          const accessToken = res.data.data.accessToken;
-          console.log(accessToken);
+          const accessToken = res.data.data
+          localStorage.setItem("accessToken", accessToken);
           dispatch(signinAction);
           // axios
           //   .get(`${serverUrl}users`, {
@@ -344,12 +344,3 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
 }
 
 export default Signin;
-
-// 우선 토큰을 저장 시키고 정보 요청을 할때 불러서 요청한다 get cookies에 있다.
-// 그리고 유저정보를 가지고 오는 리듀서를 사용할건지 말건지에 대한 고민이 필요하다
-
-
-// 로그아웃 구현
-// 회원탈퇴 구현
-// 마이페이지 버튼 구현
-// 마이페이지 구현
