@@ -10,11 +10,7 @@ axios.defaults.withCredentials = true;
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 // ------------------------------------------------------------------------------------------
 
-function Navbar({
-  modalOpener,
-  logoutIndicator,
-  signupIndicator,
-}) {
+function Navbar({ modalOpener, logoutIndicator, signupIndicator }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const signinState = useSelector((state) => state.authReducer);
@@ -29,13 +25,8 @@ function Navbar({
     let params = new URL(href).searchParams;
     let authorizationCode = params.get("code");
     let authorizationScope = params.get("scope");
-<<<<<<< HEAD
-    console.log(authorizationCode);
-    console.log(authorizationScope);
-=======
     // console.log(authorizationCode)
     // console.log(authorizationScope)
->>>>>>> 6de07c2b2b56c628e64a854e1f18d38bb32d6234
     if (authorizationScope === null) {
       kakaoGetAccessToken(authorizationCode);
     } else {
@@ -107,7 +98,7 @@ function Navbar({
       </S.FirstDiv>
       {/* 로그인 버튼 */}
       <S.SecondDiv>
-        {!isSignin ?  (
+        {!isSignin ? (
           <S.ButtonStyle
             type="button"
             onClick={modalOpener}
@@ -115,7 +106,7 @@ function Navbar({
           >
             로그인
           </S.ButtonStyle>
-        ):(
+        ) : (
           <S.ButtonStyle
             type="button"
             onClick={logoutIndicator}

@@ -81,27 +81,26 @@ function Router() {
       }
     };
     logoutReq();
-<<<<<<< HEAD
-    setIsSignin(false);
-=======
     dispatch(logoutAction);
->>>>>>> 6de07c2b2b56c628e64a854e1f18d38bb32d6234
     console.log(isSignin);
   };
   //로그아웃 실행
 
-
   //회원정보
-  const signupIndicator = () =>{
+  const signupIndicator = () => {
     dispatch(signupAction);
-  }
+  };
 
   //react-modal 실행시 적어야 하는 코드
   Modal.setAppElement("#root");
 
   return (
     <BrowserRouter>
-      <Navbar modalOpener={modalOpener} logoutIndicator={logoutIndicator} signupIndicator={signupIndicator} />{" "}
+      <Navbar
+        modalOpener={modalOpener}
+        logoutIndicator={logoutIndicator}
+        signupIndicator={signupIndicator}
+      />{" "}
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/main" element={<Main />} />
@@ -138,14 +137,14 @@ function Router() {
           },
         }}
         isOpen={isSignupModal}
-        onRequestClose={() =>modalCloser()}
+        onRequestClose={() => modalCloser()}
       >
         <Signup
-        modalOpener={modalOpener}
-        modalCloser={modalCloser}
-        changeformToSignin={changeformToSignin}
-        signupIndicator={signupIndicator}
-         />
+          modalOpener={modalOpener}
+          modalCloser={modalCloser}
+          changeformToSignin={changeformToSignin}
+          signupIndicator={signupIndicator}
+        />
       </Modal>
     </BrowserRouter>
   );

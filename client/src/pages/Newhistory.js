@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import * as S from "./Main.style";
 import PostBoard from "../modals/PostBoard";
 
 function Newhistory() {

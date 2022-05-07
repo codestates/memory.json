@@ -1,109 +1,67 @@
 import axios from "axios";
 import React, { useState } from "react";
-import styled from "styled-components";
 import Button from "../components/Button";
 
 function PostBoard() {
+  // 서버로 파일을 전송하기 위해 추가해주는 파일의 상태
   const [myImage, setMyImage] = useState(null);
+  // 클라이언트에서 미리보기를 위해 추가한 상태 파일 base64
+  const [imgBase64, setImgBase64] = useState("");
   const onChange = (e) => {
-    setMyImage(e.target.files[0]);
+    // 미리 보기를 위한 FileReader 객체 생성
+    const reader = new FileReader();
+    const files = e.target.files;
+    reader.onloadend = () => {
+      const base64 = reader.result;
+      console.log("base64", base64);
+      if (base64) {
+        setImgBase64(base64.toString()); // 파일 base64 상태 업데이트
+      }
+    };
+    if (files[0]) {
+      reader.readAsDataURL(files[0]); // 파일을 읽어서 버퍼에 저장
+      console.log("files", files);
+      setMyImage(files[0]);
+    }
   };
   const onClick = async () => {
+    // 서버로 파일 전송을 위한 FormData 객체 생성
     const formData = new FormData();
-    formData.append("file", "img");
+    console.log("formData", formData);
+    formData.append("file", myImage, myImage.name);
     // 서버의 upload api 호출
-    const res = await axios.post("", formData);
+    const config = {
+      Headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    const res = await axios.post(
+      "http://localhost:4000/histories/uploadphoto",
+      formData,
+      config
+    );
     console.log("res", res);
   };
   return (
     <div className="PostBoard">
-      <input type={"img"} onChange={onChange} />
+      <div
+        style={{
+          background: "white",
+          width: "90%",
+          height: "auto",
+        }}
+      >
+        <img src={imgBase64} alt="img" />
+      </div>
+      <input
+        type="file"
+        multiple
+        onChange={onChange}
+        style={{ background: "white" }}
+      />
       <Button onClick={onClick}>업로드</Button>
     </div>
   );
 }
 
 export default PostBoard;
-
-// const InputLabel = styled.label`
-//   width: 300px;
-//   height: 300px;
-//   margin-top: 10px;
-//   padding: 6px 15px;
-//   background-color: white;
-//   border-radius: 20px;
-//   color: black;
-//   cursor: pointer;
-//   margin-bottom: 30px;
-// `;
-{
-  /* <InputLabel htmlFor="input-file" onChange={PostBoard}>
-      <input
-        type="file"
-        multiple="multiple"
-        id="input-file"
-        style={{ display: "none" }}
-        accept=".jpg,.jpeg,.img,.png"
-      />
-    </InputLabel> */
-}
-
-// const [historyInfo, setHistoryInfo] = useState({
-//   history_title: "",
-//   history_year: "",
-//   history_content: "",
-// });
-
-// const addressInfoHandler = () => {
-//   axios
-//     .get(`dapi.kakao.com/v2/local/search/address.${FORMAT}`, {
-//       headers: { Authorization: KakaoAK`${REACT_APP_KAKAO_CLIENT_ID}` },
-//     })
-//     .then((res) => {
-//       console.log("res", res);
-
-//     });
-// };
-
-// const handleAddImages = (event) => {
-//   const selectImageList = event.target.files;
-//   const nowImageURLList = [...myImage];
-
-//   for (let i = 0; i < selectImageList.length; i++) {
-//     const nowImageURL = URL.createObjectURL(nowImageURLList[i]);
-//     nowImageURLList.push(nowImageURL);
-//   }
-
-//   if (nowImageURLList.length > 10) {
-//     nowImageURLList = nowImageURLList.slice(0, 10);
-//   }
-//   setMyImage(nowImageURLList);
-// };
-
-// const handleDeleteImage = (id) => {
-//   setMyImage(myImage.filter((_, index) => index !== id));
-// };
-
-// return (
-//   <div className="addPic">
-//     <label
-//       htmlFor="input-file"
-//       className="addButton"
-//       onChange={handleAddImages}
-//     >
-//       <input
-//         type="file"
-//         id="input-file"
-//         multiple="multiple"
-//         className="addButton"
-//       />
-//       <span>사진추가</span>
-//     </label>
-//     {myImage.map((image, id) => (
-//       <div className="imageContainer" key={id}>
-//         <img src={image} alt={`${image}-${id}`} />
-//         <Button onClick={() => handleDeleteImage(id)}></Button>
-//       </div>
-//     ))}
-//   </div>
-// );

@@ -216,11 +216,7 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
 
   //처음
   const signinHandler = () => {
-<<<<<<< HEAD
-    console.log("x", loginInfo);
-=======
     // console.log("x", loginInfo);
->>>>>>> 6de07c2b2b56c628e64a854e1f18d38bb32d6234
     if (!loginInfo.user_account || !loginInfo.password) {
       setErrorMessage("아이디와 비밀번호를 입력하세요");
       errorHandler();
@@ -238,24 +234,6 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
         }
       )
       .then((res) => {
-<<<<<<< HEAD
-        if (res.data.message === "Login Success!") {
-          modalOpener();
-          loginIndicator();
-
-          const accessToken = res.data.data.accessToken;
-          axios
-            .get(`${serverUrl}users`, {
-              headers: { authorization: `Bearer ${accessToken}` },
-            })
-            .then((res) => {
-              console.log("getres", res.data.data);
-              const userInformation = res.data.data;
-              setUserInfo(userInformation);
-            });
-          window.location.replace("/main");
-          console.log("d", isSignin);
-=======
         // console.log(res)
         if (res.status === 200) {
           console.log(res.data.data);
@@ -277,7 +255,6 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
           modalCloser();
           alert("로그인에 성공하셨습니다!");
           navigate("/main");
->>>>>>> 6de07c2b2b56c628e64a854e1f18d38bb32d6234
         }
       })
       .catch((err) => {
@@ -368,10 +345,6 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
 
 export default Signin;
 
-<<<<<<< HEAD
-// 해결해야 하는 부분
-=======
-
 // 우선 토큰을 저장 시키고 정보 요청을 할때 불러서 요청한다 get cookies에 있다.
 // 그리고 유저정보를 가지고 오는 리듀서를 사용할건지 말건지에 대한 고민이 필요하다.
 
@@ -381,5 +354,3 @@ export default Signin;
 // 회원탈퇴 구현
 // 마이페이지 버튼 구현
 // 마이페이지 구현
-
->>>>>>> 6de07c2b2b56c628e64a854e1f18d38bb32d6234
