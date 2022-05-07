@@ -10,11 +10,7 @@ axios.defaults.withCredentials = true;
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 // ------------------------------------------------------------------------------------------
 
-function Navbar({
-  modalOpener,
-  logoutIndicator,
-  signupIndicator,
-}) {
+function Navbar({ modalOpener, logoutIndicator, signupIndicator }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const signinState = useSelector((state) => state.authReducer);
@@ -102,7 +98,7 @@ function Navbar({
       </S.FirstDiv>
       {/* 로그인 버튼 */}
       <S.SecondDiv>
-        {!isSignin ?  (
+        {!isSignin ? (
           <S.ButtonStyle
             type="button"
             onClick={modalOpener}
@@ -110,7 +106,7 @@ function Navbar({
           >
             로그인
           </S.ButtonStyle>
-        ):(
+        ) : (
           <S.ButtonStyle
             type="button"
             onClick={logoutIndicator}
