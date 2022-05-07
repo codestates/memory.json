@@ -108,7 +108,7 @@ function Signup({
 
   const checkedInfo = (inputName) => {
     let validate = validateCheck(inputName);
-    let { user_name, user_account, password, checkedPassword } = signupInfo;
+    let { password, checkedPassword } = signupInfo;
     if (validate) {
       if (inputName === "user_account") {
         setValidateErr(validate);
@@ -146,20 +146,6 @@ function Signup({
         }
         setValidateErr("");
       }
-
-      // if (inputName === "user_name") {
-      //   axios
-      //     .get(`${serverUrl}users/?user_name=${user_name}`)
-      //     .then((ok) => setValidateErr(""))
-      //     .catch((err) => setValidateErr("중복된 닉네임 입니다."));
-      // }
-
-      // if (inputName === "user_account") {
-      //   axios
-      //     .get(`${serverUrl}users/?user_account=${user_account}`)
-      //     .then((ok) => setValidateErr(""))
-      //     .catch((err) => setValidateErr("중복된 아이디 입니다."));
-      // }
     }
   };
   //---------------------------------------------------------------------------------

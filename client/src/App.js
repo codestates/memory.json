@@ -31,7 +31,6 @@ import {
 
 // axios 설정 / 전역변수 가져오기
 axios.defaults.withCredentials = true;
-const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 function Router() {
   const dispatch = useDispatch();
@@ -96,7 +95,7 @@ function Router() {
 
   return (
     <BrowserRouter>
-      <Navbar modalOpener={modalOpener} logoutIndicator={logoutIndicator} signupIndicator={signupIndicator} />{" "}
+      <Navbar modalOpener={modalOpener} modalCloser={modalCloser} logoutIndicator={logoutIndicator} signupIndicator={signupIndicator} />{" "}
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/main" element={<Main />} />

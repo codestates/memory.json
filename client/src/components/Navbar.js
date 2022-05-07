@@ -12,6 +12,7 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 function Navbar({
   modalOpener,
+  modalCloser,
   logoutIndicator,
   signupIndicator,
 }) {
@@ -53,11 +54,11 @@ function Navbar({
       }
     );
     // console.log(res);
-    logoutIndicator();
     if (res.status === 200) {
       signupIndicator();
       dispatch(signinAction);
       alert("회원가입에 성공하셨습니다!");
+      modalCloser();
     } else {
       window.location.replace("/main");
     }
@@ -78,12 +79,12 @@ function Navbar({
       }
     );
     // console.log(res);
-    logoutIndicator();
     if (res.status === 200) {
-      console.log(res.status);
+      console.log(res);
       signupIndicator();
       dispatch(signinAction);
       alert("회원가입에 성공하셨습니다!");
+      modalCloser();
     } else {
       window.location.replace("/main");
     }

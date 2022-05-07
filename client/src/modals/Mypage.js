@@ -1,18 +1,9 @@
 import styled from "styled-components";
 import React from "react";
-import Header from "../component/Header";
-import Header2 from "../component/Header2";
-import Footer from "../component/Footer";
 import { useState, useEffect } from "react";
 import SignOut from "../modalComponent/SignOut";
-import PwdChange1 from "../modalComponent/PwdChange1";
 import axios from "axios";
 import { signoutModalAction, pwdModalAction } from "../store/actions";
-import MypageContent from "./MypageContent";
-import MypageComment from "./MypageComment";
-import MypageManage from "./MypageManage";
-import MypageMenuBar from "./MypageMenuBar";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
