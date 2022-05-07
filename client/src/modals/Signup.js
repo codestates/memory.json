@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Popup from "../components/Popup";
 import PopupDom from "../components/PopupDom";
 import PopupPostCode from "../components/PopupPostCode";
 import * as S from "./Singup.style";
@@ -10,13 +8,15 @@ import * as S from "./Singup.style";
 axios.defaults.withCredentials = true;
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
-function Signup({ changeForm, modalCloser, modalOpener }) {
-  const navigate = useNavigate();
-
+function Signup({
+  modalCloser,
+  modalOpener,
+  changeformToSignin,
+  signupIndicator,
+}) {
   //유효성 검사 상태
   const [validateErr, setValidateErr] = useState("");
-  //회원가입 성공 여부
-  const [successSignup, setSuccessSignup] = useState(false);
+
   //주소 Api
   const [zoneCode, setZoneCode] = useState(""); // zoneCode
   const [addressDetail, setAddressDetail] = useState(""); // 검색주소
@@ -30,7 +30,7 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
     mobile: "",
     email: "",
     address: "",
-    age: "",
+    age: 0,
     sex: "",
   });
   console.log("signupInfo", signupInfo);
@@ -166,7 +166,11 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
 
   //회원가입 버튼을 눌렀을때 서버 교신
   const signupHandler = () => {
-    let { user_name, user_account, password } = signupInfo;
+    let { user_name, user_account, password, checkedPassword } = signupInfo;
+    if (password !== checkedPassword) {
+      setValidateErr("아이디와 비밀번호가 같지 않습니다.");
+      return;
+    }
     if (user_name && user_account && password !== undefined) {
       axios
         .post(
@@ -187,10 +191,11 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
         )
         .then((res) => {
           console.log("res", res);
-          setSuccessSignup(true);
+          signupIndicator();
           modalCloser();
           modalOpener();
-          navigate("/main");
+          alert("회원가입에 성공하셨습니다!");
+          window.location.replace("/");
         })
         .catch((err) => {
           console.log(err);
@@ -353,23 +358,14 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
           회원 가입 하기
         </S.SignUpBtn>
 
-        <S.SignInBtn
-          onClick={() => {
-            changeForm();
-          }}
-        >
-          이미 가입하셨다면 여기를 눌러주세요.
+        <S.SignInBtn onClick={changeformToSignin}>
+          이미 회원이신가요?
         </S.SignInBtn>
       </S.SignUpArea>
-
       <S.Modalback onClick={modalCloser}></S.Modalback>
-      {successSignup ? <Popup text={`회원가입에 성공하셨습니다.`} /> : null}
     </S.ModalArea>
   );
 }
 
 export default Signup;
 
-// 해결해야 하는부분
-// 주소 api를 결정하고, 상세주소를 치면 address에 올바른 값이 들어간다. 하지만 중간에 도로명 지도 api를 수정하려고 누르고 상세주소를 건들리지 않으면 주소명이 바뀌지 않는다.
-// 중복 조회
