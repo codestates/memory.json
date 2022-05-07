@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import Alert from "../components/Alert";
 import styled from "styled-components";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { signinAction } from "../store/actions";
 
 const ModalArea = styled.div`
   position: relative;
@@ -177,14 +180,12 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 // ------------------------------------------------------------------------------------------
 
-function Signin({
-  isSignin,
-  setUserInfo,
-  loginIndicator,
-  modalOpener,
-  modalCloser,
-  changeForm,
-}) {
+function Signin({ changeformToSignup, modalCloser, modalOpener }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const signinState = useSelector((state) => state.authReducer);
+  const { isSignin } = signinState;
+
   // 로그인 상태 정보
   const [loginInfo, setLoginInfo] = useState({
     user_account: "",
@@ -207,15 +208,19 @@ function Signin({
     setCheckErr(true);
     setTimeout(() => {
       setCheckErr(false);
-    }, 2000);
+    }, 3000);
   };
   const clickError = () => {
     setCheckErr(false);
   };
 
-  //처음 로그인 요청하는 곳
+  //처음
   const signinHandler = () => {
+<<<<<<< HEAD
     console.log("x", loginInfo);
+=======
+    // console.log("x", loginInfo);
+>>>>>>> 6de07c2b2b56c628e64a854e1f18d38bb32d6234
     if (!loginInfo.user_account || !loginInfo.password) {
       setErrorMessage("아이디와 비밀번호를 입력하세요");
       errorHandler();
@@ -233,6 +238,7 @@ function Signin({
         }
       )
       .then((res) => {
+<<<<<<< HEAD
         if (res.data.message === "Login Success!") {
           modalOpener();
           loginIndicator();
@@ -249,25 +255,47 @@ function Signin({
             });
           window.location.replace("/main");
           console.log("d", isSignin);
+=======
+        // console.log(res)
+        if (res.status === 200) {
+          console.log(res.data.data);
+          const accessToken = res.data.data.accessToken;
+          console.log(accessToken);
+          dispatch(signinAction);
+          // axios
+          //   .get(`${serverUrl}users`, {
+          //     headers: { authorization: `Bearer ${accessToken}` },
+          //   })
+          //   .then((res) => {
+          //     console.log("getres", res);
+          //     if (res.status === 200) {
+          //       const userInfomation = res.data.data;
+          //       console.log(userInfomation);
+          //       dispatch(userInfoAction(userInfomation.address));
+          //     }
+          //   });
+          modalCloser();
+          alert("로그인에 성공하셨습니다!");
+          navigate("/main");
+>>>>>>> 6de07c2b2b56c628e64a854e1f18d38bb32d6234
         }
       })
       .catch((err) => {
         console.log(err);
-        setErrorMessage("아이디 혹은 비밀번호가 틀립니다.");
+        setErrorMessage(`${err.response.data.message}`);
         errorHandler();
       });
+    console.log("로그인상태", isSignin);
   };
 
   //카카오 소셜 로그인
   const kakaoSigninHandler = () => {
     let clientId = process.env.REACT_APP_KAKAO_CLIENT_ID;
-    console.log(clientId)
+    console.log(clientId);
     let redirectUri = process.env.REACT_APP_KAKAO_REDIRECT_URI;
     window.location.assign(
       `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
     );
-    modalOpener();
-    modalCloser();
   };
 
   //구글 소셜 로그인
@@ -279,8 +307,6 @@ function Signin({
     window.location.assign(
       `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${redirectUri}&prompt=consent&response_type=code&client_id=${clientId}&scope=${scope}&access_type=offline`
     );
-    modalOpener();
-    modalCloser();
   };
 
   const loginPressEnter = (e) => {
@@ -318,7 +344,7 @@ function Signin({
               </div>
             </div>
 
-            <SignUpBtn onClick={() => changeForm()}>회원가입</SignUpBtn>
+            <SignUpBtn onClick={() => changeformToSignup()}>회원가입</SignUpBtn>
             <SignInBtn onClick={signinHandler}>로그인</SignInBtn>
 
             {checkErr ? (
@@ -342,4 +368,18 @@ function Signin({
 
 export default Signin;
 
+<<<<<<< HEAD
 // 해결해야 하는 부분
+=======
+
+// 우선 토큰을 저장 시키고 정보 요청을 할때 불러서 요청한다 get cookies에 있다.
+// 그리고 유저정보를 가지고 오는 리듀서를 사용할건지 말건지에 대한 고민이 필요하다.
+
+// 소셜로그인 구현
+
+// 로그아웃 구현
+// 회원탈퇴 구현
+// 마이페이지 버튼 구현
+// 마이페이지 구현
+
+>>>>>>> 6de07c2b2b56c628e64a854e1f18d38bb32d6234

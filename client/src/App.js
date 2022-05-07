@@ -16,20 +16,61 @@ import Signup from "./modals/Signup";
 import Navbar from "./components/Navbar";
 import Newhistory from "./pages/Newhistory";
 
+//Redux
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signinAction,
+  logoutAction,
+  signupAction,
+  signinModalOnAction,
+  changeSignupToSignin,
+  changeSigninToSignup,
+  modalOff,
+} from "./store/actions";
+
+// ------------------------------------------------------------------------------------------
+
+// axios 설정 / 전역변수 가져오기
+axios.defaults.withCredentials = true;
+const serverUrl = process.env.REACT_APP_SERVER_URL;
+
 function Router() {
-  const [userInfo, setUserInfo] = useState("");
-  //회원정보
-  const [isSignin, setIsSignin] = useState(false);
-  //로그인 상태
-  const [isModal, setIsModal] = useState(false);
-  //모달 상태
-  const [signupModalOpen, setSignupModalOpen] = useState(false);
-  //회원가입 모달
+  const dispatch = useDispatch();
+
+  const modalState = useSelector((state) => state.modalReducer);
+  const signinState = useSelector((state) => state.authReducer);
+
+  // 모달 상태
+  const { isSigninModal, isSignupModal, isLogoutModal } = modalState;
+
+  //로그인 모달 열기로 상태변경
+  const modalOpener = () => {
+    dispatch(signinModalOnAction);
+  };
+
+  // 모든 모달 닫기로 상태 변경
+  const modalCloser = () => {
+    dispatch(modalOff);
+  };
+
+  //회원가입 모달 내리고 로그인 모달 열기로 상태변경
+  const changeformToSignin = () => {
+    dispatch(changeSignupToSignin);
+  };
+
+  //로그인 모달 내리고 회원가입 모달 열기로 상태변경
+  const changeformToSignup = () => {
+    dispatch(changeSigninToSignup);
+  };
+
+  //---------------------------//
+
+  //로그인/ 로그아웃 상태
+  const { isSignin } = signinState;
 
   const loginIndicator = () => {
-    setIsSignin(true);
+    dispatch(signinAction);
   };
-  //로그인 실행
 
   const logoutIndicator = () => {
     const logoutReq = async () => {
@@ -40,51 +81,30 @@ function Router() {
       }
     };
     logoutReq();
+<<<<<<< HEAD
     setIsSignin(false);
+=======
+    dispatch(logoutAction);
+>>>>>>> 6de07c2b2b56c628e64a854e1f18d38bb32d6234
     console.log(isSignin);
   };
   //로그아웃 실행
 
-  const modalOpener = () => {
-    setIsModal(true);
-  };
-  //모달 실행
 
-  const modalCloser = () => {
-    setIsModal(false);
-    setSignupModalOpen(false);
-  };
-  //모달 닫기
-
-  const setModalCloser = () => {
-    setIsModal(false);
-  };
-  const setSignupModalCloser = () => {
-    setSignupModalOpen(false);
-  };
-
-  const changeForm = () => {
-    setSignupModalOpen(!signupModalOpen);
-    modalOpener();
-  };
+  //회원정보
+  const signupIndicator = () =>{
+    dispatch(signupAction);
+  }
 
   //react-modal 실행시 적어야 하는 코드
   Modal.setAppElement("#root");
 
   return (
     <BrowserRouter>
-      <Navbar
-        isSignin={isSignin}
-        loginIndicator={loginIndicator}
-        logoutIndicator={logoutIndicator}
-        modalOpener={modalOpener}
-      />{" "}
+      <Navbar modalOpener={modalOpener} logoutIndicator={logoutIndicator} signupIndicator={signupIndicator} />{" "}
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route
-          path="/main"
-          element={<Main isSignin={isSignin} modalOpener={modalOpener} />}
-        />
+        <Route path="/main" element={<Main />} />
         <Route path="/board" element={<Board />} />
         <Route path="/Newhistory" element={<Newhistory />} />
       </Routes>
@@ -98,16 +118,13 @@ function Router() {
             borderRadius: "1em",
           },
         }}
-        isOpen={isModal}
-        onRequestClose={() => setIsModal(false)}
+        isOpen={isSigninModal}
+        onRequestClose={() => modalCloser()}
       >
         <Signin
+          changeformToSignup={changeformToSignup}
           modalOpener={modalOpener}
           modalCloser={modalCloser}
-          setModalCloser={setModalCloser}
-          loginIndicator={loginIndicator}
-          changeForm={changeForm}
-          setUserInfo={setUserInfo}
         />
       </Modal>
       <Modal
@@ -120,16 +137,15 @@ function Router() {
             borderRadius: "1em",
           },
         }}
-        isOpen={signupModalOpen}
-        onRequestClose={() => setSignupModalOpen(false)}
+        isOpen={isSignupModal}
+        onRequestClose={() =>modalCloser()}
       >
         <Signup
-          setSignupModalCloser={setSignupModalCloser}
-          modalCloser={modalCloser}
-          modalOpener={modalOpener}
-          loginIndicator={loginIndicator}
-          changeForm={changeForm}
-        />
+        modalOpener={modalOpener}
+        modalCloser={modalCloser}
+        changeformToSignin={changeformToSignin}
+        signupIndicator={signupIndicator}
+         />
       </Modal>
     </BrowserRouter>
   );
