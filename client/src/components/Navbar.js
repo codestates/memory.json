@@ -16,6 +16,7 @@ function Navbar({
   modalCloser,
   logoutIndicator,
   signupIndicator,
+  mypageModalOpener
 }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -124,7 +125,7 @@ function Navbar({
         ) : (
           <S.MypagebuttonStyle
             type="button"
-            onClick={''}
+            onClick={mypageModalOpener}
             style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
           >
             <FaRegUser size="24" color="#fff"></FaRegUser>

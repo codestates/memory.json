@@ -1,5 +1,5 @@
 //library
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Modal from "react-modal";
 import axios from "axios";
@@ -27,6 +27,7 @@ import {
   signinModalOnAction,
   changeSignupToSignin,
   changeSigninToSignup,
+  mypageModalAction,
   modalOff,
 } from "./store/actions";
 
@@ -34,6 +35,7 @@ import {
 
 // axios 설정 / 전역변수 가져오기
 axios.defaults.withCredentials = true;
+const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 function Router() {
   const dispatch = useDispatch();
@@ -43,7 +45,7 @@ function Router() {
   const signinState = useSelector((state) => state.authReducer);
 
   // 모달 상태
-  const { isSigninModal, isSignupModal, isLogoutModal } = modalState;
+  const { isSigninModal, isSignupModal, isMypageModal } = modalState;
 
   //로그인 모달 열기로 상태변경
   const modalOpener = () => {
@@ -65,6 +67,10 @@ function Router() {
     dispatch(changeSigninToSignup);
   };
 
+  const mypageModalOpener = () => {
+    dispatch(mypageModalAction)
+  }
+
   //---------------------------//
 
   //로그인/ 로그아웃 상태
@@ -77,7 +83,7 @@ function Router() {
   const logoutIndicator = () => {
     axios
       .post(
-        `${process.env.SERVER_URL}/signout`,
+        `${serverUrl}users/signin`,
         {},
         {
           headers: {
@@ -110,6 +116,7 @@ function Router() {
       <Navbar
         modalOpener={modalOpener}
         modalCloser={modalCloser}
+        mypageModalOpener={mypageModalOpener}
         logoutIndicator={logoutIndicator}
         signupIndicator={signupIndicator}
       />{" "}
@@ -119,6 +126,7 @@ function Router() {
         <Route path="/board" element={<Board />} />
         <Route path="/Newhistory" element={<Newhistory />} />
       </Routes>
+      {/* // 로그인 모달 */}
       <Modal
         style={{
           content: {
@@ -138,6 +146,7 @@ function Router() {
           modalCloser={modalCloser}
         />
       </Modal>
+      {/* // 회원가입 모달 */}
       <Modal
         style={{
           content: {
@@ -156,6 +165,26 @@ function Router() {
           modalCloser={modalCloser}
           changeformToSignin={changeformToSignin}
           signupIndicator={signupIndicator}
+        />
+      </Modal>
+      {/* // 마이페이지 모달 */}
+      <Modal
+        style={{
+          content: {
+            background: "#92a8d1",
+            left: "35%",
+            right: "35%",
+            border: "5px solid #697F6E",
+            borderRadius: "1em",
+          },
+        }}
+        isOpen={isMypageModal}
+        onRequestClose={() => modalCloser()}
+      >
+        <Mypage
+          modalOpener={modalOpener}
+          modalCloser={modalCloser}
+          mypageModalOpener={mypageModalOpener}
         />
       </Modal>
     </BrowserRouter>

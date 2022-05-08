@@ -10,6 +10,7 @@ import {
   SIGN_IN_ON_SIGN_UP_OFF_MODAL,
   SIGN_UP_ON_SIGN_IN_OFF_MODAL,
   SIGN_OUT_MODAL_ON,
+  MY_PAGE_MODAL_ON,
   MODAL_OFF,
 } from "./actionTypes";
 
@@ -48,6 +49,9 @@ export const changeSigninToSignup = {
 };
 export const signoutModalAction = {
   type: SIGN_OUT_MODAL_ON,
+};
+export const mypageModalAction = {
+  type: MY_PAGE_MODAL_ON,
 };
 export const modalOff = {
   type: MODAL_OFF,
