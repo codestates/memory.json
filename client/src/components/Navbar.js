@@ -61,7 +61,7 @@ function Navbar({
       signupIndicator();
       alert(`${res.data.message}`);
       const accessToken = res.data.data
-      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("accessToken", JSON.stringify(accessToken));
       dispatch(signinAction);
       modalCloser();
     } else {
@@ -89,7 +89,7 @@ function Navbar({
       signupIndicator();
       alert(`${res.data.message}`);
       const accessToken = res.data.data
-      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("accessToken", JSON.stringify(accessToken));
       dispatch(signinAction);
       modalCloser();
     } else {
