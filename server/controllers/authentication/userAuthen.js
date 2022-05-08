@@ -12,6 +12,7 @@ module.exports = async (req, res) => {
     if (!accessToken) {
       return null;
     }
+    console.log("1",req)
 
     // 토큰 테스트용
     /* const { accessToken }= req.cookies;
@@ -31,6 +32,8 @@ module.exports = async (req, res) => {
       return null;
     }
 
+    console.log("2")
+
     // 액세스 토큰 정보가 유효한지 확인 : 토큰 구성할떄 테이블 고유 id로 구성
     const user_id = accessTokenData.id;
     // DB에서 확인
@@ -42,6 +45,8 @@ module.exports = async (req, res) => {
     if (!userInfo) {
       return null;
     }
+
+    console.log("3")
 
     // 모든 인증 절차가 끝났다면 userInfo 반환
     return userInfo;

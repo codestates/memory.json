@@ -39,10 +39,7 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 function Router() {
   const dispatch = useDispatch();
-  const accessTokenJson = localStorage.getItem("accessToken");
-  const accessToken = JSON.parse(accessTokenJson)
-  console.log("ad", accessToken)
-
+  
   const modalState = useSelector((state) => state.modalReducer);
   const signinState = useSelector((state) => state.authReducer);
 
@@ -83,6 +80,12 @@ function Router() {
   };
 
   const logoutIndicator = () => {
+    const accessTokenJson = localStorage.getItem("accessToken");
+    console.log("acctokenjson", accessTokenJson)
+    const accessTokenObject = JSON.parse(accessTokenJson)
+    const accessToken = Object.values(accessTokenObject)
+    console.log("ad", accessToken)
+    
     axios
       .post(
         `${serverUrl}users/signout`,
@@ -94,7 +97,8 @@ function Router() {
         }
       )
       .then((res) => {
-        localStorage.setItem("accessToken", "");
+        console.log(res)
+        localStorage.removeItem("accessToken");
         dispatch(logoutAction);
         dispatch(modalOff);
         window.location.replace("/main");
