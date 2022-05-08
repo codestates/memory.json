@@ -1,22 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import * as S from "./Navbar.style";
 import { useDispatch, useSelector } from "react-redux";
 import { signinAction } from "../store/actions";
+import { FaRegUser } from "react-icons/fa";
 
 // axios 설정 / 전역변수 가져오기
 axios.defaults.withCredentials = true;
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 // ------------------------------------------------------------------------------------------
 
-function Navbar({ modalOpener, logoutIndicator, signupIndicator }) {
+function Navbar({
+  modalOpener,
+  modalCloser,
+  logoutIndicator,
+  signupIndicator,
+  mypageModalOpener
+}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const signinState = useSelector((state) => state.authReducer);
   const { isSignin } = signinState;
   const signupState = useSelector((state) => state.signupReducer);
   const { signup } = signupState;
+
 
   // 리디렉션 됬을때 접근코드를 서버에게보냄.
   useEffect(() => {
@@ -49,11 +57,13 @@ function Navbar({ modalOpener, logoutIndicator, signupIndicator }) {
       }
     );
     // console.log(res);
-    logoutIndicator();
     if (res.status === 200) {
       signupIndicator();
+      alert(`${res.data.message}`);
+      const accessToken = res.data.data
+      localStorage.setItem("accessToken", accessToken);
       dispatch(signinAction);
-      alert("회원가입에 성공하셨습니다!");
+      modalCloser();
     } else {
       window.location.replace("/main");
     }
@@ -74,16 +84,23 @@ function Navbar({ modalOpener, logoutIndicator, signupIndicator }) {
       }
     );
     // console.log(res);
-    logoutIndicator();
     if (res.status === 200) {
-      console.log(res.status);
+      console.log(res);
       signupIndicator();
+      alert(`${res.data.message}`);
+      const accessToken = res.data.data
+      localStorage.setItem("accessToken", accessToken);
       dispatch(signinAction);
-      alert("회원가입에 성공하셨습니다!");
+      modalCloser();
     } else {
       window.location.replace("/main");
     }
   };
+
+  const checkedLogin = () =>{
+    alert("로그인을 해주세요")
+    modalOpener()
+  }
 
   return (
     <S.NavArea>
@@ -96,26 +113,44 @@ function Navbar({ modalOpener, logoutIndicator, signupIndicator }) {
           }}
         />
       </S.FirstDiv>
-      {/* 로그인 버튼 */}
       <S.SecondDiv>
         {!isSignin ? (
-          <S.ButtonStyle
+          <S.MypagebuttonStyle
+            type="button"
+            onClick={checkedLogin}
+            style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
+          >
+            <FaRegUser size="24" color="#fff"></FaRegUser>
+          </S.MypagebuttonStyle>
+        ) : (
+          <S.MypagebuttonStyle
+            type="button"
+            onClick={mypageModalOpener}
+            style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
+          >
+            <FaRegUser size="24" color="#fff"></FaRegUser>
+          </S.MypagebuttonStyle>
+        )}
+      </S.SecondDiv>
+      <S.ThirdDiv>
+        {!isSignin ? (
+          <S.LoginbuttonStyle
             type="button"
             onClick={modalOpener}
             style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
           >
             로그인
-          </S.ButtonStyle>
+          </S.LoginbuttonStyle>
         ) : (
-          <S.ButtonStyle
+          <S.LoginbuttonStyle
             type="button"
             onClick={logoutIndicator}
             style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
           >
             로그아웃
-          </S.ButtonStyle>
+          </S.LoginbuttonStyle>
         )}
-      </S.SecondDiv>
+      </S.ThirdDiv>
     </S.NavArea>
   );
 }
