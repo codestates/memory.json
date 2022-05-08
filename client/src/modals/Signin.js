@@ -238,7 +238,8 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
         if (res.status === 200) {
           console.log(res.data.data);
           const accessToken = res.data.data
-          localStorage.setItem("accessToken", accessToken);
+          console.log(accessToken)
+          localStorage.setItem("accessToken", JSON.stringify(accessToken));
           dispatch(signinAction);
           // axios
           //   .get(`${serverUrl}users`, {

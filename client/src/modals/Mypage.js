@@ -104,7 +104,6 @@ const InputPassword = styled.input`
   }
 `;
 
-
 const MarginDiv = styled.div`
   display: flex;
 `;
