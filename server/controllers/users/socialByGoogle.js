@@ -57,12 +57,12 @@ module.exports = async (req, res) => {
           }).then(data=>{
             const accessToken = generateAccessToken({id: data.dataValues.id})
             sendAccessToken(res,accessToken);
-            return res.status(200).send({data:data.dataValues, message: '회원가입 및 로그인 완료'})
+            return res.status(200).send({accessToken: accessToken, message: '회원가입 및 로그인 완료'})
           })
     } else {
       const accessToken = generateAccessToken({id: sameAccount.dataValues.id})
       sendAccessToken(res,accessToken)
-      return res.status(200).send({data:sameAccount.dataValues, message: '기존회원 로그인 완료'})
+      return res.status(200).send({accessToken: accessToken, message: '기존회원 로그인 완료'})
     }
     // return res.send({ data: socialInfo.data, message: "ok" });
   } catch (err) {
