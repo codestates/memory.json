@@ -180,7 +180,13 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 // ------------------------------------------------------------------------------------------
 
-function Signin({ changeformToSignup, modalCloser, modalOpener }) {
+function Signin({
+  changeformToSignup,
+  modalCloser,
+  modalOpener,
+  kakaoHandler,
+  googleHandler,
+}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const signinState = useSelector((state) => state.authReducer);
@@ -237,8 +243,8 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
         // console.log(res)
         if (res.status === 200) {
           console.log(res.data.data);
-          const accessToken = res.data.data
-          console.log(accessToken)
+          const accessToken = res.data.data;
+          console.log(accessToken);
           localStorage.setItem("accessToken", JSON.stringify(accessToken));
           dispatch(signinAction);
           // axios
@@ -268,6 +274,7 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
 
   //카카오 소셜 로그인
   const kakaoSigninHandler = () => {
+    kakaoHandler();
     let clientId = process.env.REACT_APP_KAKAO_CLIENT_ID;
     console.log(clientId);
     let redirectUri = process.env.REACT_APP_KAKAO_REDIRECT_URI;
@@ -278,6 +285,7 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
 
   //구글 소셜 로그인
   const googleSigninHandler = () => {
+    googleHandler();
     let clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
     let redirectUri = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
     let scope =
@@ -328,7 +336,6 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
             {checkErr ? (
               <Alert message={errorMessage} setCheckErr={clickError} />
             ) : null}
-
             <SocialSignInBtn onClick={kakaoSigninHandler}>
               <KakaoIcon src="../img/kakao_login_medium_narrow.png" />
             </SocialSignInBtn>

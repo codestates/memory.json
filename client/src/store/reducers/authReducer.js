@@ -6,7 +6,7 @@ const userInfoState = {
   password: "",
 };
 
-const auth = (prevState = userInfoState, action) => {
+const authReducer = (prevState = userInfoState, action) => {
   let state;
   switch (action.type) {
     case SIGN_IN:
@@ -30,4 +30,4 @@ const auth = (prevState = userInfoState, action) => {
   return state;
 };
 
-export default auth;
+export default authReducer;

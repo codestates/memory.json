@@ -12,18 +12,18 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 // ------------------------------------------------------------------------------------------
 
 function Navbar({
+  isKakaoLogin,
+  isGoogelLogin,
   modalOpener,
   modalCloser,
   logoutIndicator,
   signupIndicator,
-  mypageModalOpener
+  mypageModalOpener,
 }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const signinState = useSelector((state) => state.authReducer);
   const { isSignin } = signinState;
-  const signupState = useSelector((state) => state.signupReducer);
-  const { signup } = signupState;
 
 
   // 리디렉션 됬을때 접근코드를 서버에게보냄.
@@ -40,7 +40,7 @@ function Navbar({
     } else {
       googleGetAccessToken(authorizationCode);
     }
-  }, []);
+  }, [isKakaoLogin, isGoogelLogin]);
 
   // 카카오 로그인 코드 전송
   const kakaoGetAccessToken = async (authorizationCode) => {
@@ -60,7 +60,7 @@ function Navbar({
     if (res.status === 200) {
       signupIndicator();
       alert(`${res.data.message}`);
-      const accessToken = res.data.data
+      const accessToken = res.data.data;
       localStorage.setItem("accessToken", JSON.stringify(accessToken));
       dispatch(signinAction);
       modalCloser();
@@ -88,7 +88,7 @@ function Navbar({
       console.log(res);
       signupIndicator();
       alert(`${res.data.message}`);
-      const accessToken = res.data.data
+      const accessToken = res.data.data;
       localStorage.setItem("accessToken", JSON.stringify(accessToken));
       dispatch(signinAction);
       modalCloser();
@@ -97,10 +97,10 @@ function Navbar({
     }
   };
 
-  const checkedLogin = () =>{
-    alert("로그인을 해주세요")
-    modalOpener()
-  }
+  const checkedLogin = () => {
+    alert("로그인을 해주세요");
+    modalOpener();
+  };
 
   return (
     <S.NavArea>
