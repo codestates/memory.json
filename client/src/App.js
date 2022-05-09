@@ -123,11 +123,8 @@ function Router() {
 
   const logoutIndicator = () => {
     const accessTokenJson = localStorage.getItem("accessToken");
-    console.log("acctokenjson", accessTokenJson);
     const accessTokenObject = JSON.parse(accessTokenJson);
     const accessToken = Object.values(accessTokenObject);
-    console.log("ad", accessToken);
-
     axios
       .post(
         `${serverUrl}users/signout`,
@@ -162,8 +159,8 @@ function Router() {
   return (
     <BrowserRouter>
       <Navbar
-        isKakaoLogin={isKakaoLogin}
-        isGoogelLogin={isGoogelLogin}
+        kakaoHandler={kakaoHandler}
+        googleHandler={googleHandler}
         modalOpener={modalOpener}
         modalCloser={modalCloser}
         mypageModalOpener={mypageModalOpener}
@@ -194,8 +191,6 @@ function Router() {
           changeformToSignup={changeformToSignup}
           modalOpener={modalOpener}
           modalCloser={modalCloser}
-          kakaoHandler={kakaoHandler}
-          googleHandler={googleHandler}
         />
       </Modal>
       {/* // 회원가입 모달 */}
@@ -224,8 +219,8 @@ function Router() {
         style={{
           content: {
             background: "#92a8d1",
-            left: "35%",
-            right: "35%",
+            left: "15%",
+            right: "15%",
             border: "5px solid #697F6E",
             borderRadius: "1em",
           },
@@ -234,6 +229,8 @@ function Router() {
         onRequestClose={() => modalCloser()}
       >
         <Mypage
+          isGoogelLogin={isGoogelLogin}
+          isKakaoLogin={isKakaoLogin}
           modalCloser={modalCloser}
           mypageModalOpener={mypageModalOpener}
           changeformToEditmyinfo={changeformToEditmyinfo}
@@ -309,4 +306,3 @@ function App() {
 export default App;
 
 // 회원탈퇴 구현 //
-// 마이페이지 구현 get user 정보 axios 요청

@@ -3,6 +3,7 @@ export const SIGN_IN = "SIGN_IN";
 export const LOG_OUT = "LOG_OUT";
 export const SIGN_UP = "SIGN_UP";
 export const SIGN_OUT = "SIGN_OUT";
+export const GET_USER = "GET_USER";
 
 // 소셜 로그인
 export const GOOGLE_LOGIN = "GOOGLE_LOGIN";

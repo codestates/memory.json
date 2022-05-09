@@ -12,8 +12,8 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 // ------------------------------------------------------------------------------------------
 
 function Navbar({
-  isKakaoLogin,
-  isGoogelLogin,
+  kakaoHandler,
+  googleHandler,
   modalOpener,
   modalCloser,
   logoutIndicator,
@@ -40,7 +40,7 @@ function Navbar({
     } else {
       googleGetAccessToken(authorizationCode);
     }
-  }, [isKakaoLogin, isGoogelLogin]);
+  }, []);
 
   // 카카오 로그인 코드 전송
   const kakaoGetAccessToken = async (authorizationCode) => {
@@ -67,6 +67,7 @@ function Navbar({
     } else {
       window.location.replace("/main");
     }
+    kakaoHandler();
   };
 
   // 구글 로그인 코드 전송
@@ -95,6 +96,7 @@ function Navbar({
     } else {
       window.location.replace("/main");
     }
+    googleHandler();
   };
 
   const checkedLogin = () => {

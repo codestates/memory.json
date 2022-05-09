@@ -3,6 +3,7 @@ import {
   LOG_OUT,
   SIGN_UP,
   SIGN_OUT,
+  GET_USER,
   GOOGLE_LOGIN,
   KAKAO_LOGIN,
   USER_INFORMATION,
@@ -34,16 +35,40 @@ export const signupAction = {
 export const signoutAction = {
   type: SIGN_OUT,
 };
+export const getUserAction = (user_account, password) => ({
+  type: GET_USER,
+  data: { user_account: user_account, password: password },
+});
 export const googleAction = {
   type: GOOGLE_LOGIN,
 };
 export const kakaoAction = {
   type: KAKAO_LOGIN,
 };
-export const userInfoAction = (data) => ({
+export const userinfoAction = (
+  address,
+  age,
+  email,
+  id,
+  mobile,
+  provider,
+  sex,
+  social_id,
+  user_account,
+  user_name
+) => ({
   type: USER_INFORMATION,
-  payload: {
-    ...data,
+  data: {
+    address: address,
+    age: age,
+    email: email,
+    id: id,
+    mobile: mobile,
+    provider: provider,
+    sex: sex,
+    social_id: social_id,
+    user_account: user_account,
+    user_name: user_name,
   },
 });
 export const signinModalOnAction = {

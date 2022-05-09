@@ -4,7 +4,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { signinAction } from "../store/actions";
+import { signinAction, getUserAction } from "../store/actions";
 
 const ModalArea = styled.div`
   position: relative;
@@ -180,13 +180,7 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 // ------------------------------------------------------------------------------------------
 
-function Signin({
-  changeformToSignup,
-  modalCloser,
-  modalOpener,
-  kakaoHandler,
-  googleHandler,
-}) {
+function Signin({ changeformToSignup, modalCloser, modalOpener }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const signinState = useSelector((state) => state.authReducer);
@@ -247,18 +241,6 @@ function Signin({
           console.log(accessToken);
           localStorage.setItem("accessToken", JSON.stringify(accessToken));
           dispatch(signinAction);
-          // axios
-          //   .get(`${serverUrl}users`, {
-          //     headers: { authorization: `Bearer ${accessToken}` },
-          //   })
-          //   .then((res) => {
-          //     console.log("getres", res);
-          //     if (res.status === 200) {
-          //       const userInfomation = res.data.data;
-          //       console.log(userInfomation);
-          //       dispatch(userInfoAction(userInfomation.address));
-          //     }
-          //   });
           modalCloser();
           alert("로그인에 성공하셨습니다!");
           navigate("/main");
@@ -269,12 +251,12 @@ function Signin({
         setErrorMessage(`${err.response.data.message}`);
         errorHandler();
       });
+    dispatch(getUserAction(loginInfo.user_account, loginInfo.password));
     console.log("로그인상태", isSignin);
   };
 
   //카카오 소셜 로그인
   const kakaoSigninHandler = () => {
-    kakaoHandler();
     let clientId = process.env.REACT_APP_KAKAO_CLIENT_ID;
     console.log(clientId);
     let redirectUri = process.env.REACT_APP_KAKAO_REDIRECT_URI;
@@ -285,7 +267,6 @@ function Signin({
 
   //구글 소셜 로그인
   const googleSigninHandler = () => {
-    googleHandler();
     let clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
     let redirectUri = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
     let scope =
