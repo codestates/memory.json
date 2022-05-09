@@ -1,28 +1,40 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import PopUp from "./Popup";
 import * as S from "./Navbar.style";
+import { useDispatch, useSelector } from "react-redux";
+import { signinAction } from "../store/actions";
+import { FaRegUser } from "react-icons/fa";
 
 // axios 설정 / 전역변수 가져오기
 axios.defaults.withCredentials = true;
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 // ------------------------------------------------------------------------------------------
 
-function Navbar({ isSignin, logoutIndicator, modalOpener }) {
-  const [successSignUp, setSuccessSignUp] = useState(false);
-
+function Navbar({
+  modalOpener,
+  modalCloser,
+  logoutIndicator,
+  signupIndicator,
+  mypageModalOpener
+}) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const signinState = useSelector((state) => state.authReducer);
+  const { isSignin } = signinState;
+  const signupState = useSelector((state) => state.signupReducer);
+  const { signup } = signupState;
+
 
   // 리디렉션 됬을때 접근코드를 서버에게보냄.
   useEffect(() => {
     const href = window.location.href;
-    console.log(href);
+    // console.log(href);
     let params = new URL(href).searchParams;
     let authorizationCode = params.get("code");
     let authorizationScope = params.get("scope");
-    console.log(authorizationCode)
-    console.log(authorizationScope)
+    // console.log(authorizationCode)
+    // console.log(authorizationScope)
     if (authorizationScope === null) {
       kakaoGetAccessToken(authorizationCode);
     } else {
@@ -44,10 +56,14 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
         },
       }
     );
-    console.log(res);
-    logoutIndicator();
+    // console.log(res);
     if (res.status === 200) {
-      setSuccessSignUp(true);
+      signupIndicator();
+      alert(`${res.data.message}`);
+      const accessToken = res.data.data
+      localStorage.setItem("accessToken", JSON.stringify(accessToken));
+      dispatch(signinAction);
+      modalCloser();
     } else {
       window.location.replace("/main");
     }
@@ -67,14 +83,24 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
         },
       }
     );
-    console.log(res);
-    logoutIndicator();
+    // console.log(res);
     if (res.status === 200) {
-      setSuccessSignUp(true);
+      console.log(res);
+      signupIndicator();
+      alert(`${res.data.message}`);
+      const accessToken = res.data.data
+      localStorage.setItem("accessToken", JSON.stringify(accessToken));
+      dispatch(signinAction);
+      modalCloser();
     } else {
       window.location.replace("/main");
     }
   };
+
+  const checkedLogin = () =>{
+    alert("로그인을 해주세요")
+    modalOpener()
+  }
 
   return (
     <S.NavArea>
@@ -87,27 +113,44 @@ function Navbar({ isSignin, logoutIndicator, modalOpener }) {
           }}
         />
       </S.FirstDiv>
-      {/* 로그인 버튼 */}
       <S.SecondDiv>
-        {isSignin ? (
-          <S.ButtonStyle
+        {!isSignin ? (
+          <S.MypagebuttonStyle
             type="button"
-            onClick={logoutIndicator}
+            onClick={checkedLogin}
             style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
           >
-            로그아웃
-          </S.ButtonStyle>
+            <FaRegUser size="24" color="#fff"></FaRegUser>
+          </S.MypagebuttonStyle>
         ) : (
-          <S.ButtonStyle
+          <S.MypagebuttonStyle
+            type="button"
+            onClick={mypageModalOpener}
+            style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
+          >
+            <FaRegUser size="24" color="#fff"></FaRegUser>
+          </S.MypagebuttonStyle>
+        )}
+      </S.SecondDiv>
+      <S.ThirdDiv>
+        {!isSignin ? (
+          <S.LoginbuttonStyle
             type="button"
             onClick={modalOpener}
             style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
           >
             로그인
-          </S.ButtonStyle>
+          </S.LoginbuttonStyle>
+        ) : (
+          <S.LoginbuttonStyle
+            type="button"
+            onClick={logoutIndicator}
+            style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
+          >
+            로그아웃
+          </S.LoginbuttonStyle>
         )}
-      </S.SecondDiv>
-      {successSignUp ? <PopUp text={`회원가입에 성공하셨습니다.'`} /> : null}
+      </S.ThirdDiv>
     </S.NavArea>
   );
 }

@@ -12,7 +12,7 @@ const NavArea = styled.div`
 `;
 
 const FirstDiv = styled.div`
-  width: 100px;
+  width: 300px;
   height: 50px;
   background-color: transparent;
   margin: 1em 1em 1em 1em;
@@ -36,7 +36,16 @@ const SecondDiv = styled.div`
   cursor: pointer;
 `;
 
-const ButtonStyle = styled.button`
+const ThirdDiv = styled.div`
+  width: 10%;
+  height: 50px;
+  margin: 1em 1em 1em 1em;
+  background-color: #ff4c29;
+  border-radius: 15em;
+  cursor: pointer;
+`;
+
+const LoginbuttonStyle = styled.button`
   width: 100%;
   height: 50px;
   cursor: pointer;
@@ -44,4 +53,12 @@ const ButtonStyle = styled.button`
   border: none;
 `;
 
-export { NavArea, FirstDiv, SecondDiv, ImageLog, ButtonStyle };
+const MypagebuttonStyle = styled.button`
+  width: 100%;
+  height: 50px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+`;
+
+export { NavArea, FirstDiv, SecondDiv, ThirdDiv, ImageLog, LoginbuttonStyle, MypagebuttonStyle };

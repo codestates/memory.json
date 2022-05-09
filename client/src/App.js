@@ -1,5 +1,5 @@
 //library
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Modal from "react-modal";
 import axios from "axios";
@@ -12,59 +12,106 @@ import Board from "./pages/Board";
 //Modal
 import Signin from "./modals/Signin";
 import Signup from "./modals/Signup";
+import Mypage from "./modals/Mypage";
+
 //Component
 import Navbar from "./components/Navbar";
+import Newhistory from "./pages/Newhistory";
+
+//Redux
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signinAction,
+  logoutAction,
+  signupAction,
+  signinModalOnAction,
+  changeSignupToSignin,
+  changeSigninToSignup,
+  mypageModalAction,
+  modalOff,
+} from "./store/actions";
+
+// ------------------------------------------------------------------------------------------
+
+// axios 설정 / 전역변수 가져오기
+axios.defaults.withCredentials = true;
+const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 function Router() {
-  const [userInfo, setUserInfo] = useState("");
-  //회원정보
-  const [isSignin, setIsSignin] = useState(false);
-  //로그인 상태
-  const [isModal, setIsModal] = useState(false);
-  //모달 상태
-  const [signupModalOpen, setSignupModalOpen] = useState(false);
-  //회원가입 모달
+  const dispatch = useDispatch();
+  
+  const modalState = useSelector((state) => state.modalReducer);
+  const signinState = useSelector((state) => state.authReducer);
+
+  // 모달 상태
+  const { isSigninModal, isSignupModal, isMypageModal } = modalState;
+
+  //로그인 모달 열기로 상태변경
+  const modalOpener = () => {
+    dispatch(signinModalOnAction);
+  };
+
+  // 모든 모달 닫기로 상태 변경
+  const modalCloser = () => {
+    dispatch(modalOff);
+  };
+
+  //회원가입 모달 내리고 로그인 모달 열기로 상태변경
+  const changeformToSignin = () => {
+    dispatch(changeSignupToSignin);
+  };
+
+  //로그인 모달 내리고 회원가입 모달 열기로 상태변경
+  const changeformToSignup = () => {
+    dispatch(changeSigninToSignup);
+  };
+
+  const mypageModalOpener = () => {
+    dispatch(mypageModalAction)
+  }
+
+  //---------------------------//
+
+  //로그인/ 로그아웃 상태
+  const { isSignin } = signinState;
 
   const loginIndicator = () => {
-    setIsSignin(true);
+    dispatch(signinAction);
   };
-  //로그인 실행
 
   const logoutIndicator = () => {
-    const logoutReq = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/users/signout");
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    logoutReq();
-    setIsSignin(false);
-    console.log(isSignin)
+    const accessTokenJson = localStorage.getItem("accessToken");
+    console.log("acctokenjson", accessTokenJson)
+    const accessTokenObject = JSON.parse(accessTokenJson)
+    const accessToken = Object.values(accessTokenObject)
+    console.log("ad", accessToken)
+    
+    axios
+      .post(
+        `${serverUrl}users/signout`,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res)
+        localStorage.removeItem("accessToken");
+        dispatch(logoutAction);
+        dispatch(modalOff);
+        window.location.replace("/main");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   //로그아웃 실행
 
-  const modalOpener = () => {
-    setIsModal(true);
-  };
-  //모달 실행
-
-  const modalCloser = () => {
-    setIsModal(false);
-    setSignupModalOpen(false);
-  };
-  //모달 닫기
-
-  const setModalCloser = () => {
-    setIsModal(false);
-  };
-  const setSignupModalCloser = () => {
-    setSignupModalOpen(false);
-  };
-
-  const changeForm = () => {
-    setSignupModalOpen(!signupModalOpen);
-    modalOpener();
+  //회원정보
+  const signupIndicator = () => {
+    dispatch(signupAction);
   };
 
   //react-modal 실행시 적어야 하는 코드
@@ -73,19 +120,19 @@ function Router() {
   return (
     <BrowserRouter>
       <Navbar
-        isSignin={isSignin}
-        loginIndicator={loginIndicator}
-        logoutIndicator={logoutIndicator}
         modalOpener={modalOpener}
+        modalCloser={modalCloser}
+        mypageModalOpener={mypageModalOpener}
+        logoutIndicator={logoutIndicator}
+        signupIndicator={signupIndicator}
       />{" "}
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route
-          path="/main"
-          element={<Main isSignin={isSignin} modalOpener={modalOpener} />}
-        />
+        <Route path="/main" element={<Main />} />
         <Route path="/board" element={<Board />} />
+        <Route path="/Newhistory" element={<Newhistory />} />
       </Routes>
+      {/* // 로그인 모달 */}
       <Modal
         style={{
           content: {
@@ -96,18 +143,16 @@ function Router() {
             borderRadius: "1em",
           },
         }}
-        isOpen={isModal}
-        onRequestClose={() => setIsModal(false)}
+        isOpen={isSigninModal}
+        onRequestClose={() => modalCloser()}
       >
         <Signin
+          changeformToSignup={changeformToSignup}
           modalOpener={modalOpener}
           modalCloser={modalCloser}
-          setModalCloser={setModalCloser}
-          loginIndicator={loginIndicator}
-          changeForm={changeForm}
-          setUserInfo={setUserInfo}
         />
       </Modal>
+      {/* // 회원가입 모달 */}
       <Modal
         style={{
           content: {
@@ -118,15 +163,34 @@ function Router() {
             borderRadius: "1em",
           },
         }}
-        isOpen={signupModalOpen}
-        onRequestClose={() => setSignupModalOpen(false)}
+        isOpen={isSignupModal}
+        onRequestClose={() => modalCloser()}
       >
         <Signup
-          setSignupModalCloser={setSignupModalCloser}
-          modalCloser={modalCloser}
           modalOpener={modalOpener}
-          loginIndicator={loginIndicator}
-          changeForm={changeForm}
+          modalCloser={modalCloser}
+          changeformToSignin={changeformToSignin}
+          signupIndicator={signupIndicator}
+        />
+      </Modal>
+      {/* // 마이페이지 모달 */}
+      <Modal
+        style={{
+          content: {
+            background: "#92a8d1",
+            left: "35%",
+            right: "35%",
+            border: "5px solid #697F6E",
+            borderRadius: "1em",
+          },
+        }}
+        isOpen={isMypageModal}
+        onRequestClose={() => modalCloser()}
+      >
+        <Mypage
+          modalOpener={modalOpener}
+          modalCloser={modalCloser}
+          mypageModalOpener={mypageModalOpener}
         />
       </Modal>
     </BrowserRouter>
@@ -138,3 +202,6 @@ function App() {
 }
 
 export default App;
+
+// 회원탈퇴 구현 //
+// 마이페이지 구현 get user 정보 axios 요청

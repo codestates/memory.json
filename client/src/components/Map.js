@@ -53,7 +53,7 @@ const MapArea = ({ searchPlace }) => {
   // });
   // marker.setMap(map);
 
-  return <div id="myMap" style={{ width: "auto", height: "700px" }}></div>;
+  return <div id="myMap" style={{ width: "50%", height: "700px" }}></div>;
 };
 
 export default MapArea;

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Popup from "../components/Popup";
 import PopupDom from "../components/PopupDom";
 import PopupPostCode from "../components/PopupPostCode";
 import * as S from "./Singup.style";
@@ -10,16 +8,21 @@ import * as S from "./Singup.style";
 axios.defaults.withCredentials = true;
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
-function Signup({ changeForm, modalCloser, modalOpener }) {
-  const navigate = useNavigate();
-
+function Signup({
+  modalCloser,
+  modalOpener,
+  changeformToSignin,
+  signupIndicator,
+}) {
   //유효성 검사 상태
   const [validateErr, setValidateErr] = useState("");
-  //회원가입 성공 여부
-  const [successSignup, setSuccessSignup] = useState(false);
+
   //주소 Api
   const [zoneCode, setZoneCode] = useState(""); // zoneCode
   const [addressDetail, setAddressDetail] = useState(""); // 검색주소
+
+  // 글자 유무 상태
+  const [text, setText] = useState("");
 
   // 회원가입 정보
   const [signupInfo, setSignupInfo] = useState({
@@ -30,24 +33,35 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
     mobile: "",
     email: "",
     address: "",
-    age: "",
+    age: 0,
     sex: "",
   });
   console.log("signupInfo", signupInfo);
 
-  //회원가입을 보낼 데이터
+  //회원가입 데이터
   const handleInputValue = (key) => (e) => {
     // console.log("e",e)
     // console.log("key",key)
     setSignupInfo({ ...signupInfo, [key]: e.target.value });
   };
 
-  //주소를 가져올 데이터
+  //주소 데이터
   const handleInputAddress = (key) => (e) => {
     let firstAddress = `${addressDetail} ${zoneCode}`;
     let lastAddress = e.target.value;
-    let allAddress = firstAddress + lastAddress;
-    setSignupInfo({ ...signupInfo, [key]: allAddress });
+    setText(e.target.value);
+    setSignupInfo({ ...signupInfo, [key]: firstAddress + lastAddress });
+  };
+
+  const onReset = () => {
+    setText("");
+  };
+
+  //나이 데이터
+  const handleInputAge = (key) => (e) => {
+    console.log(e.target.value);
+    let ageValue = parseInt(e.target.value);
+    setSignupInfo({ ...signupInfo, [key]: ageValue });
   };
 
   // 유효성 검사
@@ -85,7 +99,7 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
         return "숫자와 특수문자가 포함되어야 합니다.";
       }
       if (passwordCheck.test(password) && password !== checkedPassword) {
-        return "일치하지 않습니다";
+        return "아이디와 비밀번호가 같지 않습니다.";
       }
     }
     if (inputName === "mobile") {
@@ -108,7 +122,7 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
 
   const checkedInfo = (inputName) => {
     let validate = validateCheck(inputName);
-    let { user_name, user_account, password, checkedPassword } = signupInfo;
+    let { password, checkedPassword } = signupInfo;
     if (validate) {
       if (inputName === "user_account") {
         setValidateErr(validate);
@@ -142,31 +156,25 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
       setValidateErr("");
       if (inputName === "password") {
         if (password !== checkedPassword && checkedPassword !== "") {
-          return setValidateErr("비밀번호가 일치하지 않습니다");
+          return setValidateErr("아이디와 비밀번호가 같지 않습니다.");
         }
         setValidateErr("");
       }
-
-      // if (inputName === "user_name") {
-      //   axios
-      //     .get(`${serverUrl}users/?user_name=${user_name}`)
-      //     .then((ok) => setValidateErr(""))
-      //     .catch((err) => setValidateErr("중복된 닉네임 입니다."));
-      // }
-
-      // if (inputName === "user_account") {
-      //   axios
-      //     .get(`${serverUrl}users/?user_account=${user_account}`)
-      //     .then((ok) => setValidateErr(""))
-      //     .catch((err) => setValidateErr("중복된 아이디 입니다."));
-      // }
     }
   };
   //---------------------------------------------------------------------------------
 
   //회원가입 버튼을 눌렀을때 서버 교신
   const signupHandler = () => {
-    let { user_name, user_account, password } = signupInfo;
+    let { user_name, user_account, password, checkedPassword, age } = signupInfo;
+    if (password !== checkedPassword) {
+      setValidateErr("아이디와 비밀번호가 같지 않습니다.");
+      return;
+    }
+    if(typeof age !== 'number'){
+      setValidateErr("나이에 숫자를 입력해주세요");
+      return;
+    }
     if (user_name && user_account && password !== undefined) {
       axios
         .post(
@@ -187,10 +195,11 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
         )
         .then((res) => {
           console.log("res", res);
-          setSuccessSignup(true);
+          signupIndicator();
           modalCloser();
           modalOpener();
-          navigate("/main");
+          alert("회원가입에 성공하셨습니다!");
+          window.location.replace("/");
         })
         .catch((err) => {
           console.log(err);
@@ -300,7 +309,13 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
           />
           <div>
             {/* 버튼 클릭 시 팝업 생성 */}
-            <button type="button" onClick={openPostCode}>
+            <button
+              type="button"
+              onClick={() => {
+                openPostCode();
+                onReset();
+              }}
+            >
               우편번호 검색
             </button>
             {/* 팝업 div */}
@@ -321,6 +336,7 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
           <span>상세 주소</span>
           <S.Input
             type="text"
+            value={text}
             onChange={handleInputAddress("address")}
             placeholder="상세주소를 입력하세요"
           />
@@ -328,10 +344,9 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
         <div>
           <span>나이</span>
           <S.Input
-            type="number"
-            min="0"
-            max="100"
-            onChange={handleInputValue("age")}
+            type="text"
+            pattern="^[0-9]+$"
+            onChange={handleInputAge("age")}
             placeholder="나이를 입력해주세요 ex) 25"
           />
         </div>
@@ -353,23 +368,13 @@ function Signup({ changeForm, modalCloser, modalOpener }) {
           회원 가입 하기
         </S.SignUpBtn>
 
-        <S.SignInBtn
-          onClick={() => {
-            changeForm();
-          }}
-        >
-          이미 가입하셨다면 여기를 눌러주세요.
+        <S.SignInBtn onClick={changeformToSignin}>
+          이미 회원이신가요?
         </S.SignInBtn>
       </S.SignUpArea>
-
       <S.Modalback onClick={modalCloser}></S.Modalback>
-      {successSignup ? <Popup text={`회원가입에 성공하셨습니다.`} /> : null}
     </S.ModalArea>
   );
 }
 
 export default Signup;
-
-// 해결해야 하는부분
-// 주소 api를 결정하고, 상세주소를 치면 address에 올바른 값이 들어간다. 하지만 중간에 도로명 지도 api를 수정하려고 누르고 상세주소를 건들리지 않으면 주소명이 바뀌지 않는다.
-// 중복 조회

@@ -5,7 +5,7 @@ const { generateAccessToken, sendAccessToken } = require("../tokenFunctions");
 require("dotenv").config();
 
 module.exports = async (req, res) => {
-  // console.log(req.body.authorizationCode);
+  console.log(req.body.authorizationCode);
   try {
     console.log("hello");
     const { authorizationCode } = req.body;
@@ -13,10 +13,10 @@ module.exports = async (req, res) => {
     const bodyData = {
       grant_type: "authorization_code",
       client_id: process.env.KAKAO_ID,
-      redirect_uri: "http://localhost:3000/main",
+      redirect_uri: process.env.KAKAO_REDIRECT_URI,
       code: authorizationCode,
     };
-    // console.log(bodyData)
+    console.log(bodyData)
 
     // 인가코드를 가지고 kakao 측에 토큰 요청
     const kakaoTokenRes = await axios({
@@ -27,11 +27,11 @@ module.exports = async (req, res) => {
       },
       data: qs.stringify(bodyData),
     });
-    // console.log(kakaoTokenRes);
+    console.log(kakaoTokenRes);
 
     // 카카오 토큰을 변수로 선언 후 값 할당
     const kakaoAccessToken = kakaoTokenRes.data.access_token;
-    // console.log(kakaoAccessToken) 확인 완료
+    console.log(kakaoAccessToken) 
 
     // 카카오 토큰을 다시 보내 정보 해석하게 함
     const tokenUserRes = await axios({
@@ -88,7 +88,7 @@ module.exports = async (req, res) => {
      */
 
     // 토큰을 발급하고 쿠키에 저장한다.
-    const accessToken = getAccessToken(userInfo.dataValues);
+    const accessToken = generateAccessToken(userInfo.dataValues);
     sendAccessToken(res, accessToken);
 
     return res.status(200).json({

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import Alert from "../components/Alert";
 import styled from "styled-components";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { signinAction } from "../store/actions";
 
 const ModalArea = styled.div`
   position: relative;
@@ -177,14 +180,12 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 // ------------------------------------------------------------------------------------------
 
-function Signin({
-  isSignin,
-  setUserInfo,
-  loginIndicator,
-  modalOpener,
-  modalCloser,
-  changeForm,
-}) {
+function Signin({ changeformToSignup, modalCloser, modalOpener }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const signinState = useSelector((state) => state.authReducer);
+  const { isSignin } = signinState;
+
   // 로그인 상태 정보
   const [loginInfo, setLoginInfo] = useState({
     user_account: "",
@@ -207,15 +208,15 @@ function Signin({
     setCheckErr(true);
     setTimeout(() => {
       setCheckErr(false);
-    }, 2000);
+    }, 3000);
   };
   const clickError = () => {
     setCheckErr(false);
   };
 
-  //처음 로그인 요청하는 곳
+  //처음
   const signinHandler = () => {
-    console.log("x",loginInfo);
+    // console.log("x", loginInfo);
     if (!loginInfo.user_account || !loginInfo.password) {
       setErrorMessage("아이디와 비밀번호를 입력하세요");
       errorHandler();
@@ -233,53 +234,57 @@ function Signin({
         }
       )
       .then((res) => {
-        if (res.data.message === "Login Success!") {
-          modalOpener();
-          loginIndicator();
-          
-          const accessToken = res.data.data.accessToken;
-          axios
-            .get(`${serverUrl}users`, {
-              headers: { authorization: `Bearer ${accessToken}` },
-            })
-            .then((res) => {
-              console.log("getres", res.data.data);
-              const userInformation = res.data.data;
-              setUserInfo(userInformation);
-            });
-          window.location.replace("/main");
-          console.log("d",isSignin)
+        // console.log(res)
+        if (res.status === 200) {
+          console.log(res.data.data);
+          const accessToken = res.data.data
+          console.log(accessToken)
+          localStorage.setItem("accessToken", JSON.stringify(accessToken));
+          dispatch(signinAction);
+          // axios
+          //   .get(`${serverUrl}users`, {
+          //     headers: { authorization: `Bearer ${accessToken}` },
+          //   })
+          //   .then((res) => {
+          //     console.log("getres", res);
+          //     if (res.status === 200) {
+          //       const userInfomation = res.data.data;
+          //       console.log(userInfomation);
+          //       dispatch(userInfoAction(userInfomation.address));
+          //     }
+          //   });
+          modalCloser();
+          alert("로그인에 성공하셨습니다!");
+          navigate("/main");
         }
       })
       .catch((err) => {
         console.log(err);
-        setErrorMessage("아이디 혹은 비밀번호가 틀립니다.");
+        setErrorMessage(`${err.response.data.message}`);
         errorHandler();
       });
+    console.log("로그인상태", isSignin);
   };
 
   //카카오 소셜 로그인
   const kakaoSigninHandler = () => {
     let clientId = process.env.REACT_APP_KAKAO_CLIENT_ID;
-    console.log(clientId)
+    console.log(clientId);
     let redirectUri = process.env.REACT_APP_KAKAO_REDIRECT_URI;
     window.location.assign(
       `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
     );
-    modalOpener();
-    modalCloser();
   };
 
   //구글 소셜 로그인
   const googleSigninHandler = () => {
     let clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
     let redirectUri = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
-    let scope ='profile%20https://www.googleapis.com/auth/userinfo.profile%20https://www.googleapis.com/auth/user.gender.read%20https://www.googleapis.com/auth/user.emails.read%20https://www.googleapis.com/auth/user.birthday.read%20https://www.googleapis.com/auth/user.addresses.read%20https://www.googleapis.com/auth/user.phonenumbers.read'
+    let scope =
+      "profile%20https://www.googleapis.com/auth/userinfo.profile%20https://www.googleapis.com/auth/user.gender.read%20https://www.googleapis.com/auth/user.emails.read%20https://www.googleapis.com/auth/user.birthday.read%20https://www.googleapis.com/auth/user.addresses.read%20https://www.googleapis.com/auth/user.phonenumbers.read";
     window.location.assign(
       `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${redirectUri}&prompt=consent&response_type=code&client_id=${clientId}&scope=${scope}&access_type=offline`
     );
-    modalOpener();
-    modalCloser();
   };
 
   const loginPressEnter = (e) => {
@@ -317,7 +322,7 @@ function Signin({
               </div>
             </div>
 
-            <SignUpBtn onClick={() => changeForm()}>회원가입</SignUpBtn>
+            <SignUpBtn onClick={() => changeformToSignup()}>회원가입</SignUpBtn>
             <SignInBtn onClick={signinHandler}>로그인</SignInBtn>
 
             {checkErr ? (
@@ -340,5 +345,3 @@ function Signin({
 }
 
 export default Signin;
-
-// 해결해야 하는 부분
