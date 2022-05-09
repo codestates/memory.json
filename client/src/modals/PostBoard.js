@@ -7,6 +7,16 @@ function PostBoard() {
   const [myImage, setMyImage] = useState(null);
   // 클라이언트에서 미리보기를 위해 추가한 상태 파일 base64
   const [imgBase64, setImgBase64] = useState("");
+  // history 정보
+  const [historyInfo, setHistoryInfo] = useState({
+    history_title: "",
+    history_content: "",
+    history_year: "",
+    place_id: "",
+    user_id: "",
+  });
+  console.log("historyInfo", historyInfo);
+
   const onChange = (e) => {
     // 미리 보기를 위한 FileReader 객체 생성
     const reader = new FileReader();
@@ -59,7 +69,7 @@ function PostBoard() {
         onChange={onChange}
         style={{ background: "white" }}
       />
-      <Button onClick={onClick}>업로드</Button>
+      <Button onClick={onClick}>작성</Button>
     </div>
   );
 }
