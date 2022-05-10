@@ -16,12 +16,6 @@ function SearchAddress() {
   };
 
   const callAddress = async () => {
-    // const headers = new Headers();
-    // headers.append(
-    //   "Autorization",
-    //   "KakaoAK " + `${process.env.REACT_APP_KAKAO_CLIENT_ID}`
-    // );
-
     const config = {
       headers: {
         Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_CLIENT_ID}`,
