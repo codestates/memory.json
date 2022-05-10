@@ -36,11 +36,11 @@ const searchByUser = require("./searchByUser");
 const searchByFavorite = require("./searchByFavorite");
 const changeHistory = require("./changeHistory");
 const deleteHistory = require("./deleteHistory");
-const uploadPhoto = require("./uploadphoto");
+// const uploadPhoto = require("./uploadphoto");
 
-router.post("/uploadphoto", upload.single("filess"), uploadPhoto);
+// router.post("/uploadphoto", upload.single("file"), uploadPhoto);
 router.post("/:placeId", registHistory);
-router.post("/", registHistory);
+router.post("/", upload.array("formData", 10), registHistory);
 router.get("/place/:placeId", searchByPlace);
 router.get("/user/:userId", searchByUser);
 router.get("/favorite/:userId", searchByFavorite);
