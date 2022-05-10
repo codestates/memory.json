@@ -9,13 +9,14 @@ module.exports = async (req, res) => {
     //   image_name: req.file.location,
     // });
     // console.log(photoInfo);
-    console.log(`4: ${req.file}`);
-    console.log(req.body);
+    console.log(req.file.location);
+    console.log(JSON.parse(req.body.historyInfo));
+    
 
     return res.status(201).json({
-      data: {
-        location: req.file.location,
-      },
+      // data: {
+        // location: req.file.location,
+      // },
       message: "ok",
     });
   } catch (err) {
