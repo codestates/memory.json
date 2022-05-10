@@ -13,6 +13,9 @@ import Board from "./pages/Board";
 import Signin from "./modals/Signin";
 import Signup from "./modals/Signup";
 import Mypage from "./modals/Mypage";
+import Editmyinfo from "./modals/Editmyinfo";
+import Myhistory from "./modals/Myhistory";
+import Myfavorite from "./modals/Myfavorite";
 
 //Component
 import Navbar from "./components/Navbar";
@@ -24,10 +27,16 @@ import {
   signinAction,
   logoutAction,
   signupAction,
+  googleAction,
+  kakaoAction,
   signinModalOnAction,
   changeSignupToSignin,
   changeSigninToSignup,
   mypageModalAction,
+  changeMypageToEditmyinfo,
+  changeEditmyinfoToMypage,
+  changeMypageToMyhistory,
+  changeMypageToMyfavorite,
   modalOff,
 } from "./store/actions";
 
@@ -39,12 +48,30 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 function Router() {
   const dispatch = useDispatch();
-  
+
   const modalState = useSelector((state) => state.modalReducer);
   const signinState = useSelector((state) => state.authReducer);
+  const socialState = useSelector((state) => state.socialLoginReducer);
+
+  const { isGoogelLogin, isKakaoLogin } = socialState;
 
   // 모달 상태
-  const { isSigninModal, isSignupModal, isMypageModal } = modalState;
+  const {
+    isSigninModal,
+    isSignupModal,
+    isMypageModal,
+    isEditmyinfoModal,
+    isMyhistoryModal,
+    isMyfavoriteModal,
+  } = modalState;
+
+  const kakaoHandler = () => {
+    dispatch(kakaoAction);
+  };
+
+  const googleHandler = () => {
+    dispatch(googleAction);
+  };
 
   //로그인 모달 열기로 상태변경
   const modalOpener = () => {
@@ -66,9 +93,30 @@ function Router() {
     dispatch(changeSigninToSignup);
   };
 
+  //마에페이지 모달 열기로 상태 변경
   const mypageModalOpener = () => {
-    dispatch(mypageModalAction)
-  }
+    dispatch(mypageModalAction);
+  };
+
+  //마이페이지 모달에서 에디트 모달로 변경
+  const changeformToEditmyinfo = () => {
+    dispatch(changeMypageToEditmyinfo);
+  };
+
+  //에디트 모달에서 마이페이지 모달로 변경
+  const changeformToMyinfoFromEdit = () => {
+    dispatch(changeEditmyinfoToMypage);
+  };
+
+  //마이페이지 모달에서 마이히스토리 모달로 변경
+  const changeformToMyhistory = () => {
+    dispatch(changeMypageToMyhistory);
+  };
+
+  //마이페이지 모달에서 마이페이퍼리트 모달로 변경
+  const changeformToMyfavorite = () => {
+    dispatch(changeMypageToMyfavorite);
+  };
 
   //---------------------------//
 
@@ -81,11 +129,8 @@ function Router() {
 
   const logoutIndicator = () => {
     const accessTokenJson = localStorage.getItem("accessToken");
-    console.log("acctokenjson", accessTokenJson)
-    const accessTokenObject = JSON.parse(accessTokenJson)
-    const accessToken = Object.values(accessTokenObject)
-    console.log("ad", accessToken)
-    
+    const accessTokenObject = JSON.parse(accessTokenJson);
+    const accessToken = Object.values(accessTokenObject);
     axios
       .post(
         `${serverUrl}users/signout`,
@@ -97,7 +142,7 @@ function Router() {
         }
       )
       .then((res) => {
-        console.log(res)
+        console.log(res);
         localStorage.removeItem("accessToken");
         dispatch(logoutAction);
         dispatch(modalOff);
@@ -120,6 +165,8 @@ function Router() {
   return (
     <BrowserRouter>
       <Navbar
+        kakaoHandler={kakaoHandler}
+        googleHandler={googleHandler}
         modalOpener={modalOpener}
         modalCloser={modalCloser}
         mypageModalOpener={mypageModalOpener}
@@ -178,8 +225,8 @@ function Router() {
         style={{
           content: {
             background: "#92a8d1",
-            left: "35%",
-            right: "35%",
+            left: "15%",
+            right: "15%",
             border: "5px solid #697F6E",
             borderRadius: "1em",
           },
@@ -188,7 +235,71 @@ function Router() {
         onRequestClose={() => modalCloser()}
       >
         <Mypage
-          modalOpener={modalOpener}
+          isGoogelLogin={isGoogelLogin}
+          isKakaoLogin={isKakaoLogin}
+          modalCloser={modalCloser}
+          mypageModalOpener={mypageModalOpener}
+          changeformToEditmyinfo={changeformToEditmyinfo}
+          changeformToMyhistory={changeformToMyhistory}
+          changeformToMyfavorite={changeformToMyfavorite}
+        />
+      </Modal>
+      {/* //정보수정모달 */}
+      <Modal
+        style={{
+          content: {
+            background: "#92a8d1",
+            left: "35%",
+            right: "35%",
+            border: "5px solid #697F6E",
+            borderRadius: "1em",
+          },
+        }}
+        isOpen={isEditmyinfoModal}
+        onRequestClose={() => modalCloser()}
+      >
+        <Editmyinfo
+          isGoogelLogin={isGoogelLogin}
+          isKakaoLogin={isKakaoLogin}
+          modalCloser={modalCloser}
+          mypageModalOpener={mypageModalOpener}
+          changeformToMyinfoFromEdit={changeformToMyinfoFromEdit}
+        />
+      </Modal>
+      {/* //myhistory 모달 */}
+      <Modal
+        style={{
+          content: {
+            background: "#92a8d1",
+            left: "35%",
+            right: "35%",
+            border: "5px solid #697F6E",
+            borderRadius: "1em",
+          },
+        }}
+        isOpen={isMyhistoryModal}
+        onRequestClose={() => modalCloser()}
+      >
+        <Myhistory
+          modalCloser={modalCloser}
+          mypageModalOpener={mypageModalOpener}
+        />
+      </Modal>
+      {/* //myfavorite 모달 */}
+      <Modal
+        style={{
+          content: {
+            background: "#92a8d1",
+            left: "35%",
+            right: "35%",
+            border: "5px solid #697F6E",
+            borderRadius: "1em",
+          },
+        }}
+        isOpen={isMyfavoriteModal}
+        onRequestClose={() => modalCloser()}
+      >
+        <Myfavorite
           modalCloser={modalCloser}
           mypageModalOpener={mypageModalOpener}
         />
@@ -204,4 +315,3 @@ function App() {
 export default App;
 
 // 회원탈퇴 구현 //
-// 마이페이지 구현 get user 정보 axios 요청

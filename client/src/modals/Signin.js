@@ -4,7 +4,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { signinAction } from "../store/actions";
+import { signinAction, getUserAction } from "../store/actions";
 
 const ModalArea = styled.div`
   position: relative;
@@ -237,22 +237,10 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
         // console.log(res)
         if (res.status === 200) {
           console.log(res.data.data);
-          const accessToken = res.data.data
-          console.log(accessToken)
+          const accessToken = res.data.data;
+          console.log(accessToken);
           localStorage.setItem("accessToken", JSON.stringify(accessToken));
           dispatch(signinAction);
-          // axios
-          //   .get(`${serverUrl}users`, {
-          //     headers: { authorization: `Bearer ${accessToken}` },
-          //   })
-          //   .then((res) => {
-          //     console.log("getres", res);
-          //     if (res.status === 200) {
-          //       const userInfomation = res.data.data;
-          //       console.log(userInfomation);
-          //       dispatch(userInfoAction(userInfomation.address));
-          //     }
-          //   });
           modalCloser();
           alert("로그인에 성공하셨습니다!");
           navigate("/main");
@@ -263,6 +251,7 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
         setErrorMessage(`${err.response.data.message}`);
         errorHandler();
       });
+    dispatch(getUserAction(loginInfo.user_account, loginInfo.password));
     console.log("로그인상태", isSignin);
   };
 
@@ -328,7 +317,6 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
             {checkErr ? (
               <Alert message={errorMessage} setCheckErr={clickError} />
             ) : null}
-
             <SocialSignInBtn onClick={kakaoSigninHandler}>
               <KakaoIcon src="../img/kakao_login_medium_narrow.png" />
             </SocialSignInBtn>
