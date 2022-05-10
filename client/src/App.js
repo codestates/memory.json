@@ -34,6 +34,7 @@ import {
   changeSigninToSignup,
   mypageModalAction,
   changeMypageToEditmyinfo,
+  changeEditmyinfoToMypage,
   changeMypageToMyhistory,
   changeMypageToMyfavorite,
   modalOff,
@@ -100,6 +101,11 @@ function Router() {
   //마이페이지 모달에서 에디트 모달로 변경
   const changeformToEditmyinfo = () => {
     dispatch(changeMypageToEditmyinfo);
+  };
+
+  //에디트 모달에서 마이페이지 모달로 변경
+  const changeformToMyinfoFromEdit = () => {
+    dispatch(changeEditmyinfoToMypage);
   };
 
   //마이페이지 모달에서 마이히스토리 모달로 변경
@@ -253,8 +259,11 @@ function Router() {
         onRequestClose={() => modalCloser()}
       >
         <Editmyinfo
+          isGoogelLogin={isGoogelLogin}
+          isKakaoLogin={isKakaoLogin}
           modalCloser={modalCloser}
           mypageModalOpener={mypageModalOpener}
+          changeformToMyinfoFromEdit={changeformToMyinfoFromEdit}
         />
       </Modal>
       {/* //myhistory 모달 */}

@@ -9,6 +9,7 @@ import {
   MY_PAGE_MODAL_ON,
   EDIT_MY_INFO_MODAL_ON,
   EDIT_MY_INFO_ON_MY_PAGE_OFF_MODAL,
+  MY_PAGE_ON_EDIT_MY_INFO_OFF_MODAL,
   MY_HISTORY_MODAL_ON,
   MY_HISTORY_ON_MY_PAGE_OFF_MODAL,
   MY_FAVORITE_MODAL_ON,
@@ -56,11 +57,14 @@ const modalReducer = (prevState = initialState, action) => {
     case EDIT_MY_INFO_ON_MY_PAGE_OFF_MODAL:
       state = { ...prevState, isEditmyinfoModal: true, isMypageModal: false };
       break;
+    case MY_PAGE_ON_EDIT_MY_INFO_OFF_MODAL:
+      state = { ...prevState, isMypageModal: true, isEditmyinfoModal: false  };
+      break;
     case MY_HISTORY_MODAL_ON:
       state = { ...prevState, isMyhistoryModal: true };
       break;
     case MY_HISTORY_ON_MY_PAGE_OFF_MODAL:
-      state = { ...prevState, isMyhistoryModal: true, isMypageModal: false };
+      state = { ...prevState, isMypageModal: false, isMyhistoryModal: true  };
       break;
     case MY_FAVORITE_MODAL_ON:
       state = { ...prevState, isMyfavoriteModal: true };

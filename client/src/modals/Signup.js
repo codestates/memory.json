@@ -99,7 +99,7 @@ function Signup({
         return "숫자와 특수문자가 포함되어야 합니다.";
       }
       if (passwordCheck.test(password) && password !== checkedPassword) {
-        return "아이디와 비밀번호가 같지 않습니다.";
+        return "비밀번호가 같지 않습니다.";
       }
     }
     if (inputName === "mobile") {
@@ -134,7 +134,7 @@ function Signup({
       if (inputName === "password") {
         setValidateErr("비밀번호는 숫자와 특수문자가 포함되어야 합니다.");
         if (password === "") {
-          return setValidateErr("");
+          return setValidateErr("비밀번호를 입력해주세요");
         }
       }
 
@@ -156,7 +156,7 @@ function Signup({
       setValidateErr("");
       if (inputName === "password") {
         if (password !== checkedPassword && checkedPassword !== "") {
-          return setValidateErr("아이디와 비밀번호가 같지 않습니다.");
+          return setValidateErr("비밀번호가 같지 않습니다.");
         }
         setValidateErr("");
       }
@@ -168,7 +168,7 @@ function Signup({
   const signupHandler = () => {
     let { user_name, user_account, password, checkedPassword, age } = signupInfo;
     if (password !== checkedPassword) {
-      setValidateErr("아이디와 비밀번호가 같지 않습니다.");
+      setValidateErr("비밀번호가 같지 않습니다.");
       return;
     }
     if(typeof age !== 'number'){
@@ -285,7 +285,7 @@ function Signup({
               checkedInfo("mobile");
             }}
             onChange={handleInputValue("mobile")}
-            placeholder="휴대폰 번호를 입력해주세요 ex)010-XXXX-XXXX"
+            placeholder="휴대폰 번호를 입력해주세요 ex)010-1234-5678"
           />
         </div>
         <div>
