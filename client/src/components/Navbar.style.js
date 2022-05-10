@@ -61,4 +61,12 @@ const MypagebuttonStyle = styled.button`
   border: none;
 `;
 
-export { NavArea, FirstDiv, SecondDiv, ThirdDiv, ImageLog, LoginbuttonStyle, MypagebuttonStyle };
+export {
+  NavArea,
+  FirstDiv,
+  SecondDiv,
+  ThirdDiv,
+  ImageLog,
+  LoginbuttonStyle,
+  MypagebuttonStyle,
+};

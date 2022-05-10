@@ -1,28 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import PostBoard from "../modals/PostBoard";
+import SearchAddress from "../components/Search";
 
 function Newhistory() {
   return (
     <MapContainer>
       <MapSection>
         <MapDiv>
-          <div>
-            <span style={{ color: "white" }}>제목</span>
-            <input type={"text"} placeholder={"제목을 입력해주세요."}></input>
-          </div>
-          <div>위치 로컬 api</div>
-          <div>
-            <span style={{ color: "white" }}>연도</span>
-            <input
-              type={"text"}
-              placeholder={"연도를 입력해주세요.(4자리)"}
-              maxLength={"4"}
-            ></input>
-          </div>
-          <div>
-            <span style={{ color: "white" }}>내용</span>
-          </div>
           <PostBoard></PostBoard>
         </MapDiv>
       </MapSection>
