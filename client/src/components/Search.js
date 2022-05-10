@@ -12,6 +12,7 @@ function SearchAddress() {
   const searchInputAddress = (e) => {
     console.log(e);
     setAddressText(e.target.value);
+    // console.log("주소 검색 창", addressText);
   };
 
   const callAddress = async () => {
@@ -20,6 +21,7 @@ function SearchAddress() {
     //   "Autorization",
     //   "KakaoAK " + `${process.env.REACT_APP_KAKAO_CLIENT_ID}`
     // );
+
     const config = {
       headers: {
         Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_CLIENT_ID}`,
