@@ -3,7 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getUserAction } from "../store/actions";
+import { getUserAction, userinfoAction } from "../store/actions";
 
 const ModalArea = styled.div`
   position: relative;
@@ -156,6 +156,60 @@ const Editmyinfo = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const userState = useSelector((state) => state.userinfoReducer);
+
+  // 기존 회원 가입 상태 가져오기
+  const {
+    address,
+    age,
+    email,
+    id,
+    mobile,
+    provider,
+    sex,
+    social_id,
+    user_account,
+    user_name,
+  } = userState;
+
+  // 수정정보
+  const [editInfo, setEditInfo] = useState({
+    user_account:userState.user_account,
+    exPassword: "",
+    password: "",
+    checkedPassword: "",
+    mobile: userState.mobile,
+    email: userState.email,
+    age: userState.age,
+  });
+
+  console.log(userState.email);
+
+  //회원수정 데이터
+  const handleInputValue = (e) => {
+    const { name, value } = e.target;
+    setEditInfo({ ...editInfo, [name]: value });
+  };
+
+  //나이
+  const handleInputAge = (key) => (e) => {
+      let ageValue = parseInt(e.target.value);
+      setEditInfo({ ...editInfo, [key]: ageValue });
+  };
+
+  //input창 클릭시 기본데이터 초기화
+  const onResetMobile = () => {
+    setEditInfo({ ...editInfo, mobile: "" });
+  };
+
+  const onResetEmail = () => {
+    setEditInfo({ ...editInfo, email: "" });
+  };
+
+  const onResetAge = () => {
+    setEditInfo({ ...editInfo, age: "" });
+  };
+
   // 토큰 가져오기
   const accessTokenJson = localStorage.getItem("accessToken");
   const accessTokenObject = JSON.parse(accessTokenJson);
@@ -168,28 +222,6 @@ const Editmyinfo = ({
 
   //유효성 검사 상태
   const [validateError, setValidateError] = useState("");
-
-  // 수정정보
-  const [editInfo, setEditInfo] = useState({
-    exPassword: "",
-    password: "",
-    checkedPassword: "",
-    mobile: "",
-    email: "",
-    age: 0,
-  });
-
-  //회원수정 데이터
-  const handleInputValue = (key) => (e) => {
-    setEditInfo({ ...editInfo, [key]: e.target.value });
-  };
-
-  //나이 데이터
-  const handleInputAge = (key) => (e) => {
-    console.log(e.target.value);
-    let ageValue = parseInt(e.target.value);
-    setEditInfo({ ...editInfo, [key]: ageValue });
-  };
 
   // 유효성 검사
   const validateCheck = (inputName) => {
@@ -276,7 +308,7 @@ const Editmyinfo = ({
     if (password !== undefined) {
       axios
         .patch(
-          `${serverUrl}users/signup`,
+          `${serverUrl}users`,
           {
             password: editInfo.password,
             mobile: editInfo.mobile,
@@ -288,11 +320,20 @@ const Editmyinfo = ({
           }
         )
         .then((res) => {
-          console.log("res", res);
+          console.log("res", res.data.data);
+          const userInformation = res.data.data;
           modalCloser();
           mypageModalOpener();
+          dispatch(
+            userinfoAction(
+              userInformation.age,
+              userInformation.email,
+              userInformation.mobile
+            )
+          );
+          dispatch(getUserAction(editInfo.user_account, editInfo.password))
           alert("회원정보 업데이트가 성공하였습니다!");
-          window.location.replace("/");
+          navigate("/main");
         })
         .catch((err) => {
           console.log(err);
@@ -307,47 +348,59 @@ const Editmyinfo = ({
     <ModalArea>
       <EditArea>
         <h1>회원정보 수정</h1>
-        <div>
-          <span>현재 비밀번호</span>
-          <InputPassword
-            type="password"
-            onBlur={() => {
-              checkedInfo("exPassword");
-            }}
-            onChange={handleInputValue("exPassword")}
-            placeholder="비밀번호를 입력해주세요"
-          />
-        </div>
-        <div>
-          <span>새로운 비밀번호</span>
-          <InputPassword
-            type="password"
-            onBlur={() => {
-              checkedInfo("password");
-            }}
-            onChange={handleInputValue("password")}
-            placeholder="새로운 비밀번호를 입력해주세요"
-          />
-        </div>
-        <div>
-          <span>새로운 비밀번호 확인</span>
-          <InputPassword
-            type="password"
-            onBlur={() => {
-              checkedInfo("checkedPassword");
-            }}
-            onChange={handleInputValue("checkedPassword")}
-            placeholder="새로운 비밀번호를 다시 입력해주세요"
-          />
-        </div>
+        {social_id === null ? (
+          <div>
+            <span>현재 비밀번호</span>
+            <InputPassword
+              type="password"
+              name="exPassword"
+              onBlur={() => {
+                checkedInfo("exPassword");
+              }}
+              onChange={handleInputValue}
+              placeholder="비밀번호를 입력해주세요"
+            />
+          </div>
+        ) : null}
+        {social_id === null ? (
+          <div>
+            <span>새로운 비밀번호</span>
+            <InputPassword
+              type="password"
+              name="password"
+              onBlur={() => {
+                checkedInfo("password");
+              }}
+              onChange={handleInputValue}
+              placeholder="새로운 비밀번호를 입력해주세요"
+            />
+          </div>
+        ) : null}
+        {social_id === null ? (
+          <div>
+            <span>새로운 비밀번호 확인</span>
+            <InputPassword
+              type="password"
+              name="checkedPassword"
+              onBlur={() => {
+                checkedInfo("checkedPassword");
+              }}
+              onChange={handleInputValue}
+              placeholder="새로운 비밀번호를 다시 입력해주세요"
+            />
+          </div>
+        ) : null}
         <div>
           <span>휴대폰 번호</span>
           <Input
             type="text"
+            name="mobile"
+            value={editInfo.mobile}
+            onClick={onResetMobile}
             onBlur={() => {
               checkedInfo("mobile");
             }}
-            onChange={handleInputValue("mobile")}
+            onChange={handleInputValue}
             placeholder="새로운 휴대폰 번호를 입력해주세요 ex)010-1234-5678"
           />
         </div>
@@ -355,10 +408,13 @@ const Editmyinfo = ({
           <span>이메일</span>
           <Input
             type="email"
+            name="email"
+            value={editInfo.email}
+            onClick={onResetEmail}
             onBlur={() => {
               checkedInfo("email");
             }}
-            onChange={handleInputValue("email")}
+            onChange={handleInputValue}
             placeholder="새로운 이메일을 입력하세요"
           />
         </div>
@@ -366,6 +422,9 @@ const Editmyinfo = ({
           <span>나이</span>
           <Input
             type="text"
+            name="age"
+            value={editInfo.age}
+            onClick={onResetAge}
             pattern="^[0-9]+$"
             onChange={handleInputAge("age")}
             placeholder="나이를 입력해주세요 ex) 25"

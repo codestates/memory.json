@@ -93,6 +93,7 @@ function Navbar({
       signupIndicator();
       alert(`${res.data.message}`);
       const accessToken = res.data.data;
+      console.log(accessToken)
       localStorage.setItem("accessToken", JSON.stringify(accessToken));
       dispatch(signinAction);
       modalCloser();

@@ -26,7 +26,7 @@ const authReducer = (prevState = userInfoState, action) => {
       break;
     case GET_USER:
       state = {
-        ...userInfoState,
+        ...prevState,
         user_account: action.data.user_account,
         password: action.data.password,
       };
