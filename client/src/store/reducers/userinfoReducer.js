@@ -23,7 +23,7 @@ const userinfoReducer = (prevState = initialState, action) => {
         age: action.data.age,
         email: action.data.email,
         id: action.data.id,
-        mobile: action.data.age,
+        mobile: action.data.mobile,
         provider: action.data.provider,
         sex: action.data.sex,
         social_id: action.data.social_id,

@@ -35,6 +35,9 @@ function Navbar({
     let authorizationScope = params.get("scope");
     // console.log(authorizationCode)
     // console.log(authorizationScope)
+    if (authorizationCode === null) {
+      return
+    }
     if (authorizationScope === null) {
       kakaoGetAccessToken(authorizationCode);
     } else {
@@ -90,6 +93,7 @@ function Navbar({
       signupIndicator();
       alert(`${res.data.message}`);
       const accessToken = res.data.data;
+      console.log(accessToken)
       localStorage.setItem("accessToken", JSON.stringify(accessToken));
       dispatch(signinAction);
       modalCloser();
