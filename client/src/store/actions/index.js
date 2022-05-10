@@ -16,6 +16,7 @@ import {
   MY_PAGE_MODAL_ON,
   EDIT_MY_INFO_MODAL_ON,
   EDIT_MY_INFO_ON_MY_PAGE_OFF_MODAL,
+  MY_PAGE_ON_EDIT_MY_INFO_OFF_MODAL,
   MY_HISTORY_MODAL_ON,
   MY_HISTORY_ON_MY_PAGE_OFF_MODAL,
   MY_FAVORITE_MODAL_ON,
@@ -97,6 +98,9 @@ export const editmyinfoModalAction = {
 };
 export const changeMypageToEditmyinfo = {
   type: EDIT_MY_INFO_ON_MY_PAGE_OFF_MODAL,
+};
+export const changeEditmyinfoToMypage = {
+  type: MY_PAGE_ON_EDIT_MY_INFO_OFF_MODAL,
 };
 export const myhistoryModalAction = {
   type: MY_HISTORY_MODAL_ON,
