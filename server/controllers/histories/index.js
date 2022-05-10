@@ -1,18 +1,23 @@
 const express = require("express");
 const router = express.Router();
-
 // const express = require("express");
+const dotenv = require("dotenv");
+dotenv.config();
 const app = express();
 const multer = require("multer");
 const aws = require("aws-sdk");
-aws.config.loadFromPath(__dirname + "/../../config/s3.json");
+// aws.config.loadFromPath(__dirname + "/../../config/s3.js");
 const multerS3 = require("multer-s3");
 const { photo } = require("../../models");
-const s3 = new aws.S3();
+const s3 = new aws.S3({
+  "accessKeyId": process.env.S3_ACCESS_KEY_ID,
+  "secretAccessKey": process.env.S3_SECRET_KEY,
+  "region": process.env.S3_REGION
+});
 const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: "testburkey",
+    bucket: process.env.S3_BUCKET,
     key: function (req, file, cb) {
       var ext = file.mimetype.split("/")[1];
       if (!["png", "jpg", "jpeg", "gif", "bmp"].includes(ext)) {
@@ -33,7 +38,7 @@ const changeHistory = require("./changeHistory");
 const deleteHistory = require("./deleteHistory");
 const uploadPhoto = require("./uploadphoto");
 
-router.post("/uploadphoto", upload.single("file"), uploadPhoto);
+router.post("/uploadphoto", upload.single("filess"), uploadPhoto);
 router.post("/:placeId", registHistory);
 router.post("/", registHistory);
 router.get("/place/:placeId", searchByPlace);

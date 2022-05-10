@@ -9,8 +9,11 @@ module.exports = async (req, res) => {
       //   image_name: req.file.location,
       // });
       // console.log(photoInfo);
+      console.log(`4: ${req.file}`)
+      console.log(req.body)
 
-      console.log(req.file.location)
+
+
       return res.status(201).json({
         data: {
           location: req.file.location
