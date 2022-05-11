@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const favorite = require('./favorite');
+const getFavorite = require('./getFavorite');
+const setFavorite = require('./setFavorite');
 
-router.post('/', favorite)
+router.get('/:historyId', getFavorite)
+router.post('/:historyId', setFavorite)
 
 module.exports = router;
