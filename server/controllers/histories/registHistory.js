@@ -32,22 +32,22 @@ module.exports = async (req, res) => {
       const placeBody = JSON.parse(req.body.placeInfo);
       // console.log(placeBody)
       const place_address = placeBody.place_address;
-      const place_location = JSON.stringify(placeBody.place_location); // 배열이니 JSON문자열로 변환
-      // console.log(place_location)
+      const place_lat = placeBody.place_lat;
+      const place_lag = placeBody.place_lag;
 
-      
       // place 등록 하는 절차
       // 만약 body로 들어온 place_address가 DB에 없으면 place를 추가하고
       // 이미 place_address가 DB에 있으면 추가하지 않음.
       placeInfo = await place.findOrCreate({
         where: { place_address },
         defaults: {
-        user_id:  1001, // 임시
-        place_address,
-        place_location // JSON.stringify로 변환해 넣어줌
-        }
-      })
-      placeInfo = placeInfo[0].dataValues 
+          user_id: 1001, // 임시
+          place_address,
+          place_lat,
+          place_lag,
+        },
+      });
+      placeInfo = placeInfo[0].dataValues;
     } else {
       /* 
 
@@ -56,9 +56,9 @@ module.exports = async (req, res) => {
     */
 
       //placeId가 있으면 DB에 있는지 조회
-         placeInfo = await place.findOne({
-          where: { id: place_id },
-        });
+      placeInfo = await place.findOne({
+        where: { id: place_id },
+      });
       // 만약 DB에 없으면 404 오류 리턴
       if (!placeInfo) {
         return res.status(404).json({
@@ -69,7 +69,7 @@ module.exports = async (req, res) => {
       placeInfo = placeInfo.dataValues;
     }
     //placeInfo의 place_location 키의 값을 JSON.parse 해줌
-    placeInfo.place_location = JSON.parse(placeInfo.place_location)
+    placeInfo.place_location = JSON.parse(placeInfo.place_location);
     // console.log(placeInfo)
 
     // body 내용 조회
@@ -78,7 +78,12 @@ module.exports = async (req, res) => {
 
     let { history_title, history_content, history_year } = historyBody;
     // 만약 바디에 정보가 없으면 401 오류 리턴
-    if (!history_title || !history_content || !history_year || isNaN(history_year)) {
+    if (
+      !history_title ||
+      !history_content ||
+      !history_year ||
+      isNaN(history_year)
+    ) {
       return res.status(400).json({
         data: null,
         message: "history 등록 정보를 올바르게 입력했는지 확인해주세요!",
@@ -116,7 +121,7 @@ module.exports = async (req, res) => {
       data: {
         historyInfo: historyInfo.dataValues,
         photoInfo: photoInfo,
-        placeInfo: placeInfo
+        placeInfo: placeInfo,
       },
       message: "새로운 history 등록 성공!",
     });
