@@ -4,15 +4,32 @@ import styled from "styled-components";
 import Button from "../components/Button";
 import MapArea from "../components/Map";
 import SearchPlace from "../components/SearchPlace";
+import { useDispatch, useSelector } from "react-redux";
 
-function Board() {
+function Board({ modalOpener }) {
+  const signinState = useSelector((state) => state.authReducer);
+  const { isSignin } = signinState;
+
+  const checkedLogin = () => {
+    alert("로그인을 해주세요");
+    modalOpener();
+  };
+
   return (
     <MapContainer>
       <MapSection>
         <MapDiv>
-          <NavLink to="/Newhistory">
-            <Button>New History</Button>
-          </NavLink>
+          {!isSignin ? (
+            <Button
+              onClick={checkedLogin}
+              style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
+            ></Button>
+          ) : (
+            <NavLink to="/Newhistory">
+              <Button>New History</Button>
+            </NavLink>
+          )}
+
           <SearchPlace></SearchPlace>
           <MapArea></MapArea>
         </MapDiv>

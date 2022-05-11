@@ -176,7 +176,7 @@ function Router() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/main" element={<Main />} />
-        <Route path="/board" element={<Board />} />
+        <Route path="/board" element={<Board modalOpener={modalOpener} />} />
         <Route path="/Newhistory" element={<Newhistory />} />
       </Routes>
       {/* // 로그인 모달 */}
