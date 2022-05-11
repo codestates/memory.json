@@ -1,9 +1,19 @@
 import axios from "axios";
 import React, { useState } from "react";
 import Button from "../components/Button";
-import SearchAddress from "../components/Search";
+import { useSelector } from "react-redux";
 
 const PostBoard = () => {
+  const signinState = useSelector((state) => state.authReducer);
+  const { isSignin } = signinState;
+  console.log(signinState);
+
+  // 토큰 가져오기
+  const accessTokenJson = localStorage.getItem("accessToken");
+  const accessTokenObject = JSON.parse(accessTokenJson);
+  const accessToken = Object.values(accessTokenObject);
+  console.log("accessToken", accessToken);
+
   // 서버로 파일을 전송하기 위해 추가해주는 파일의 상태
   const [postFiles, setPostFiles] = useState({
     file: [],
@@ -50,7 +60,8 @@ const PostBoard = () => {
         setAddress({
           place_id: "",
           place_address: location.address_name,
-          place_location: [location.x, location.y],
+          place_x: location.x,
+          place_y: location.y,
         });
         console.log("address", address);
       })
@@ -96,6 +107,7 @@ const PostBoard = () => {
     const config = {
       Headers: {
         "content-type": "multipart/form-data",
+        authorization: `Bearer ${accessToken}`,
       },
     };
     const res = await axios.post(

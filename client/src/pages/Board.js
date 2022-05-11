@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Button from "../components/Button";
 import MapArea from "../components/Map";
 import SearchPlace from "../components/SearchPlace";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 function Board({ modalOpener }) {
   const signinState = useSelector((state) => state.authReducer);
@@ -20,16 +20,12 @@ function Board({ modalOpener }) {
       <MapSection>
         <MapDiv>
           {!isSignin ? (
-            <Button
-              onClick={checkedLogin}
-              style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
-            ></Button>
+            <Button onClick={checkedLogin}></Button>
           ) : (
             <NavLink to="/Newhistory">
               <Button>New History</Button>
             </NavLink>
           )}
-
           <SearchPlace></SearchPlace>
           <MapArea></MapArea>
         </MapDiv>
