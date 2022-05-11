@@ -6,7 +6,7 @@ const { sequelize } = require("./models");
 const app = express();
 const cookieParser = require("cookie-parser");
 const controllers = require("./controllers");
-const logger = require('./config/winston')
+const logger = require("./config/winston");
 
 const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
 const HTTP_PORT = process.env.HTTP_PORT || 4000;
@@ -14,7 +14,7 @@ const HTTP_PORT = process.env.HTTP_PORT || 4000;
 app.use(express.json());
 app.use(
   cors({
-    origin: process.env.CLIENT_HOST || 'http://localhost:3000',
+    origin: process.env.CLIENT_HOST || "http://localhost:3000",
     credentials: true,
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
   })
@@ -32,11 +32,11 @@ sequelize
   })
   .then(() => {
     console.log("데이터베이스 연결 성공");
-    logger.info('데이터베이스가 연결되었습니다.')
+    logger.info("데이터베이스가 연결되었습니다.");
   })
   .catch((err) => {
     console.error(err);
-    logger.error(err)
+    logger.error(err);
   });
 
 let server;
@@ -47,15 +47,14 @@ if (fs.existsSync("./key.pem") && fs.existsSync("./cert.pem")) {
 
   server = https.createServer(credentials, app);
   server.listen(HTTPS_PORT, () => {
-    console.log("https server runnning")
-    logger.info('https로 서버가 켜졌어요')
+    console.log("https server runnning");
+    logger.info("https로 서버가 켜졌어요");
   });
 } else {
-  server = app.listen(HTTP_PORT, () => { 
-  console.log("http server runnning")
-  logger.info('http로 서버가 켜졌어요')
-  }
-  );
+  server = app.listen(HTTP_PORT, () => {
+    console.log("http server runnning");
+    logger.info("http로 서버가 켜졌어요");
+  });
 }
 
 module.exports = server;

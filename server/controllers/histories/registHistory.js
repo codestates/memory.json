@@ -4,15 +4,15 @@ const userAuthen = require("../authentication/userAuthen");
 module.exports = async (req, res) => {
   try {
     // 유저 인증 확인
-    // const userInfo = await userAuthen(req, res);
+    const userInfo = await userAuthen(req, res);
     // 유저 인증에 실패하면 에러 상태코드 401 리턴
-    // console.log(userInfo)
-    // if (!userInfo) {
-    //   return res.status(401).json({
-    //     data: null,
-    //     message: "먼저 로그인 해주세요!",
-    //   });
-    // }
+    console.log(userInfo);
+    if (!userInfo) {
+      return res.status(401).json({
+        data: null,
+        message: "먼저 로그인 해주세요!",
+      });
+    }
     // console.log(userInfo)
 
     // 파라미터 조회
@@ -69,7 +69,7 @@ module.exports = async (req, res) => {
       placeInfo = placeInfo.dataValues;
     }
     //placeInfo의 place_location 키의 값을 JSON.parse 해줌
-    placeInfo.place_location = JSON.parse(placeInfo.place_location);
+    // placeInfo.place_location = JSON.parse(placeInfo.place_location);
     // console.log(placeInfo)
 
     // body 내용 조회

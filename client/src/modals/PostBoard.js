@@ -60,8 +60,8 @@ const PostBoard = () => {
         setAddress({
           place_id: "",
           place_address: location.address_name,
-          place_x: location.x,
-          place_y: location.y,
+          place_lng: location.x,
+          place_lat: location.y,
         });
         console.log("address", address);
       })
@@ -106,8 +106,8 @@ const PostBoard = () => {
     // 서버의 upload api 호출
     const config = {
       Headers: {
-        "content-type": "multipart/form-data",
         authorization: `Bearer ${accessToken}`,
+        "content-type": "multipart/form-data",
       },
     };
     const res = await axios.post(
