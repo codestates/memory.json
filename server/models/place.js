@@ -12,10 +12,10 @@ module.exports = (sequelize, DataTypes) => {
       place_address: {
         type: DataTypes.CHAR(200),
       },
-      place_x: {
+      place_lat: {
         type: DataTypes.STRING(255),
       },
-      place_y: {
+      place_lag: {
         type: DataTypes.STRING(255),
       },
     },

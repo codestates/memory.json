@@ -32,8 +32,8 @@ module.exports = async (req, res) => {
       const placeBody = JSON.parse(req.body.placeInfo);
       // console.log(placeBody)
       const place_address = placeBody.place_address;
-      const place_x = placeBody.place_x;
-      const place_y = placeBody.place_y;
+      const place_lat = placeBody.place_lat;
+      const place_lag = placeBody.place_lag;
 
       // place 등록 하는 절차
       // 만약 body로 들어온 place_address가 DB에 없으면 place를 추가하고
@@ -43,8 +43,8 @@ module.exports = async (req, res) => {
         defaults: {
           user_id: 1001, // 임시
           place_address,
-          place_x,
-          place_y,
+          place_lat,
+          place_lag,
         },
       });
       placeInfo = placeInfo[0].dataValues;
