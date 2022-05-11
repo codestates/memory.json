@@ -1,21 +1,23 @@
 const { user } = require("../../models");
 const axios = require("axios");
 const dotenv = require("dotenv");
-const {generateAccessToken, sendAccessToken} = require('../tokenFunctions')
+const {generateAccessToken, sendAccessToken} = require('../tokenFunctions');
+const logger = require("../../config/winston");
 dotenv.config();
 
 module.exports = async (req, res) => {
   try {
+    logger.info('구글로그인이 시작됩니다')
     const googleClientId = process.env.GOOGLE_OAUTH_CLIENT_ID;
     const googleSecret = process.env.GOOGLE_OAUTH_SECRET;
     const googleRedirectUri = process.env.GOOGLE_REDIRECT_URI;
+    const code = req.body.authorizationCode;
 
-    if (!req.body.authorizationCode) {
-      res
+    if (!code) {
+      return res
         .status(400)
         .send({ data: null, message: "authorizationCode가 없습니다!" });
     }
-    const code = req.body.authorizationCode;
 
     // console.log(req)
     const socialToken = await axios({
@@ -57,11 +59,13 @@ module.exports = async (req, res) => {
           }).then(data=>{
             const accessToken = generateAccessToken({id: data.dataValues.id})
             sendAccessToken(res,accessToken);
+            logger.info(`${social_id}로 소셜회원가입이 되었습니다.`)
             return res.status(200).send({data:{accessToken: accessToken}, message: 'Login Success!'})
           })
     } else {
       const accessToken = generateAccessToken({id: sameAccount.dataValues.id})
       sendAccessToken(res,accessToken)
+      logger.info(`소셜아이디 ${social_id}로 로그인이 진행되었습니다.`)
       return res.status(200).send({data:{accessToken: accessToken}, message: 'Login Success!'})
     }
     // return res.send({ data: socialInfo.data, message: "ok" });
