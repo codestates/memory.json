@@ -68,6 +68,7 @@ function Navbar({
       dispatch(signinAction);
       modalCloser();
     } else {
+      alert("처음 회원가입시 다시한번 로그인을 해주세요")
       window.location.replace("/main");
     }
     kakaoHandler();
