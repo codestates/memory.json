@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { signoutModalAction, userinfoAction } from "../store/actions";
+import { userinfoAction } from "../store/actions";
 
 const ModalArea = styled.div`
   position: relative;

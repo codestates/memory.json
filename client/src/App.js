@@ -16,6 +16,7 @@ import Mypage from "./modals/Mypage";
 import Editmyinfo from "./modals/Editmyinfo";
 import Myhistory from "./modals/Myhistory";
 import Myfavorite from "./modals/Myfavorite";
+import Signout from "./modals/Signout";
 
 //Component
 import Navbar from "./components/Navbar";
@@ -30,11 +31,13 @@ import {
   googleAction,
   kakaoAction,
   signinModalOnAction,
+  signoutModalAction,
   changeSignupToSignin,
   changeSigninToSignup,
   mypageModalAction,
   changeMypageToEditmyinfo,
   changeEditmyinfoToMypage,
+  changeEditmyinfoToSignout,
   changeMypageToMyhistory,
   changeMypageToMyfavorite,
   modalOff,
@@ -60,6 +63,7 @@ function Router() {
     isSigninModal,
     isSignupModal,
     isMypageModal,
+    isSignoutModal,
     isEditmyinfoModal,
     isMyhistoryModal,
     isMyfavoriteModal,
@@ -106,6 +110,11 @@ function Router() {
   //에디트 모달에서 마이페이지 모달로 변경
   const changeformToMyinfoFromEdit = () => {
     dispatch(changeEditmyinfoToMypage);
+  };
+
+  //에디트 모달에서 회원탈퇴 모달로 변경
+  const changeformToSignoutFromEdit = () => {
+    dispatch(changeEditmyinfoToSignout);
   };
 
   //마이페이지 모달에서 마이히스토리 모달로 변경
@@ -264,6 +273,7 @@ function Router() {
           modalCloser={modalCloser}
           mypageModalOpener={mypageModalOpener}
           changeformToMyinfoFromEdit={changeformToMyinfoFromEdit}
+          changeformToSignoutFromEdit={changeformToSignoutFromEdit}
         />
       </Modal>
       {/* //myhistory 모달 */}
@@ -304,6 +314,25 @@ function Router() {
           mypageModalOpener={mypageModalOpener}
         />
       </Modal>
+      {/* //회원탈퇴 모달 */}
+      <Modal
+        style={{
+          content: {
+            background: "#92a8d1",
+            left: "35%",
+            right: "35%",
+            border: "5px solid #697F6E",
+            borderRadius: "1em",
+          },
+        }}
+        isOpen={isSignoutModal}
+        onRequestClose={() => modalCloser()}
+      >
+        <Signout
+          modalCloser={modalCloser}
+          mypageModalOpener={mypageModalOpener}
+        />
+      </Modal>
     </BrowserRouter>
   );
 }
@@ -313,5 +342,3 @@ function App() {
 }
 
 export default App;
-
-// 회원탈퇴 구현 //

@@ -3,7 +3,11 @@ import axios from "axios";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getUserAction, userinfoAction } from "../store/actions";
+import {
+  getUserAction,
+  userinfoAction,
+  signoutModalAction,
+} from "../store/actions";
 
 const ModalArea = styled.div`
   position: relative;
@@ -128,6 +132,23 @@ const CancelButton = styled.div`
   background: #fee518;
 `;
 
+const SignoutButton = styled.div`
+  width: 60%;
+  height: 1vh;
+  color: white;
+  font-weight: 700;
+  font-size: 20px;
+  padding: 10px 10px 20px 10px;
+  margin: 20px 40px 30px 70px;
+  background-color: #c4ddff;
+  border-radius: 5em;
+  cursor: pointer;
+  :hover {
+    border: 2px solid #fee518;
+  }
+  background: #fee518;
+`;
+
 const Modalback = styled.div`
   z-index: 900;
   position: fixed;
@@ -152,9 +173,13 @@ const Editmyinfo = ({
   modalCloser,
   mypageModalOpener,
   changeformToMyinfoFromEdit,
+  changeformToSignoutFromEdit
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const state = useSelector((state) => state.modalReducer);
+  const { isSignoutModal } = state;
 
   const userState = useSelector((state) => state.userinfoReducer);
 
@@ -174,7 +199,7 @@ const Editmyinfo = ({
 
   // 수정정보
   const [editInfo, setEditInfo] = useState({
-    user_account:userState.user_account,
+    user_account: userState.user_account,
     exPassword: "",
     password: "",
     checkedPassword: "",
@@ -193,8 +218,8 @@ const Editmyinfo = ({
 
   //나이
   const handleInputAge = (key) => (e) => {
-      let ageValue = parseInt(e.target.value);
-      setEditInfo({ ...editInfo, [key]: ageValue });
+    let ageValue = parseInt(e.target.value);
+    setEditInfo({ ...editInfo, [key]: ageValue });
   };
 
   //input창 클릭시 기본데이터 초기화
@@ -331,7 +356,7 @@ const Editmyinfo = ({
               userInformation.mobile
             )
           );
-          dispatch(getUserAction(editInfo.user_account, editInfo.password))
+          dispatch(getUserAction(editInfo.user_account, editInfo.password));
           alert("회원정보 업데이트가 성공하였습니다!");
           navigate("/main");
         })
@@ -395,7 +420,7 @@ const Editmyinfo = ({
           <Input
             type="text"
             name="mobile"
-            value={editInfo.mobile}
+            value={editInfo.mobile || ''}
             onClick={onResetMobile}
             onBlur={() => {
               checkedInfo("mobile");
@@ -409,7 +434,7 @@ const Editmyinfo = ({
           <Input
             type="email"
             name="email"
-            value={editInfo.email}
+            value={editInfo.email || ''}
             onClick={onResetEmail}
             onBlur={() => {
               checkedInfo("email");
@@ -423,7 +448,7 @@ const Editmyinfo = ({
           <Input
             type="text"
             name="age"
-            value={editInfo.age}
+            value={editInfo.age || ''}
             onClick={onResetAge}
             pattern="^[0-9]+$"
             onChange={handleInputAge("age")}
@@ -439,6 +464,13 @@ const Editmyinfo = ({
         <CancelButton onClick={changeformToMyinfoFromEdit}>
           취소하고 마이페이지 돌아가기
         </CancelButton>
+        <SignoutButton
+          onClick={() => {
+            changeformToSignoutFromEdit();
+          }}
+        >
+          회원탈퇴하기
+        </SignoutButton>
       </EditArea>
       <Modalback onClick={modalCloser}></Modalback>
     </ModalArea>
