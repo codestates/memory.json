@@ -5,6 +5,7 @@ import * as S from "./Navbar.style";
 import { useDispatch, useSelector } from "react-redux";
 import { signinAction } from "../store/actions";
 import { FaRegUser } from "react-icons/fa";
+import { FaSearchLocation } from "react-icons/fa";
 
 // axios 설정 / 전역변수 가져오기
 axios.defaults.withCredentials = true;
@@ -25,7 +26,6 @@ function Navbar({
   const signinState = useSelector((state) => state.authReducer);
   const { isSignin } = signinState;
 
-
   // 리디렉션 됬을때 접근코드를 서버에게보냄.
   useEffect(() => {
     const href = window.location.href;
@@ -36,7 +36,7 @@ function Navbar({
     // console.log(authorizationCode)
     // console.log(authorizationScope)
     if (authorizationCode === null) {
-      return
+      return;
     }
     if (authorizationScope === null) {
       kakaoGetAccessToken(authorizationCode);
@@ -68,7 +68,7 @@ function Navbar({
       dispatch(signinAction);
       modalCloser();
     } else {
-      alert("처음 회원가입시 다시한번 로그인을 해주세요")
+      alert("처음 회원가입시 다시한번 로그인을 해주세요");
       window.location.replace("/main");
     }
     kakaoHandler();
@@ -94,7 +94,7 @@ function Navbar({
       signupIndicator();
       alert(`${res.data.message}`);
       const accessToken = res.data.data;
-      console.log(accessToken)
+      console.log(accessToken);
       localStorage.setItem("accessToken", JSON.stringify(accessToken));
       dispatch(signinAction);
       modalCloser();
@@ -109,6 +109,9 @@ function Navbar({
     modalOpener();
   };
 
+  const boardLink = () => {
+    navigate("/board");
+  };
   return (
     <S.NavArea>
       <S.FirstDiv>
@@ -121,6 +124,15 @@ function Navbar({
         />
       </S.FirstDiv>
       <S.SecondDiv>
+        <S.BoardbuttonStyle
+          type="button"
+          onClick={boardLink}
+          style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
+        >
+          <FaSearchLocation size="24" color="#fff"></FaSearchLocation>
+        </S.BoardbuttonStyle>
+      </S.SecondDiv>
+      <S.ThirdDiv>
         {!isSignin ? (
           <S.MypagebuttonStyle
             type="button"
@@ -138,8 +150,8 @@ function Navbar({
             <FaRegUser size="24" color="#fff"></FaRegUser>
           </S.MypagebuttonStyle>
         )}
-      </S.SecondDiv>
-      <S.ThirdDiv>
+      </S.ThirdDiv>
+      <S.FourthDiv>
         {!isSignin ? (
           <S.LoginbuttonStyle
             type="button"
@@ -157,7 +169,7 @@ function Navbar({
             로그아웃
           </S.LoginbuttonStyle>
         )}
-      </S.ThirdDiv>
+      </S.FourthDiv>
     </S.NavArea>
   );
 }

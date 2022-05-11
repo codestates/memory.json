@@ -45,6 +45,15 @@ const ThirdDiv = styled.div`
   cursor: pointer;
 `;
 
+const FourthDiv = styled.div`
+  width: 10%;
+  height: 50px;
+  margin: 1em 1em 1em 1em;
+  background-color: #ff4c29;
+  border-radius: 15em;
+  cursor: pointer;
+`;
+
 const LoginbuttonStyle = styled.button`
   width: 100%;
   height: 50px;
@@ -61,12 +70,22 @@ const MypagebuttonStyle = styled.button`
   border: none;
 `;
 
+const BoardbuttonStyle = styled.button`
+  width: 100%;
+  height: 50px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+`;
+
 export {
   NavArea,
   FirstDiv,
   SecondDiv,
   ThirdDiv,
+  FourthDiv,
   ImageLog,
   LoginbuttonStyle,
   MypagebuttonStyle,
+  BoardbuttonStyle
 };
