@@ -6,15 +6,12 @@ module.exports = (sequelize, DataTypes)=>{
     },
     place_name: {
       type:DataTypes.CHAR(200),
-      allowNull: false //필수값
     },
     place_address: {
       type:DataTypes.CHAR(200),
-      allowNull: false //필수값
     },
     place_location: {
       type:DataTypes.STRING(255),
-      allowNull: false //필수값
     }
   },{
       // 한글을 쓸수 있게 해준다.(한글 저장)

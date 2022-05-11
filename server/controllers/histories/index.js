@@ -23,7 +23,7 @@ const upload = multer({
       if (!["png", "jpg", "jpeg", "gif", "bmp"].includes(ext)) {
         return cb(new Error("Only images are allowed"));
       }
-      cb(null, `images/${Date.now()}${file.originalname.split(".").pop()}`);
+      cb(null, `imagesee/${Date.now()}${file.originalname.split(".").pop()}`);
     },
   }),
   acl: "public-read-write",
