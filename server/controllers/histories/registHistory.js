@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
 
     // 파라미터 조회
     const place_id = req.params.placeId; // 임시 1001
-    // console.log(place_id);
+    console.log(place_id);
     // console.log(req.body);
 
     // placeInfo 만드는 과정

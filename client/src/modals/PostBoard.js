@@ -105,13 +105,13 @@ const PostBoard = () => {
     formData.append("placeInfo", JSON.stringify(address));
     // 서버의 upload api 호출
     const config = {
-      Headers: {
+      headers: {
         authorization: `Bearer ${accessToken}`,
         "content-type": "multipart/form-data",
       },
     };
     const res = await axios.post(
-      "http://localhost:4000/histories",
+      `http://localhost:4000/histories/${address.place_id}`,
       formData,
       config
     );
