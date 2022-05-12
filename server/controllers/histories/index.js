@@ -39,7 +39,7 @@ const deleteHistory = require("./deleteHistory");
 // const uploadPhoto = require("./uploadphoto");
 
 // router.post("/uploadphoto", upload.single("file"), uploadPhoto);
-router.post("/:placeId", registHistory);
+router.post("/:placeId", upload.array("formData", 10), registHistory);
 router.post("/", upload.array("formData", 10), registHistory);
 router.get("/place/:placeId", searchByPlace);
 router.get("/user/:userId", searchByUser);
