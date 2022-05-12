@@ -6,6 +6,7 @@ const {
 } = require('../tokenFunctions');
 const dotenv = require('dotenv');
 dotenv.config();
+const logger = require("../../config/winston");
 
 module.exports = async (req, res) => {
   try{
@@ -61,6 +62,7 @@ module.exports = async (req, res) => {
     sendAccessToken(res, accessToken);
     
     // 성공 응답
+    logger.info(`userId ${userInfo.dataValues.id}가 로그인하였습니다.`)
     return res.status(200).json({
       data: { accessToken },
       message: "Login Success!"
