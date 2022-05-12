@@ -7,9 +7,18 @@ import Button from "../components/Button";
 import MapArea from "../components/Map";
 import SearchPlace from "../components/SearchPlace";
 import Comment from "../components/Comment"
+import { useSelector } from "react-redux";
 
-function Board() {
+function Board({ modalOpener }) {
   // -------------------------------------------------------------
+  const signinState = useSelector((state) => state.authReducer);
+  const { isSignin } = signinState;
+
+  const checkedLogin = () => {
+    alert("로그인을 해주세요");
+    modalOpener();
+  };
+
   const [listComment, setListComment] = useState([])
   const [isFavorite, setIsFavorite] = useState({})
   
@@ -91,17 +100,19 @@ function Board() {
     }
   },[])
   
-  
-// -------------------------------
 
   return (
     <div>
     <MapContainer>
       <MapSection>
         <MapDiv>
-          <NavLink to="/Newhistory">
-            <Button>New History</Button>
-          </NavLink>
+          {!isSignin ? (
+            <Button onClick={checkedLogin}></Button>
+          ) : (
+            <NavLink to="/Newhistory">
+              <Button>New History</Button>
+            </NavLink>
+          )}
           <SearchPlace></SearchPlace>
           <MapArea></MapArea>
         </MapDiv>

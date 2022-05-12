@@ -190,8 +190,6 @@ const Editmyinfo = ({
     email,
     id,
     mobile,
-    provider,
-    sex,
     social_id,
     user_account,
     user_name,
