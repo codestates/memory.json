@@ -6,21 +6,21 @@ const { Op } = require("sequelize");
 
 module.exports = async (req, res) => {
   try {
-    /* const authorization = req.headers["authorization"];
+    const authorization = req.headers["authorization"];
     // token 내용을 분리
     const accessToken = authorization.split(" ")[1];
     // 헤더에 액세스 토큰이 담겨있지 않다면 401 오류
     if (!accessToken) {
       return null;
-    } */
+    }
 
     // 토큰 테스트용
-    const { accessToken }= req.cookies;
+    /* const { accessToken }= req.cookies;
 
     if (!accessToken) {
       return null;
     }
-
+ */
     // 액세스 토큰이 유효한지 검사하는 함수 구성
     const checkAccessToken = (accessToken) => {
       return jwt.verify(accessToken, process.env.ACCESS_SECRET);
