@@ -6,34 +6,37 @@ module.exports = async (req, res) => {
     // 유저 인증 확인
     const userInfo = await userAuthen(req, res);
     // 유저 인증에 실패하면 에러 상태코드 401 리턴
-    console.log(userInfo);
+    // console.log(userInfo);
     if (!userInfo) {
       return res.status(401).json({
         data: null,
         message: "먼저 로그인 해주세요!",
       });
     }
-    // console.log(userInfo)
+    // console.log(req.params)
 
     // 파라미터 조회
-    const place_id = req.params.placeId; // 임시 1001
-    console.log(place_id);
+    const place_id = req.params.placeId;
+    // console.log(place_id);
     // console.log(req.body);
 
     // placeInfo 만드는 과정
     let placeInfo;
     /* 
 
-      만약 패스 파라미터로 placeId가 없으면 먼저 새로 place를 만듦     
+      만약 패스 파라미터로 placeId가 없으면 먼저 새로 place를 만듦
     
     */
+  //  console.log(req.body.placeInfo);
+
+
     if (!place_id) {
       // body 내용 조회
       const placeBody = JSON.parse(req.body.placeInfo);
       // console.log(placeBody)
       const place_address = placeBody.place_address;
       const place_lat = placeBody.place_lat;
-      const place_lag = placeBody.place_lag;
+      const place_lng = placeBody.place_lng;
 
       // place 등록 하는 절차
       // 만약 body로 들어온 place_address가 DB에 없으면 place를 추가하고
@@ -41,10 +44,10 @@ module.exports = async (req, res) => {
       placeInfo = await place.findOrCreate({
         where: { place_address },
         defaults: {
-          user_id: 1001, // 임시
+          user_id: userInfo.dataValues.id, // 임시
           place_address,
           place_lat,
-          place_lag,
+          place_lng,
         },
       });
       placeInfo = placeInfo[0].dataValues;
@@ -93,8 +96,7 @@ module.exports = async (req, res) => {
     // 히스토리 등록
     const historyInfo = await history.create({
       place_id: placeInfo.id,
-      // user_id: userInfo.dataValues.id,
-      user_id: 1001, // user_id는 임시
+      user_id: userInfo.dataValues.id, 
       history_title,
       history_content,
       history_year,

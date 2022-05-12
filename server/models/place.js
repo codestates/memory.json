@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       place_lat: {
         type: DataTypes.STRING(255),
       },
-      place_lag: {
+      place_lng: {
         type: DataTypes.STRING(255),
       },
     },

@@ -57,18 +57,21 @@ module.exports = {
       {
         id: 1001,
         user_id: 1001,
+        place_address: "서울특별시 용산구 한강대로 405",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         id: 1002,
         user_id: 1001,
+        place_address: "서울특별시 용산구 인중로 405",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         id: 1003,
         user_id: 1002,
+        place_address: "서울특별시 중구 덕대로 11",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
