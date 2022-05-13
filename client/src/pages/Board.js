@@ -73,7 +73,7 @@ function Board({ modalOpener }) {
     if(!accessToken) {
       return alert('회원만 좋아요 할 수 있습니다.')
     }
-    axios.post(`${serverUrl}favorites/${historyId}`,{history_id: historyId},
+    axios.post(`${serverUrl}setFavorites/${historyId}`,{history_id: historyId},
     {headers: { "Content-Type": "application/json" , Authorization: `Bearer ${accessToken}`},}
     ).then(data => {
       setIsFavorite(data.data.data)
@@ -85,7 +85,7 @@ function Board({ modalOpener }) {
     if (!accessToken) {
       headers = { "Content-Type": "application/json" }
     }
-    axios.get(`${serverUrl}favorites/${historyId}`,
+    axios.get(`${serverUrl}getFavorites/${historyId}`,
     {headers: headers,}
     ).then(data => {
       setIsFavorite(data.data.data)
