@@ -8,6 +8,7 @@ import MapArea from "../components/Map";
 import SearchPlace from "../components/SearchPlace";
 import Comment from "../components/Comment"
 import { useSelector } from "react-redux";
+import Map from "../components/Placemap";
 
 function Board({ modalOpener }) {
   // -------------------------------------------------------------
@@ -113,8 +114,9 @@ function Board({ modalOpener }) {
               <Button>New History</Button>
             </NavLink>
           )}
-          <SearchPlace></SearchPlace>
-          <MapArea></MapArea>
+          {/* <SearchPlace></SearchPlace>
+          <MapArea></MapArea> */}
+          <Map></Map>
         </MapDiv>
       </MapSection>
     </MapContainer>
