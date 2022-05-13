@@ -1,4 +1,5 @@
-const { place, history, favorite } = require("../../models");
+const { place, history, photo } = require("../../models");
+const { Op } = require("sequelize");
 
 module.exports = async (req, res) => {
   try {
@@ -28,12 +29,32 @@ module.exports = async (req, res) => {
     });
     // console.log(historyInfo);
 
+
+    // historyInfo에서 history pk id들을 토대로 DB photo 테이블에서 대표사진 한장들을 가져오기 위해 historyInfo에서 id만 뽑음
+    // const historyInfoIds = historyInfo.map((el) => {
+    //   return el.id
+    // })
+    // console.log(historyInfoIds)
+
+    // historyInfoIds를 토대로 DB photos 테이블에서 사진들을 한장씩 가져옴
+    // const historyThumbnailPhotos = await photo.findAll({
+    //   raw: true,
+    //   attributes: ['history_id', 'image_name'],
+    //   where: {
+    //     history_id: {
+    //       [Op.or]: historyInfoIds,
+    //     }
+    //   },
+    // })
+    // console.log(historyThumbnailPhotos)
+    
+
     //historyInfo배열을 돌며 id를 통해 favorites 테이블에서 좋아요 받은 길이를 가져오기 위해
     // 우선 historyInfo 에서 id만 빼냄
-    const test1 = historyInfo.map((el) => {
-      return el["id"];
-    });
-    console.log(test1);
+    // const test1 = historyInfo.map((el) => {
+    //   return el["id"];
+    // });
+    // console.log(test1);
 
     // 그 id를 가지고  favorites 테이블에서 history_id와 일치하는 컬럼의 개수를 각각 반환
 
@@ -43,7 +64,8 @@ module.exports = async (req, res) => {
       return el
     })
     console.log(test1);
- */
+    
+   */
     // 리턴
     res.status(200).json({
       data: historyInfo,
