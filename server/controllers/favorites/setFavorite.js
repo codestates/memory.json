@@ -40,6 +40,7 @@ module.exports = async (req, res) => {
             message: "ok",
           });
         });
+        return
     }
 
     const isLike = isFavorite.dataValues.like;
