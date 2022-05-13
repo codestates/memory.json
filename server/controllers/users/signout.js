@@ -1,3 +1,4 @@
+const logger = require("../../config/winston");
 const userAuthen = require("../authentication/userAuthen");
 
 module.exports = async (req, res) => {
@@ -8,6 +9,7 @@ module.exports = async (req, res) => {
         .status(401)
         .send({ data: null, message: "먼저 로그인을 해주세요!" });
     } else {
+      logger.info(`userId ${userInfo.id}가 로그아웃하였습니다.`)
       return res
         .cookie("accessToken", null, { maxAge: 0 })
         .status(200)

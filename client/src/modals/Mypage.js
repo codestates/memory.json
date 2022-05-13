@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { signoutModalAction, userinfoAction } from "../store/actions";
+import { userinfoAction } from "../store/actions";
 
 const ModalArea = styled.div`
   position: relative;
@@ -147,8 +147,6 @@ function Mypage({
     user_account,
     user_name,
   } = userState;
-  console.log(userState.user_account);
-  console.log(user_account);
 
   useEffect(() => {
     bringUserinformation();
@@ -160,11 +158,8 @@ function Mypage({
         headers: { authorization: `Bearer ${accessToken}` },
       })
       .then((res) => {
-        console.log("getres", res);
         if (res.status === 200) {
           const userInformation = res.data.data;
-          console.log(userInformation);
-          console.log(userInformation.user_account);
           dispatch(
             userinfoAction(
               userInformation.address,

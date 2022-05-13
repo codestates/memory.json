@@ -43,9 +43,9 @@ module.exports = async (req, res) => {
     const newUserInfo = await user.findOne({
       attributes: [
         'mobile',
+        'email',
         'address',
-        'age',
-        'sex'
+        'age'
       ],
       where: {
         id: userInfo.dataValues.id

@@ -16,6 +16,7 @@ import Mypage from "./modals/Mypage";
 import Editmyinfo from "./modals/Editmyinfo";
 import Myhistory from "./modals/Myhistory";
 import Myfavorite from "./modals/Myfavorite";
+import Signout from "./modals/Signout";
 
 //Component
 import Navbar from "./components/Navbar";
@@ -30,10 +31,13 @@ import {
   googleAction,
   kakaoAction,
   signinModalOnAction,
+  signoutModalAction,
   changeSignupToSignin,
   changeSigninToSignup,
   mypageModalAction,
   changeMypageToEditmyinfo,
+  changeEditmyinfoToMypage,
+  changeEditmyinfoToSignout,
   changeMypageToMyhistory,
   changeMypageToMyfavorite,
   modalOff,
@@ -59,6 +63,7 @@ function Router() {
     isSigninModal,
     isSignupModal,
     isMypageModal,
+    isSignoutModal,
     isEditmyinfoModal,
     isMyhistoryModal,
     isMyfavoriteModal,
@@ -100,6 +105,16 @@ function Router() {
   //마이페이지 모달에서 에디트 모달로 변경
   const changeformToEditmyinfo = () => {
     dispatch(changeMypageToEditmyinfo);
+  };
+
+  //에디트 모달에서 마이페이지 모달로 변경
+  const changeformToMyinfoFromEdit = () => {
+    dispatch(changeEditmyinfoToMypage);
+  };
+
+  //에디트 모달에서 회원탈퇴 모달로 변경
+  const changeformToSignoutFromEdit = () => {
+    dispatch(changeEditmyinfoToSignout);
   };
 
   //마이페이지 모달에서 마이히스토리 모달로 변경
@@ -170,7 +185,7 @@ function Router() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/main" element={<Main />} />
-        <Route path="/board" element={<Board />} />
+        <Route path="/board" element={<Board modalOpener={modalOpener} />} />
         <Route path="/Newhistory" element={<Newhistory />} />
       </Routes>
       {/* // 로그인 모달 */}
@@ -253,8 +268,12 @@ function Router() {
         onRequestClose={() => modalCloser()}
       >
         <Editmyinfo
+          isGoogelLogin={isGoogelLogin}
+          isKakaoLogin={isKakaoLogin}
           modalCloser={modalCloser}
           mypageModalOpener={mypageModalOpener}
+          changeformToMyinfoFromEdit={changeformToMyinfoFromEdit}
+          changeformToSignoutFromEdit={changeformToSignoutFromEdit}
         />
       </Modal>
       {/* //myhistory 모달 */}
@@ -295,6 +314,25 @@ function Router() {
           mypageModalOpener={mypageModalOpener}
         />
       </Modal>
+      {/* //회원탈퇴 모달 */}
+      <Modal
+        style={{
+          content: {
+            background: "#92a8d1",
+            left: "35%",
+            right: "35%",
+            border: "5px solid #697F6E",
+            borderRadius: "1em",
+          },
+        }}
+        isOpen={isSignoutModal}
+        onRequestClose={() => modalCloser()}
+      >
+        <Signout
+          modalCloser={modalCloser}
+          mypageModalOpener={mypageModalOpener}
+        />
+      </Modal>
     </BrowserRouter>
   );
 }
@@ -304,5 +342,3 @@ function App() {
 }
 
 export default App;
-
-// 회원탈퇴 구현 //
