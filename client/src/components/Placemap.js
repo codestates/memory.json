@@ -43,17 +43,25 @@ export default function Map() {
           if (res.status === 200) {
             setHistoryList(res.data.data);
             setIsHistory(true);
+            return axios
+              .get(`${serverUrl}histories/photo?historyid=${historyList[0].id}`)
+              .then((res) => {
+                if (res.status === 200) {
+                  setImageList(res.data.data);
+                }
+              });
           }
         });
         // 사진 가져오기 (수정중)
-        axios.get(`${serverUrl}histories/place/${el.id}`).then((res) => {
-          if (res.status === 200) {
-            setHistoryList(res.data.data);
-            setIsHistory(true);
-          }
-        });
+        // .get(`${serverUrl}histories/photo?historyid=${historyList.id}`)
+        // .then((res) => {
+        //   if (res.status === 200) {
+        //     setImageList(res.data.data);
+        //   }
+        // });
       });
-      console.log(historyList);
+      console.log("imageList", imageList);
+      console.log("id", historyList[0].id);
       console.log(isHistory);
     });
   };
@@ -103,6 +111,17 @@ export default function Map() {
   };
   console.log("placeList", placeList);
 
+  // DB로부터 장소에 해당하는 사진 목록을 모두 불러와서 imageList에 담아줌.
+  const [imageList, setImageList] = useState([]);
+  const getAllImageList = () => {
+    axios
+      .get(`${serverUrl}histories/photo?historyid=${historyList.place_id}`)
+      .then((res) => {
+        if (res.status === 200) {
+          setImageList(res.data.data);
+        }
+      });
+  };
   // 히스토리 목록 불러오기.
   const [historyList, setHistoryList] = useState([]);
 
@@ -144,6 +163,20 @@ export default function Map() {
       </div>
       <div id="map" style={{ width: "500px", height: "400px" }}></div>
       {!isHistory ? <></> : <ShowHistory></ShowHistory>}
+      <>
+        {/* {historyList.map(() => {
+        return (
+          <History
+            title={historyList.history_title}
+            content={historyList.history_content}
+            year={historyList.history_year}
+            image={}
+            comment={}
+            favorite={}
+          />
+        )
+      })} */}
+      </>
     </>
   );
 }
