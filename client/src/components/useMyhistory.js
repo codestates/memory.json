@@ -37,7 +37,8 @@ function useMyhistory(page) {
       // console.log(res);
       // console.log(res.data.data.rows);
       setHistoryfeed((prev) => [...prev, ...res.data.data.rows]);
-      console.log(historyFeed);
+      console.log(res.data.data.rows)
+      console.log("historyfeed",historyFeed);
       setLoading(false);
     } catch (err) {
       setError(err);

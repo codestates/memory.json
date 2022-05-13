@@ -75,7 +75,6 @@ const Myhistory = ({ modalCloser }) => {
 
   const handleObserver = useCallback((entries) => {
     const target = entries[0];
-    console.log(target);
     if (target.isIntersecting) {
       setPage((prev) => prev + 1);
     }
