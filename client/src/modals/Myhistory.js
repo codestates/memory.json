@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import useFetch from "../components/useFetch";
+import useMyhistory from "../components/useMyhistory";
 
 const ModalArea = styled.div`
   position: relative;
@@ -26,80 +26,21 @@ const MyhistoryArea = styled.div`
   overflow-y: auto;
 `;
 
-const Input = styled.input`
-  ::placeholder {
-    font-size: 1.1rem;
-  }
-  font-size: 1.1em;
-  font-weight: normal;
-  display: block;
-
-  width: 80%;
-  margin-bottom: 0.5rem;
-  margin-left: 10%;
-  margin-right: 10%;
-  height: 45px;
-
-  -webkit-transition: box-shadow 0.3s;
-  transition: box-shadow 0.3s;
-  transition: 0.25s linear;
-  text-align: center;
-
-  color: black;
-  border: 0;
-  outline: 0;
-  background: #eee;
-  box-shadow: 0 0 0 2px transparent;
-
-  &:focus {
-    animation: boxShadow 0.3s backwards;
-
-    box-shadow: 0 0 0 2px #008e43;
-  }
-`;
-
-const InputPassword = styled.input`
-  font-size: 1.1em;
-  font-weight: normal;
-  font-family: Arial;
-  display: block;
-  ::placeholder {
-    font-family: "font-css";
-  }
-
-  width: 80%;
-  margin-bottom: 0.5rem;
-  margin-left: 10%;
-  margin-right: 10%;
-  height: 45px;
-
-  -webkit-transition: box-shadow 0.3s;
-  transition: box-shadow 0.3s;
-  transition: 0.25s linear;
-  text-align: center;
-
-  color: black;
-  border: 0;
-  outline: 0;
-  background: #eee;
-  box-shadow: 0 0 0 2px transparent;
-
-  &:focus {
-    animation: boxShadow 0.3s backwards;
-
-    box-shadow: 0 0 0 2px #008e43;
-  }
-`;
-
-const EditConfirmButton = styled.div`
-  width: 60%;
+const PageDiv = styled.div`
+  width: 40vmin;
   height: 1vh;
+  text-align: center;
+`;
+
+const Myhistorylist = styled.div`
+  width: 60%;
+  height: 10vh;
   color: white;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 10px;
   padding: 10px 10px 20px 10px;
   margin: 20px 40px 30px 70px;
-  background-color: #c4ddff;
+  background-color: 0B0A09;
   border-radius: 5em;
   cursor: pointer;
 
@@ -129,7 +70,7 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 const Myhistory = ({ modalCloser }) => {
   const [page, setPage] = useState(1);
-  const { loading, error, historyFeed } = useFetch(page);
+  const { loading, error, historyFeed } = useMyhistory(page);
   const loader = useRef(null);
 
   const handleObserver = useCallback((entries) => {
@@ -143,7 +84,7 @@ const Myhistory = ({ modalCloser }) => {
   useEffect(() => {
     const option = {
       root: null,
-      rootMargin: "200px",
+      rootMargin: "2000px",
       threshold: 0,
     };
     const observer = new IntersectionObserver(handleObserver, option);
@@ -154,15 +95,22 @@ const Myhistory = ({ modalCloser }) => {
     <ModalArea>
       <MyhistoryArea>
         <h1>My Histories</h1>
-        <h2>글 목록</h2>
-        <div>
-          {historyFeed.map((item, i) => (
-            <div key={i}>
-              {item.id} {item.place_id} {item.user_id} {item.history_title}{" "}
-              {item.history_content} {item.history_year} {item.favorite_count}{" "}
-            </div>
-          ))}
-        </div>
+        <h2>내가 쓴 게시글</h2>
+        {historyFeed === [] ? null : (
+          <PageDiv>
+            {historyFeed.map((item, i) => (
+              <Myhistorylist key={i}>
+                <div>글번호:{item.id}</div>
+                <div>장소번호:{item.place_id}</div>
+                <div>글쓴이:{item.user_id}</div>
+                <div>글제목:{item.history_title}</div>
+                <div>글내용:{item.history_content}</div>
+                <div>해당년도:{item.history_year}</div>
+                <div>좋아요 수:{item.favorite_count}</div>
+              </Myhistorylist>
+            ))}
+          </PageDiv>
+        )}
         {loading && <p>로딩중입니다...</p>}
         {error && <p>에러가 발생했습니다!</p>}
         <div ref={loader} />
@@ -173,3 +121,7 @@ const Myhistory = ({ modalCloser }) => {
 };
 
 export default Myhistory;
+
+// 화면에 두개가 뜨는 문제
+
+// css 꾸미기 들어가야 할듯
