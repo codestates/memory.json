@@ -1,33 +1,169 @@
-import React, { useEffect } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import * as S from "../pages/Main.style";
+
+axios.defaults.withCredentials = true;
+const serverUrl = process.env.REACT_APP_SERVER_URL;
+const { kakao } = window;
 
 export default function Map() {
   useEffect(() => {
     mapscript();
-  }, []);
-
+  });
+  const [isHistory, setIsHistory] = useState(false);
+  const [placeList, setPlaceList] = useState([]);
   const mapscript = () => {
     let container = document.getElementById("map");
     let options = {
-      center: new kakao.maps.LatLng(37.565805, 126.975161);
-      level: 3,
+      center: new kakao.maps.LatLng(37.565805, 126.975161),
+      level: 8,
     };
-  }
+
+    const map = new kakao.maps.Map(container, options);
+
+    placeList.map((el) => {
+      // 마커 생성
+      let marker = new kakao.maps.Marker({
+        // 마커가 표시 될 지도
+        map: map,
+        // 마커가 표시 될 위치
+        position: new kakao.maps.LatLng(el.place_lat, el.place_lng),
+      });
+      console.log(el.place_lat, el.place_lng);
+      // if (placeList.length === 1) {
+      //   let moveLatLng = new kakao.maps.LatLng(
+      //     placeList.place_lat,
+      //     placeList.place_lng
+      //   );
+      //   map.setCenter(moveLatLng);
+      // }
+      kakao.maps.event.addListener(marker, "click", function () {
+        // 게시물 노출
+        axios.get(`${serverUrl}histories/place/${el.id}`).then((res) => {
+          if (res.status === 200) {
+            setHistoryList(res.data.data);
+            setIsHistory(true);
+          }
+        });
+        // 사진 가져오기 (수정중)
+        axios.get(`${serverUrl}histories/place/${el.id}`).then((res) => {
+          if (res.status === 200) {
+            setHistoryList(res.data.data);
+            setIsHistory(true);
+          }
+        });
+      });
+      console.log(historyList);
+      console.log(isHistory);
+    });
+  };
+
+  const ShowHistory = () => {
+    for (let i = 0; i < placeList.length; i++) {
+      return (
+        <S.ViewContainer>
+          <S.ViewSection>
+            <S.ViewDiv>
+              <h1
+                style={{ color: "white" }}
+              >{`${historyList[i].history_title}`}</h1>
+              <h1
+                style={{ color: "white" }}
+              >{`${historyList[i].history_content}`}</h1>
+              <h1
+                style={{ color: "white" }}
+              >{`${historyList[i].history_year}`}</h1>
+            </S.ViewDiv>
+          </S.ViewSection>
+        </S.ViewContainer>
+      );
+    }
+  };
+  // const ShowHistory = (i) => {};
+
+  // const makeMarker = () => {
+  //   placeList.forEach((el) => {
+  //     new kakao.maps.Marker({
+  //       map: map,
+  //       position: new kakao.maps.LatLng(el.place_lat, el.place_lng),
+  //     });
+  //   });
+  // };
+  const [inputText, setInputText] = useState(" ");
+  const [place, setPlace] = useState("");
+  // DB로부터 모든 장소정보를 가져와서 placeList에 담아줌.
+  const getAllPlaceMarker = () => {
+    axios.get(`${serverUrl}places?place_address=${inputText}`).then((res) => {
+      if (res.status === 200) {
+        // const allPlaceList = res.data.data;
+        // console.log(allPlaceList);
+        setPlaceList(res.data.data);
+      }
+    });
+  };
+  console.log("placeList", placeList);
+
+  // 히스토리 목록 불러오기.
+  const [historyList, setHistoryList] = useState([]);
+
+  // 입력 시 검색 창 상태 변화.
+  const onChange = (e) => {
+    setInputText(e.target.value);
+    console.log(e.target.value);
+  };
+  console.log("inputText", inputText);
+  // 검색 버튼 클릭 시 상태 변화
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // setPlace(inputText);
+    // setInputText(e.target.value);
+    console.log(inputText);
+  };
 
   // map
-  const map = new kakao.maps.Map(container, options);
-  
-  markerdata.forEach((el) => {
-    // 마커 생성
-    new kakao.maps.Marker({
-      // 마커가 표시 될 지도
-      map: map,
-      // 마커가 표시 될 위치
-      position: new kakao.maps.LatLng({위도, 경도}),
-      // 마커에 hover시 나타날 title
-      title: el.title,
 
-      // 클릭 이벤트 추가 해야 함.
-    })
-  })
+  return (
+    <>
+      <div>
+        <form className="inputForm" onSubmit={handleSubmit}>
+          <input
+            style={{ width: "1000px", height: "50px" }}
+            placeholder="Search Place..."
+            onChange={onChange}
+            value={inputText}
+          />
+          <button
+            type="submit"
+            onClick={getAllPlaceMarker}
+            style={{ width: "48px", height: "50px" }}
+          >
+            검색
+          </button>
+        </form>
+        {/* <Map searchPlace={place} /> */}
+      </div>
+      <div id="map" style={{ width: "500px", height: "400px" }}></div>
+      {!isHistory ? <></> : <ShowHistory></ShowHistory>}
+    </>
+  );
 }
 
+// const SearchPlace = () => {};
+// return (
+//   <>
+//     <div>
+//       <form className="inputForm" onSubmit={handleSubmit}>
+//         <input
+//           style={{ width: "1450px", height: "50px" }}
+//           placeholder="Search Place..."
+//           onChange={onChange}
+//           value={inputText}
+//         />
+//         <button type="submit" style={{ width: "48px", height: "50px" }}>
+//           검색
+//         </button>
+//       </form>
+//       <MapArea searchPlace={place} />
+//     </div>
+//   </>
+// );
