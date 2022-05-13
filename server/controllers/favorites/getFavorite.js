@@ -3,7 +3,7 @@ const { favorite } = require("../../models");
 
 module.exports = async (req, res) => {
   try {
-    const userInfo = {}
+    let userInfo = {}
     if(req.headers.authorization) {
       userInfo = await userAuthen(req);
     }
