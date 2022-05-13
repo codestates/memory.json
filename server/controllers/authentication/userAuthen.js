@@ -2,6 +2,7 @@ const { user } = require("../../models");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
+const { Op } = require("sequelize");
 
 module.exports = async (req, res) => {
   try {
@@ -18,8 +19,8 @@ module.exports = async (req, res) => {
 
     if (!accessToken) {
       return null;
-    } */
-
+    }
+ */
     // 액세스 토큰이 유효한지 검사하는 함수 구성
     const checkAccessToken = (accessToken) => {
       return jwt.verify(accessToken, process.env.ACCESS_SECRET);
@@ -31,12 +32,15 @@ module.exports = async (req, res) => {
       return null;
     }
 
-
     // 액세스 토큰 정보가 유효한지 확인 : 토큰 구성할떄 테이블 고유 id로 구성
     const user_id = accessTokenData.id;
     // DB에서 확인
     const userInfo = await user.findOne({
-      where: { id: user_id },
+      where: {
+        id: {
+          [Op.eq]: user_id,
+        },
+      },
     });
 
     // 만약 DB와 일치하는 정보가 없다면

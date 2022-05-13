@@ -6,6 +6,7 @@ const {
 } = require('../tokenFunctions');
 const dotenv = require('dotenv');
 dotenv.config();
+const logger = require("../../config/winston");
 
 module.exports = async (req, res) => {
   try{
@@ -29,7 +30,6 @@ module.exports = async (req, res) => {
         message: '허가되지 않은 로그인입니다!'
       });
     };
-    console.log('1');
     // 등록된 회원이 존재한다면 비밀번호를 확인
     const match = await bcrypt.compare(password, userInfo.dataValues.password);
     // 비밀번호가 DB과 일치하지 않다면 에러 상태코드 403 리턴
@@ -61,6 +61,7 @@ module.exports = async (req, res) => {
     sendAccessToken(res, accessToken);
     
     // 성공 응답
+    logger.info(`userId ${userInfo.dataValues.id}가 로그인하였습니다.`)
     return res.status(200).json({
       data: { accessToken },
       message: "Login Success!"
