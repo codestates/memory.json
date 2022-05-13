@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import * as S from "../pages/Main.style";
 
 axios.defaults.withCredentials = true;
 const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -9,25 +10,16 @@ export default function Map() {
   useEffect(() => {
     mapscript();
   });
+  const [isHistory, setIsHistory] = useState(false);
   const [placeList, setPlaceList] = useState([]);
   const mapscript = () => {
     let container = document.getElementById("map");
     let options = {
       center: new kakao.maps.LatLng(37.565805, 126.975161),
-      level: 7,
+      level: 8,
     };
 
     const map = new kakao.maps.Map(container, options);
-
-    // let marker = new kakao.maps.Marker({
-    //   map: map,
-    //   position: new kakao.maps.LatLng(37.565805, 126.975161),
-    // });
-
-    // marker = new kakao.maps.Marker({
-    //   map: map,
-    //   position: new kakao.maps.LatLng(37.564805, 126.975161),
-    // });
 
     placeList.map((el) => {
       // 마커 생성
@@ -35,11 +27,59 @@ export default function Map() {
         // 마커가 표시 될 지도
         map: map,
         // 마커가 표시 될 위치
-        position: new kakao.maps.LatLng(el.place_lat, el.place_lag),
+        position: new kakao.maps.LatLng(el.place_lat, el.place_lng),
       });
-      console.log(el.place_lat, el.place_lag);
+      console.log(el.place_lat, el.place_lng);
+      // if (placeList.length === 1) {
+      //   let moveLatLng = new kakao.maps.LatLng(
+      //     placeList.place_lat,
+      //     placeList.place_lng
+      //   );
+      //   map.setCenter(moveLatLng);
+      // }
+      kakao.maps.event.addListener(marker, "click", function () {
+        // 게시물 노출
+        axios.get(`${serverUrl}histories/place/${el.id}`).then((res) => {
+          if (res.status === 200) {
+            setHistoryList(res.data.data);
+            setIsHistory(true);
+          }
+        });
+        // 사진 가져오기 (수정중)
+        axios.get(`${serverUrl}histories/place/${el.id}`).then((res) => {
+          if (res.status === 200) {
+            setHistoryList(res.data.data);
+            setIsHistory(true);
+          }
+        });
+      });
+      console.log(historyList);
+      console.log(isHistory);
     });
   };
+
+  const ShowHistory = () => {
+    for (let i = 0; i < placeList.length; i++) {
+      return (
+        <S.ViewContainer>
+          <S.ViewSection>
+            <S.ViewDiv>
+              <h1
+                style={{ color: "white" }}
+              >{`${historyList[i].history_title}`}</h1>
+              <h1
+                style={{ color: "white" }}
+              >{`${historyList[i].history_content}`}</h1>
+              <h1
+                style={{ color: "white" }}
+              >{`${historyList[i].history_year}`}</h1>
+            </S.ViewDiv>
+          </S.ViewSection>
+        </S.ViewContainer>
+      );
+    }
+  };
+  // const ShowHistory = (i) => {};
 
   // const makeMarker = () => {
   //   placeList.forEach((el) => {
@@ -49,7 +89,8 @@ export default function Map() {
   //     });
   //   });
   // };
-
+  const [inputText, setInputText] = useState(" ");
+  const [place, setPlace] = useState("");
   // DB로부터 모든 장소정보를 가져와서 placeList에 담아줌.
   const getAllPlaceMarker = () => {
     axios.get(`${serverUrl}places?place_address=${inputText}`).then((res) => {
@@ -61,8 +102,9 @@ export default function Map() {
     });
   };
   console.log("placeList", placeList);
-  const [inputText, setInputText] = useState(" ");
-  const [place, setPlace] = useState("");
+
+  // 히스토리 목록 불러오기.
+  const [historyList, setHistoryList] = useState([]);
 
   // 입력 시 검색 창 상태 변화.
   const onChange = (e) => {
@@ -85,7 +127,7 @@ export default function Map() {
       <div>
         <form className="inputForm" onSubmit={handleSubmit}>
           <input
-            style={{ width: "1450px", height: "50px" }}
+            style={{ width: "1000px", height: "50px" }}
             placeholder="Search Place..."
             onChange={onChange}
             value={inputText}
@@ -100,7 +142,8 @@ export default function Map() {
         </form>
         {/* <Map searchPlace={place} /> */}
       </div>
-      <div id="map" style={{ width: "500px", height: "500px" }}></div>
+      <div id="map" style={{ width: "500px", height: "400px" }}></div>
+      {!isHistory ? <></> : <ShowHistory></ShowHistory>}
     </>
   );
 }

@@ -63,11 +63,11 @@ const PostBoard = () => {
           place_lng: location.x,
           place_lat: location.y,
         });
-        console.log("address", address);
       })
       .catch((err) => {
         console.log(err);
       });
+    // console.log("address", address);
   };
 
   // 히스토리 데이터
