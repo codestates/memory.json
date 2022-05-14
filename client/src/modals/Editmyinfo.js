@@ -150,19 +150,19 @@ const CancelButton = styled.div`
 
 const SignoutButton = styled.div`
   width: 60%;
-  height: 1vh;
-  color: white;
+  height: 0.9vh;
+  color: #FC0000;
   font-weight: 700;
   font-size: 20px;
   padding: 10px 10px 20px 10px;
-  margin: 20px 40px 30px 70px;
-  background-color: #c4ddff;
+  margin: 30px 30px 30px 100px;
+  background-color: #E9E9E9;
   border-radius: 5em;
   cursor: pointer;
   :hover {
-    border: 2px solid #fee518;
+    border: 2px solid #E9E9E9;
   }
-  background: #fee518;
+  background: #E9E9E9;
 `;
 
 const Modalback = styled.div`
@@ -184,8 +184,6 @@ axios.defaults.withCredentials = true;
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 const Editmyinfo = ({
-  isGoogelLogin,
-  isKakaoLogin,
   modalCloser,
   mypageModalOpener,
   changeformToMyinfoFromEdit,
@@ -194,8 +192,6 @@ const Editmyinfo = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const state = useSelector((state) => state.modalReducer);
-  const { isSignoutModal } = state;
 
   const userState = useSelector((state) => state.userinfoReducer);
 
