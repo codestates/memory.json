@@ -154,6 +154,7 @@ function Signout({ modalCloser, mypageModalOpener }) {
             확인
           </ConfirmButton>
         </ModalView>
+        <Modalback onClick={modalCloser}></Modalback>
       </MarginDiv>
     </ModalArea>
   );

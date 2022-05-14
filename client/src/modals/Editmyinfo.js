@@ -5,8 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   getUserAction,
-  userinfoAction,
-  signoutModalAction,
+  userinfoAction
 } from "../store/actions";
 
 const ModalArea = styled.div`
@@ -19,14 +18,15 @@ const ModalArea = styled.div`
 
 const EditArea = styled.div`
   z-index: 999;
-  width: 40vmin;
-  height: 90vmin;
-  min-height: 400px;
-  background: white;
+  width: 50vmin;
+  height: 70vmin;
+  min-height: 300px;
+  background: #BDBDBD;
   box-shadow: 0 0 15px #333;
+  border-radius: 3em;
   position: fixed;
   margin: -0.9vh auto;
-  padding-top: 1vh;
+  padding-top: 0.5vh;
   left: 0;
   right: 0;
   overflow-y: auto;
@@ -97,39 +97,55 @@ const InputPassword = styled.input`
   }
 `;
 
+const BtnDiv = styled.div`
+  width: 100%;
+  height: 50px;
+  background: #BDBDBD;
+  display: flex;
+  justify-content: space-evenly;
+  flex-grow: 1;
+  align-items: center;
+  border-radius: 4px;
+  color: #BDBDBD;
+  box-sizing: border-box;
+  position: relative;
+  background-size: contain;
+  margin: 30px 0px 0px 0px;
+`;
+
 const EditConfirmButton = styled.div`
   width: 60%;
   height: 1vh;
-  color: white;
+  color: #eee;
   font-weight: 700;
   font-size: 20px;
   padding: 10px 10px 20px 10px;
-  margin: 20px 40px 30px 70px;
-  background-color: #c4ddff;
+  margin: 30px 30px 30px 30px;
+  background-color: #0E0E0E;
   border-radius: 5em;
   cursor: pointer;
 
-  background: #008e43;
+  background: #0E0E0E;
   :hover {
-    border: 2px solid #008e43;
+    border: 2px solid #0E0E0E;
   }
 `;
 
 const CancelButton = styled.div`
   width: 60%;
   height: 1vh;
-  color: white;
+  color: #0E0E0E;
   font-weight: 700;
   font-size: 20px;
   padding: 10px 10px 20px 10px;
-  margin: 20px 40px 30px 70px;
-  background-color: #c4ddff;
+  margin: 30px 30px 30px 30px;
+  background-color: #eee;
   border-radius: 5em;
   cursor: pointer;
   :hover {
-    border: 2px solid #fee518;
+    border: 2px solid #eee;
   }
-  background: #fee518;
+  background: #eee;
 `;
 
 const SignoutButton = styled.div`
@@ -456,12 +472,14 @@ const Editmyinfo = ({
 
         <div style={{ color: "red" }}>{validateError}</div>
 
+        <BtnDiv>
         <EditConfirmButton onClick={() => updateHandler()}>
-          회원정보 수정확인
+          확인
         </EditConfirmButton>
         <CancelButton onClick={changeformToMyinfoFromEdit}>
-          취소하고 마이페이지 돌아가기
+          취소
         </CancelButton>
+        </BtnDiv>
         <SignoutButton
           onClick={() => {
             changeformToSignoutFromEdit();

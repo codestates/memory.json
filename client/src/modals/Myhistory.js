@@ -34,10 +34,10 @@ const PageDiv = styled.div`
 
 const Myhistorylist = styled.div`
   width: 60%;
-  height: 10vh;
+  height: 20vh;
   color: white;
   font-weight: 700;
-  font-size: 10px;
+  font-size: 15px;
   padding: 10px 10px 20px 10px;
   margin: 20px 40px 30px 70px;
   background-color: 0B0A09;
@@ -83,8 +83,8 @@ const Myhistory = ({ modalCloser }) => {
   useEffect(() => {
     const option = {
       root: null,
-      rootMargin: "2000px",
-      threshold: 0,
+      rootMargin: "350px",
+      threshold: 1,
     };
     const observer = new IntersectionObserver(handleObserver, option);
     if (loader.current) observer.observe(loader.current);
@@ -99,9 +99,7 @@ const Myhistory = ({ modalCloser }) => {
           <PageDiv>
             {historyFeed.map((item, i) => (
               <Myhistorylist key={i}>
-                <div>글번호:{item.id}</div>
-                <div>장소번호:{item.place_id}</div>
-                <div>글쓴이:{item.user_id}</div>
+                <div>{item.id}</div>
                 <div>글제목:{item.history_title}</div>
                 <div>글내용:{item.history_content}</div>
                 <div>해당년도:{item.history_year}</div>
@@ -120,7 +118,5 @@ const Myhistory = ({ modalCloser }) => {
 };
 
 export default Myhistory;
-
-// 화면에 두개가 뜨는 문제
 
 // css 꾸미기 들어가야 할듯

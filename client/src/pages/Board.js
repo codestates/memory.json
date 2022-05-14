@@ -29,8 +29,8 @@ function Board({ modalOpener }) {
     accessToken = JSON.parse(localStorage.accessToken).accessToken
   }
   
-  const historyId = 1 // 이건 ishistoryId가 있을 대체해야 함
-  const userId = accessToken ? 1 : '' // 이건 isUserId가 있을 때 대체해야 함
+  const historyId = 1001 // 이건 ishistoryId가 있을 대체해야 함
+  const userId = accessToken ? 1001 : '' // 이건 isUserId가 있을 때 대체해야 함
 
   console.log(accessToken)
 
