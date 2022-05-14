@@ -5,108 +5,124 @@ import { useDispatch, useSelector } from "react-redux";
 import { userinfoAction } from "../store/actions";
 
 const ModalArea = styled.div`
+  z-index: 999;
   position: relative;
   height: 100%;
   text-align: center;
-  z-index: 999;
-  font-family: "font-css";
+  font-family: "Roboto";
 `;
 const Modalback = styled.div`
-  z-index: -1;
+  z-index: 0;
   position: fixed;
+  height: 100vh;
+  width: 100vw;
   margin: 0;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.3);
-
+  background-color: rgba(0, 0, 0, 0.1);
   place-items: center;
 `;
 
 const ModalView = styled.div`
   z-index: 999;
-  width: 80vmin;
-  height: 60vmin;
-  min-height: 800px;
-  background: white;
-  box-shadow: 0 0 15px #333;
+  width: 100vmin;
+  height: 50vmin;
+  min-height: 700px;
+  background: #696773;
+  box-shadow: 0 0 30px #333;
+  border-radius: 3em;
   position: fixed;
   margin: 15vh auto;
-  padding-top: 1vh;
   left: 0;
   right: 0;
   overflow: hidden;
 `;
 
-const Input = styled.input`
-  font-size: 1.1rem;
-  font-weight: normal;
-  display: block;
+const Background = styled.article`
+  background: #265353;
+  width: max-content;
+  padding: 30px;
+  margin-left: 40px; ;
+`;
 
-  width: 80%;
-  margin-bottom: 0.5rem;
-  margin-left: 10%;
-  margin-right: 10%;
-  height: 45px;
-
-  -webkit-transition: box-shadow 0.3s;
-  transition: box-shadow 0.3s;
-  transition: 0.25s linear;
+const Wrapper = styled.div`
+  min-width: 300px;
+  border-radius: 32px;
+  padding: 24px;
+  background: white;
+  box-shadow: 0px 2px 20px hsl(248deg 53% 40%);
   text-align: center;
+`;
 
-  color: black;
-  border: 0;
-  outline: 0;
-  background: #eee;
-  box-shadow: 0 0 0 2px transparent;
+const IdDiv = styled.div`
+  font-size: 1.85rem;
+  font-weight: 600;
+  margin-bottom: 0px;
+`;
 
-  &:focus {
-    animation: boxShadow 0.3s backwards;
+const NickDiv = styled.div`
+  font-size: 1.25rem;
+  font-weight: 300;
+  color: hsl(0deg 0% 40%);
+`;
 
-    box-shadow: 0 0 0 2px #c4ddff;
+const MyhistoryButton = styled.aside`
+  width: 30%;
+  height: 1vh;
+  padding: 10px 10px 20px 10px;
+  margin: 20px 40px 30px 70px;
+  color: white;
+  font-weight: 700;
+  font-size: 20px;
+  background-color: #fafafa;
+  border: 5px solid #265353;
+  border-radius: 5em;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+    overflow: hidden;
   }
 `;
 
-const MyhistoryButton = styled.div`
-  width: 60%;
-  height: 1vh;
-  color: white;
-  font-weight: 700;
-  font-size: 20px;
-  padding: 10px 10px 20px 10px;
-  margin: 20px 40px 30px 150px;
-  background-color: #c4ddff;
-  border-radius: 5em;
-  cursor: pointer;
-`;
-
-const MyfavoriteButton = styled.div`
-  width: 60%;
-  height: 1vh;
-  color: white;
-  font-weight: 700;
-  font-size: 20px;
-  padding: 10px 10px 20px 10px;
-  margin: 20px 40px 30px 150px;
-  background-color: #c4ddff;
-  border-radius: 5em;
-  cursor: pointer;
-`;
-
-const ModifiedButton = styled.div`
+const MyfavoriteButton = styled.aside`
   width: 30%;
   height: 1vh;
+  padding: 10px 10px 20px 10px;
+  margin: 20px 40px 30px 70px;
   color: white;
   font-weight: 700;
   font-size: 20px;
-  padding: 10px 10px 20px 10px;
-  margin: 20px 40px 30px 150px;
-  background-color: #c4ddff;
+  background-color: #fafafa;
+  border: 5px solid #265353;
   border-radius: 5em;
   cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+    overflow: hidden;
+  }
+`;
+
+const ModifiedButton = styled.aside`
+  width: 30%;
+  height: 1vh;
+  padding: 10px 10px 20px 10px;
+  margin: 20px 40px 30px 70px;
+  color: white;
+  font-weight: 700;
+  font-size: 20px;
+  background-color: #fafafa;
+  border: 5px solid #265353;
+  border-radius: 5em;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+    overflow: hidden;
+  }
 `;
 
 const MarginDiv = styled.div`
@@ -120,10 +136,7 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 // ------------------------------------------------------------------------------------------
 
 function Mypage({
-  isGoogelLogin,
-  isKakaoLogin,
   modalCloser,
-  mypageModalOpener,
   changeformToEditmyinfo,
   changeformToMyhistory,
   changeformToMyfavorite,
@@ -135,18 +148,7 @@ function Mypage({
   const dispatch = useDispatch();
   const userState = useSelector((state) => state.userinfoReducer);
 
-  const {
-    address,
-    age,
-    email,
-    id,
-    mobile,
-    provider,
-    sex,
-    social_id,
-    user_account,
-    user_name,
-  } = userState;
+  const { social_id, user_account, user_name } = userState;
 
   useEffect(() => {
     bringUserinformation();
@@ -186,70 +188,99 @@ function Mypage({
       <MarginDiv>
         <ModalView>
           <div>
-            <h1>마이 페이지</h1>
+            <h1>My Page</h1>
             {social_id === null ? (
-              <div>
-                <h2
-                  style={{
-                    color: "black",
-                    fontSize: "120%",
-                    fontWeight: "700",
-                  }}
-                >
-                  아이디: {user_account}
-                </h2>
-              </div>
+              <Background>
+                <Wrapper>
+                  <IdDiv>
+                    <h2
+                      style={{
+                        color: "black",
+                        fontSize: "100%",
+                        fontWeight: "500",
+                        margin: "0px",
+                      }}
+                    >
+                      ID: {user_account}
+                    </h2>
+                  </IdDiv>
+                  <NickDiv>
+                    <h2
+                      style={{
+                        color: "black",
+                        fontSize: "100%",
+                        fontWeight: "500",
+                        margin: "0px",
+                      }}
+                    >
+                      NickName: {user_name}
+                    </h2>
+                  </NickDiv>
+                </Wrapper>
+              </Background>
             ) : (
-              <div>
-                <h2
-                  style={{
-                    color: "black",
-                    fontSize: "120%",
-                    fontWeight: "700",
-                  }}
-                >
-                  아이디: {social_id}
-                </h2>
-              </div>
+              <Background>
+                <Wrapper>
+                  <IdDiv>
+                    <h2
+                      style={{
+                        color: "black",
+                        fontSize: "100%",
+                        fontWeight: "500",
+                        margin: "0px",
+                      }}
+                    >
+                      ID: {social_id}
+                    </h2>
+                  </IdDiv>
+                  <NickDiv>
+                    <h2
+                      style={{
+                        color: "black",
+                        fontSize: "100%",
+                        fontWeight: "500",
+                        margin: "0px",
+                      }}
+                    >
+                      NickName: {user_name}
+                    </h2>
+                  </NickDiv>
+                </Wrapper>
+              </Background>
             )}
-            <div>
-              <div>
-                <h2
-                  style={{
-                    color: "black",
-                    fontSize: "120%",
-                    fontWeight: "700",
-                  }}
-                >
-                  닉네임: {user_name}
-                </h2>
-              </div>
-              <MyhistoryButton
-                type="button"
-                onClick={() => changeformToMyhistory()}
-                style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
-              >
-                My History
-              </MyhistoryButton>
-            </div>
-            <div>
-              <MyfavoriteButton
-                type="button"
-                onClick={() => changeformToMyfavorite()}
-                style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
-              >
-                My Favorite
-              </MyfavoriteButton>
-            </div>
-            <div>
-              <ModifiedButton
-                type="button"
-                onClick={() => changeformToEditmyinfo()}
-                style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
-              >
-                내 정보수정
-              </ModifiedButton>
-            </div>
+            <ModifiedButton
+              type="button"
+              onClick={() => changeformToEditmyinfo()}
+              style={{
+                color: "#28282A",
+                fontSize: "120%",
+                fontWeight: "700",
+              }}
+            >
+              내 정보 수정
+            </ModifiedButton>
+            <MyhistoryButton
+              type="button"
+              onClick={() => changeformToMyhistory()}
+              style={{
+                color: "#28282A",
+                fontSize: "120%",
+                fontWeight: "700",
+              }}
+            >
+              My History
+            </MyhistoryButton>
+            <MyfavoriteButton
+              type="button"
+              onClick={() => changeformToMyfavorite()}
+              style={{
+                color: "#28282A",
+                fontSize: "120%",
+                fontWeight: "700",
+              }}
+            >
+              My Favorite
+            </MyfavoriteButton>
           </div>
         </ModalView>
         <Modalback onClick={modalCloser}></Modalback>

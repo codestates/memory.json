@@ -7,24 +7,23 @@ import { useNavigate } from "react-router-dom";
 import { signinAction, getUserAction } from "../store/actions";
 
 const ModalArea = styled.div`
+  z-index: 999;
   position: relative;
   height: 100%;
   text-align: center;
-  z-index: 999;
-  font-family: "font-css";
+  font-family: "Roboto";
 `;
 const Modalback = styled.div`
-  z-index: -1;
+  z-index: 0;
   position: fixed;
+  height: 100vh;
+  width: 100vw;
   margin: 0;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.3);
-
+  background-color: rgba(0, 0, 0, 0.1);
   place-items: center;
 `;
 
@@ -32,12 +31,12 @@ const ModalView = styled.div`
   z-index: 999;
   width: 40vmin;
   height: 50vmin;
-  min-height: 800px;
-  background: white;
-  box-shadow: 0 0 15px #333;
+  min-height: 600px;
+  background: #BDBDBD;
+  box-shadow: 0 0 30px #333;
+  border-radius: 3em;
   position: fixed;
   margin: 15vh auto;
-  padding-top: 1vh;
   left: 0;
   right: 0;
   overflow: hidden;
@@ -81,7 +80,7 @@ const InputPassword = styled.input`
   }
 
   width: 80%;
-  margin-bottom: 0.5rem;
+  margin-bottom: 3rem;
   margin-left: 10%;
   margin-right: 10%;
 
@@ -106,69 +105,79 @@ const InputPassword = styled.input`
 `;
 
 const SignInBtn = styled.div`
-  width: 60%;
+  width: 65%;
   height: 1vh;
-  color: white;
-  font-weight: 700;
-  font-size: 20px;
   padding: 10px 10px 20px 10px;
-  margin: 20px 40px 30px 70px;
-  background-color: #c4ddff;
+  margin: 20px 40px 30px 60px;
+  color: #0E0E0E;
+  font-weight: 600;
+  font-size: 20px;
+  background-color: #eee;
   border-radius: 5em;
   cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+    overflow: hidden;
+  }
 `;
 
 const SignUpBtn = styled.div`
-  width: 60%;
+  width: 65%;
   height: 1vh;
   padding: 10px 10px 20px 10px;
-  margin: 20px 40px 10px 70px;
-  cursor: pointer;
+  margin: 20px 40px 30px 60px;
+  font-weight: 600;
   font-size: 20px;
-  color: white;
-  background-color: #c4ddff;
+  color: #eee; 
+  background-color: #0E0E0E;
   border-radius: 5em;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+    overflow: hidden;
+  }
 `;
 
 const SocialSignInBtn = styled.div`
   width: 100%;
   height: 50px;
-  background: white;
-  border: 2px solid #108dee;
+  background: #BDBDBD;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
+  flex-grow: 1;
   align-items: center;
   border-radius: 4px;
   color: white;
-  padding: 5px;
-  font-size: 1.25rem;
-  font-weight: bold;
   box-sizing: border-box;
   position: relative;
-
-  :hover::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.07);
-  }
+  background-size: contain;
 `;
 
 const KakaoIcon = styled.img`
   z-index: 999;
-  height: 40px;
-  width: 50%;
+  height: 45px;
+  width: 40%;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.1);
+    overflow: hidden;
+  }
 `;
 
 const GoogleIcon = styled.img`
   z-index: 999;
-  height: 40px;
-  width: 50%;
-`;
+  height: 45px;
+  width: 40%;
+  cursor: pointer;
 
+  &:hover {
+    transform: scale(1.1);
+    overflow: hidden;
+  }
+`;
 const MarginDiv = styled.div`
   display: flex;
 `;
@@ -287,9 +296,9 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
         <MarginDiv>
           <ModalView>
             <div>
-              <h1>로그인</h1>
+              <h1>LOGIN</h1>
               <div>
-                <span>아이디</span>
+                <h3>ID</h3>
                 <Input
                   type="text"
                   autoComplete="on"
@@ -299,7 +308,7 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
                 />
               </div>
               <div>
-                <span>비밀번호</span>
+                <h3>PASSWORD</h3>
                 <InputPassword
                   type="password"
                   autoComplete="on"
@@ -310,18 +319,21 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
               </div>
             </div>
 
-            <SignUpBtn onClick={() => changeformToSignup()}>회원가입</SignUpBtn>
-            <SignInBtn onClick={signinHandler}>로그인</SignInBtn>
+            <SignUpBtn onClick={() => changeformToSignup()}>SIGN UP</SignUpBtn>
+            <SignInBtn onClick={signinHandler}>LOGIN</SignInBtn>
 
             {checkErr ? (
               <Alert message={errorMessage} setCheckErr={clickError} />
             ) : null}
-            <SocialSignInBtn onClick={kakaoSigninHandler}>
-              <KakaoIcon src="../img/kakao_login_medium_narrow.png" />
-            </SocialSignInBtn>
-
-            <SocialSignInBtn onClick={googleSigninHandler}>
-              <GoogleIcon src="../img/googlesocaillogin.png" />
+            <SocialSignInBtn>
+              <KakaoIcon
+                src="../img/kakao_login_large_narrow.png"
+                onClick={kakaoSigninHandler}
+              />
+              <GoogleIcon
+                src="../img/btn_google_signin_dark_focus_web@2x.png"
+                onClick={googleSigninHandler}
+              />
             </SocialSignInBtn>
           </ModalView>
           <Modalback onClick={modalCloser}></Modalback>

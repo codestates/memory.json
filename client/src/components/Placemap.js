@@ -30,6 +30,7 @@ export default function Map() {
         position: new kakao.maps.LatLng(el.place_lat, el.place_lng),
       });
       console.log(el.place_lat, el.place_lng);
+      
       // if (placeList.length === 1) {
       //   let moveLatLng = new kakao.maps.LatLng(
       //     placeList.place_lat,
