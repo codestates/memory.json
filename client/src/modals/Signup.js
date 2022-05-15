@@ -2,7 +2,162 @@ import React, { useState } from "react";
 import axios from "axios";
 import PopupDom from "../components/PopupDom";
 import PopupPostCode from "../components/PopupPostCode";
-import * as S from "./Singup.style";
+import styled from "styled-components";
+
+const ModalArea = styled.div`
+  z-index: 999;
+  position: relative;
+  height: 100%;
+  text-align: center;
+  font-family: "Roboto";
+`;
+
+const SignUpArea = styled.div`
+  z-index: 999;
+  width: 80vmin;
+  height: 90vmin;
+  min-height: 400px;
+  background: #BDBDBD;
+  box-shadow: 0 0 15px #333;
+  position: fixed;
+  margin: -0.9vh auto;
+  padding-top: 1vh;
+  border-radius: 0.5em;
+  font-size: 1.3em;
+  font-weight: 700;
+  left: 0;
+  right: 0;
+  overflow-y: auto;
+`;
+
+const Input = styled.input`
+  ::placeholder {
+    font-size: 1.1rem;
+  }
+  font-size: 1.1em;
+  font-weight: normal;
+  display: block;
+
+  width: 80%;
+  margin-bottom: 0.5rem;
+  margin-left: 10%;
+  margin-right: 10%;
+  height: 45px;
+
+  -webkit-transition: box-shadow 0.3s;
+  transition: box-shadow 0.3s;
+  transition: 0.25s linear;
+  text-align: center;
+
+  color: black;
+  border: 0;
+  outline: 0;
+  background: #eee;
+  box-shadow: 0 0 0 2px transparent;
+
+  &:focus {
+    animation: boxShadow 0.3s backwards;
+
+    box-shadow: 0 0 0 2px #008e43;
+  }
+`;
+
+const InputPassword = styled.input`
+  font-size: 1.1em;
+  font-weight: normal;
+  font-family: Arial;
+  display: block;
+  ::placeholder {
+    font-family: "font-css";
+  }
+
+  width: 80%;
+  margin-bottom: 0.5rem;
+  margin-left: 10%;
+  margin-right: 10%;
+  height: 45px;
+
+  -webkit-transition: box-shadow 0.3s;
+  transition: box-shadow 0.3s;
+  transition: 0.25s linear;
+  text-align: center;
+
+  color: black;
+  border: 0;
+  outline: 0;
+  background: #eee;
+  box-shadow: 0 0 0 2px transparent;
+
+  &:focus {
+    animation: boxShadow 0.3s backwards;
+
+    box-shadow: 0 0 0 2px #008e43;
+  }
+`;
+const Btndiv = styled.div`
+  width: 100%;
+  height: 50px;
+  background: #BDBDBD;
+  display: flex;
+  justify-content: space-evenly;
+  flex-grow: 1;
+  align-items: center;
+  border-radius: 4px;
+  margin-top: 60px;
+  color: white;
+  box-sizing: border-box;
+  position: relative;
+  background-size: contain;
+`;
+
+const SignUpBtn = styled.div`
+  z-index: 999;
+  height: 45px;
+  width: 40%;
+  color: #eee;
+  font-weight: 700;
+  font-size: 20px;
+  padding-top: 10px ;
+  background-color: #0E0E0E;
+  border-radius: 5em;
+  cursor: pointer;
+
+  background: #0E0E0E;
+  :hover {
+    border: 2px solid #0E0E0E;
+  }
+`;
+
+const SignInBtn = styled.div`
+  z-index: 999; 
+  height: 45px;
+  width: 40%;
+  color: #0E0E0E;
+  font-weight: 700;
+  font-size: 20px;
+  padding-top: 10px ;
+  background-color: #eee;
+  border-radius: 5em;
+  cursor: pointer;
+  :hover {
+    border: 2px solid #eee;
+  }
+  background: #eee;
+`;
+
+const Modalback = styled.div`
+  z-index: 900;
+  position: fixed;
+  margin: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  place-items: center;
+`;
 
 // axios 설정 / 전역변수 가져오기
 axios.defaults.withCredentials = true;
@@ -230,12 +385,12 @@ function Signup({
   //---------------------------------------------------------------------------------
 
   return (
-    <S.ModalArea>
-      <S.SignUpArea>
+    <ModalArea>
+      <SignUpArea>
         <h1>회원가입</h1>
         <div>
           <span>아이디(필수)</span>
-          <S.Input
+          <Input
             type="text"
             onBlur={() => {
               checkedInfo("user_account");
@@ -246,7 +401,7 @@ function Signup({
         </div>
         <div>
           <span>닉네임(필수)</span>
-          <S.Input
+          <Input
             type="text"
             onBlur={() => {
               checkedInfo("user_name");
@@ -257,7 +412,7 @@ function Signup({
         </div>
         <div>
           <span>비밀번호(필수)</span>
-          <S.InputPassword
+          <InputPassword
             type="password"
             onBlur={() => {
               checkedInfo("password");
@@ -268,7 +423,7 @@ function Signup({
         </div>
         <div>
           <span>비밀번호 확인(필수)</span>
-          <S.InputPassword
+          <InputPassword
             type="password"
             onBlur={() => {
               checkedInfo("checkedPassword");
@@ -279,7 +434,7 @@ function Signup({
         </div>
         <div>
           <span>휴대폰 번호</span>
-          <S.Input
+          <Input
             type="text"
             onBlur={() => {
               checkedInfo("mobile");
@@ -290,7 +445,7 @@ function Signup({
         </div>
         <div>
           <span>이메일</span>
-          <S.Input
+          <Input
             type="email"
             onBlur={() => {
               checkedInfo("email");
@@ -301,7 +456,7 @@ function Signup({
         </div>
         <div>
           <span>주소</span>
-          <S.Input
+          <Input
             type="text"
             value={`${addressDetail} ${zoneCode}`}
             placeholder="주소"
@@ -334,7 +489,7 @@ function Signup({
         </div>
         <div>
           <span>상세 주소</span>
-          <S.Input
+          <Input
             type="text"
             value={text}
             onChange={handleInputAddress("address")}
@@ -343,7 +498,7 @@ function Signup({
         </div>
         <div>
           <span>나이</span>
-          <S.Input
+          <Input
             type="text"
             pattern="^[0-9]+$"
             onChange={handleInputAge("age")}
@@ -352,7 +507,7 @@ function Signup({
         </div>
         <div>
           <span>성별</span>
-          <S.Input
+          <Input
             type="text"
             onBlur={() => {
               checkedInfo("sex");
@@ -363,17 +518,18 @@ function Signup({
         </div>
 
         <div style={{ color: "red" }}>{validateErr}</div>
-
-        <S.SignUpBtn onClick={() => signupHandler()}>
+        <Btndiv>
+        <SignUpBtn onClick={() => signupHandler()}>
           회원 가입 하기
-        </S.SignUpBtn>
+        </SignUpBtn>
 
-        <S.SignInBtn onClick={changeformToSignin}>
+        <SignInBtn onClick={changeformToSignin}>
           이미 회원이신가요?
-        </S.SignInBtn>
-      </S.SignUpArea>
-      <S.Modalback onClick={modalCloser}></S.Modalback>
-    </S.ModalArea>
+        </SignInBtn>
+        </Btndiv>
+      </SignUpArea>
+      <Modalback onClick={modalCloser}></Modalback>
+    </ModalArea>
   );
 }
 

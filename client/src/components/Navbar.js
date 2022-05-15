@@ -1,11 +1,102 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import axios from "axios";
-import * as S from "./Navbar.style";
 import { useDispatch, useSelector } from "react-redux";
 import { signinAction } from "../store/actions";
 import { FaRegUser } from "react-icons/fa";
 import { FaSearchLocation } from "react-icons/fa";
+
+const NavArea = styled.div`
+  position: relative;
+  width: 100%;
+  height: 80px;
+  background-color: #2c394b;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const FirstDiv = styled.div`
+  width: 300px;
+  height: 50px;
+  background-color: transparent;
+  margin: 1em 1em 1em 1em;
+`;
+
+const ImageLog = styled.img`
+  width: 300px;
+  height: 50px;
+  margin-top: 1%;
+  margin-left: 5%;
+  margin-bottom: 5%;
+  cursor: pointer;
+`;
+
+const Btndiv = styled.div`
+  width: 100%;
+  height: 100%;
+  background: #2c394b;
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+  align-items: center;
+  color: white;
+  box-sizing: border-box; 
+  position: relative;
+  background-size: contain;
+`;
+
+const SecondDiv = styled.div`
+  width: 10%;
+  height: 50px;
+  margin: 1em 1em 1em 1em;
+  background-color: #ff4c29;
+  border-radius: 15em;
+  cursor: pointer;
+`;
+
+const ThirdDiv = styled.div`
+  width: 10%;
+  height: 50px;
+  margin: 1em 1em 1em 1em;
+  background-color: #ff4c29;
+  border-radius: 15em;
+  cursor: pointer;
+`;
+
+const FourthDiv = styled.div`
+  width: 10%;
+  height: 50px;
+  margin: 1em 1em 1em 1em;
+  background-color: #ff4c29;
+  border-radius: 15em;
+  cursor: pointer;
+`;
+
+const LoginbuttonStyle = styled.button`
+  width: 100%;
+  height: 50px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+`;
+
+const MypagebuttonStyle = styled.button`
+  width: 100%;
+  height: 50px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+`;
+
+const BoardbuttonStyle = styled.button`
+  width: 100%;
+  height: 50px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+`;
 
 // axios 설정 / 전역변수 가져오기
 axios.defaults.withCredentials = true;
@@ -113,64 +204,66 @@ function Navbar({
     navigate("/board");
   };
   return (
-    <S.NavArea>
-      <S.FirstDiv>
-        <S.ImageLog
+    <NavArea>
+      <FirstDiv>
+        <ImageLog
           src="../img/memorylogo.png"
           alt="Image"
           onClick={() => {
             navigate("/main");
           }}
         />
-      </S.FirstDiv>
-      <S.SecondDiv>
-        <S.BoardbuttonStyle
+      </FirstDiv>
+      <Btndiv>
+      <SecondDiv>
+        <BoardbuttonStyle
           type="button"
           onClick={boardLink}
           style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
         >
           <FaSearchLocation size="24" color="#fff"></FaSearchLocation>
-        </S.BoardbuttonStyle>
-      </S.SecondDiv>
-      <S.ThirdDiv>
+        </BoardbuttonStyle>
+      </SecondDiv>
+      <ThirdDiv>
         {!isSignin ? (
-          <S.MypagebuttonStyle
+          <MypagebuttonStyle
             type="button"
             onClick={checkedLogin}
             style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
           >
             <FaRegUser size="24" color="#fff"></FaRegUser>
-          </S.MypagebuttonStyle>
+          </MypagebuttonStyle>
         ) : (
-          <S.MypagebuttonStyle
+          <MypagebuttonStyle
             type="button"
             onClick={mypageModalOpener}
             style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
           >
             <FaRegUser size="24" color="#fff"></FaRegUser>
-          </S.MypagebuttonStyle>
+          </MypagebuttonStyle>
         )}
-      </S.ThirdDiv>
-      <S.FourthDiv>
+      </ThirdDiv>
+      <FourthDiv>
         {!isSignin ? (
-          <S.LoginbuttonStyle
+          <LoginbuttonStyle
             type="button"
             onClick={modalOpener}
             style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
           >
             로그인
-          </S.LoginbuttonStyle>
+          </LoginbuttonStyle>
         ) : (
-          <S.LoginbuttonStyle
+          <LoginbuttonStyle
             type="button"
             onClick={logoutIndicator}
             style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
           >
             로그아웃
-          </S.LoginbuttonStyle>
+          </LoginbuttonStyle>
         )}
-      </S.FourthDiv>
-    </S.NavArea>
+      </FourthDiv>
+      </Btndiv>
+    </NavArea>
   );
 }
 

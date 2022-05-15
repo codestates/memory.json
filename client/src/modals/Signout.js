@@ -30,80 +30,66 @@ const Modalback = styled.div`
 const ModalView = styled.div`
   z-index: 999;
   width: 80vmin;
-  height: 60vmin;
-  min-height: 800px;
-  background: white;
-  box-shadow: 0 0 15px #333;
+  height: 20vmin;
+  min-height: 200px;
+  background: #696773;
+  box-shadow: 0 0 30px #333;
+  border-radius: 3em;
   position: fixed;
   margin: 15vh auto;
-  padding-top: 1vh;
   left: 0;
   right: 0;
   overflow: hidden;
 `;
 
-const Input = styled.input`
-  font-size: 1.1rem;
-  font-weight: normal;
-  display: block;
-
-  width: 80%;
-  margin-bottom: 0.5rem;
-  margin-left: 10%;
-  margin-right: 10%;
-  height: 45px;
-
-  -webkit-transition: box-shadow 0.3s;
-  transition: box-shadow 0.3s;
-  transition: 0.25s linear;
-  text-align: center;
-
-  color: black;
-  border: 0;
-  outline: 0;
-  background: #eee;
-  box-shadow: 0 0 0 2px transparent;
-
-  &:focus {
-    animation: boxShadow 0.3s backwards;
-
-    box-shadow: 0 0 0 2px #c4ddff;
-  }
+const Btndiv = styled.div`
+  width: 100%;
+  height: 50px;
+  background: #696773;
+  display: flex;
+  justify-content: space-evenly;
+  flex-grow: 1;
+  align-items: center;
+  border-radius: 4px;
+  color: white;
+  box-sizing: border-box;
+  position: relative;
+  background-size: contain;
 `;
 
 const ConfirmButton = styled.div`
   width: 60%;
   height: 1vh;
-  color: white;
+  color: #FC0000;
   font-weight: 700;
   font-size: 20px;
   padding: 10px 10px 20px 10px;
   margin: 20px 40px 30px 70px;
-  background-color: #c4ddff;
+  background-color: #E9E9E9;
   border-radius: 5em;
   cursor: pointer;
 
-  background: #008e43;
+  background: #E9E9E9;
   :hover {
-    border: 2px solid #008e43;
+    border: 2px solid #E9E9E9;
   }
 `;
 
 const CancelButton = styled.div`
   width: 60%;
   height: 1vh;
-  color: white;
+  color: #030303;
   font-weight: 700;
   font-size: 20px;
   padding: 10px 10px 20px 10px;
   margin: 20px 40px 30px 70px;
-  background-color: #c4ddff;
+  background-color: #E9E9E9;
   border-radius: 5em;
   cursor: pointer;
   :hover {
-    border: 2px solid #fee518;
+    border: 2px solid #E9E9E9;
   }
-  background: #fee518;
+  background: #E9E9E9;
 `;
 
 const MarginDiv = styled.div`
@@ -118,7 +104,6 @@ function Signout({ modalCloser, mypageModalOpener }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-
   const confirmSignout = () => {
     const accessTokenJson = localStorage.getItem("accessToken");
     const accessTokenObject = JSON.parse(accessTokenJson);
@@ -129,7 +114,7 @@ function Signout({ modalCloser, mypageModalOpener }) {
       })
       .then((res) => {
         console.log(res);
-        alert("회원탈퇴가 정상적으로 처리되었습니다.")
+        alert("회원탈퇴가 정상적으로 처리되었습니다.");
         dispatch(signoutAction);
         dispatch(modalOff);
         navigate("/");
@@ -141,19 +126,23 @@ function Signout({ modalCloser, mypageModalOpener }) {
     <ModalArea>
       <MarginDiv>
         <ModalView>
-          <CancelButton
-            type="button"
-            onClick={() => {
-              modalCloser();
-              mypageModalOpener();
-            }}
-          >
-            취소
-          </CancelButton>
-          <ConfirmButton type="button" onClick={confirmSignout}>
-            확인
-          </ConfirmButton>
+          <h1>정말로 탈퇴하시겠습니까??</h1>
+          <Btndiv>
+            <CancelButton
+              type="button"
+              onClick={() => {
+                modalCloser();
+                mypageModalOpener();
+              }}
+            >
+              취소
+            </CancelButton>
+            <ConfirmButton type="button" onClick={confirmSignout}>
+              확인
+            </ConfirmButton>
+          </Btndiv>
         </ModalView>
+        <Modalback onClick={modalCloser}></Modalback>
       </MarginDiv>
     </ModalArea>
   );

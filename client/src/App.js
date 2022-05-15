@@ -31,7 +31,6 @@ import {
   googleAction,
   kakaoAction,
   signinModalOnAction,
-  signoutModalAction,
   changeSignupToSignin,
   changeSigninToSignup,
   mypageModalAction,
@@ -192,10 +191,12 @@ function Router() {
       <Modal
         style={{
           content: {
-            background: "#92a8d1",
+            background: "#BBC5D5",
             left: "35%",
             right: "35%",
-            border: "5px solid #697F6E",
+            bottom: "5%",
+            top: "5%",
+            border: "5px solid #2c394b",
             borderRadius: "1em",
           },
         }}
@@ -212,10 +213,10 @@ function Router() {
       <Modal
         style={{
           content: {
-            background: "#92a8d1",
-            left: "35%",
-            right: "35%",
-            border: "5px solid #697F6E",
+            background: "#BBC5D5",
+            left: "20%",
+            right: "20%",
+            border: "5px solid #2c394b",
             borderRadius: "1em",
           },
         }}
@@ -233,9 +234,9 @@ function Router() {
       <Modal
         style={{
           content: {
-            background: "#92a8d1",
-            left: "15%",
-            right: "15%",
+            background: "#BDBDBD",
+            left: "20%",
+            right: "20%",
             border: "5px solid #697F6E",
             borderRadius: "1em",
           },
@@ -244,8 +245,6 @@ function Router() {
         onRequestClose={() => modalCloser()}
       >
         <Mypage
-          isGoogelLogin={isGoogelLogin}
-          isKakaoLogin={isKakaoLogin}
           modalCloser={modalCloser}
           mypageModalOpener={mypageModalOpener}
           changeformToEditmyinfo={changeformToEditmyinfo}
@@ -257,9 +256,10 @@ function Router() {
       <Modal
         style={{
           content: {
-            background: "#92a8d1",
-            left: "35%",
-            right: "35%",
+            background: "#BDBDBD",
+            left: "33%",
+            right: "33%",
+            bottom: "20%",
             border: "5px solid #697F6E",
             borderRadius: "1em",
           },
@@ -268,8 +268,6 @@ function Router() {
         onRequestClose={() => modalCloser()}
       >
         <Editmyinfo
-          isGoogelLogin={isGoogelLogin}
-          isKakaoLogin={isKakaoLogin}
           modalCloser={modalCloser}
           mypageModalOpener={mypageModalOpener}
           changeformToMyinfoFromEdit={changeformToMyinfoFromEdit}
@@ -318,11 +316,9 @@ function Router() {
       <Modal
         style={{
           content: {
-            background: "#92a8d1",
-            left: "35%",
-            right: "35%",
-            border: "5px solid #697F6E",
-            borderRadius: "1em",
+            left: "100%",
+            right: "100%",
+            bottom: "100%",
           },
         }}
         isOpen={isSignoutModal}
