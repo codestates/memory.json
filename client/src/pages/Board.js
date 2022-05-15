@@ -20,124 +20,124 @@ function Board({ modalOpener }) {
     modalOpener();
   };
 
-  const [listComment, setListComment] = useState([]);
-  const [isFavorite, setIsFavorite] = useState({});
+  // const [listComment, setListComment] = useState([]);
+  // const [isFavorite, setIsFavorite] = useState({});
 
-  const serverUrl = process.env.REACT_APP_SERVER_URL;
-  let accessToken = "";
-  if (localStorage.accessToken) {
-    accessToken = JSON.parse(localStorage.accessToken).accessToken;
-  }
+  // const serverUrl = process.env.REACT_APP_SERVER_URL;
+  // let accessToken = "";
+  // if (localStorage.accessToken) {
+  //   accessToken = JSON.parse(localStorage.accessToken).accessToken;
+  // }
 
-  const historyId = 1001; // 이건 ishistoryId가 있을 대체해야 함
-  const userId = accessToken ? 1007 : ""; // 이건 isUserId가 있을 때 대체해야 함
+  // const historyId = 1001; // 이건 ishistoryId가 있을 대체해야 함
+  // const userId = accessToken ? 1007 : ""; // 이건 isUserId가 있을 때 대체해야 함
 
-  console.log(accessToken);
+  // console.log(accessToken);
 
-  function registCommentHandler() {
-    const comment = document.querySelector("#comment").value;
+  // function registCommentHandler() {
+  //   const comment = document.querySelector("#comment").value;
 
-    axios
-      .post(
-        `${serverUrl}comments/${historyId}`,
-        { comments_content: comment },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      )
-      .then((res) => {
-        listCommentHandler();
-      })
-      .catch((err) => console.log(err));
-  }
+  //   axios
+  //     .post(
+  //       `${serverUrl}comments/${historyId}`,
+  //       { comments_content: comment },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${accessToken}`,
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       listCommentHandler();
+  //     })
+  //     .catch((err) => console.log(err));
+  // }
 
-  function deleteCommentHandler(commentId) {
-    axios
-      .delete(`${serverUrl}comments/${commentId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((res) => {
-        listCommentHandler();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+  // function deleteCommentHandler(commentId) {
+  //   axios
+  //     .delete(`${serverUrl}comments/${commentId}`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${accessToken}`,
+  //       },
+  //     })
+  //     .then((res) => {
+  //       listCommentHandler();
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
 
-  function changeCommentHandler(commentId) {}
+  // function changeCommentHandler(commentId) {}
 
-  const listCommentHandler = () => {
-    let headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    };
-    if (!accessToken) {
-      headers = { "Content-Type": "application/json" };
-    }
-    axios
-      .get(`${serverUrl}comments/${historyId}`, { headers: headers })
-      .then((data) => {
-        setListComment(data.data.data.listComment);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const listCommentHandler = () => {
+  //   let headers = {
+  //     "Content-Type": "application/json",
+  //     Authorization: `Bearer ${accessToken}`,
+  //   };
+  //   if (!accessToken) {
+  //     headers = { "Content-Type": "application/json" };
+  //   }
+  //   axios
+  //     .get(`${serverUrl}comments/${historyId}`, { headers: headers })
+  //     .then((data) => {
+  //       setListComment(data.data.data.listComment);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
-  function favoriteHandler() {
-    if (!accessToken) {
-      return alert("회원만 좋아요 할 수 있습니다.");
-    }
-    axios
-      .post(
-        `${serverUrl}favorites/${historyId}`,
-        { history_id: historyId },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      )
-      .then((data) => {
-        setIsFavorite(data.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+  // function favoriteHandler() {
+  //   if (!accessToken) {
+  //     return alert("회원만 좋아요 할 수 있습니다.");
+  //   }
+  //   axios
+  //     .post(
+  //       `${serverUrl}favorites/${historyId}`,
+  //       { history_id: historyId },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${accessToken}`,
+  //         },
+  //       }
+  //     )
+  //     .then((data) => {
+  //       setIsFavorite(data.data.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
 
-  const getFavorite = () => {
-    let headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    };
-    if (!accessToken) {
-      headers = { "Content-Type": "application/json" };
-    }
-    axios
-      .get(`${serverUrl}favorites/${historyId}`, { headers: headers })
-      .then((data) => {
-        setIsFavorite(data.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  console.log(isFavorite);
+  // const getFavorite = () => {
+  //   let headers = {
+  //     "Content-Type": "application/json",
+  //     Authorization: `Bearer ${accessToken}`,
+  //   };
+  //   if (!accessToken) {
+  //     headers = { "Content-Type": "application/json" };
+  //   }
+  //   axios
+  //     .get(`${serverUrl}favorites/${historyId}`, { headers: headers })
+  //     .then((data) => {
+  //       setIsFavorite(data.data.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
+  // console.log(isFavorite);
 
-  useEffect(() => {
-    if (isFavorite.like === undefined) {
-      getFavorite();
-      listCommentHandler();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (isFavorite.like === undefined) {
+  //     getFavorite();
+  //     listCommentHandler();
+  //   }
+  // }, []);
 
   return (
     <div>
@@ -145,7 +145,7 @@ function Board({ modalOpener }) {
         <MapSection>
           <MapDiv>
             {!isSignin ? (
-              <Button onClick={checkedLogin}></Button>
+              <></>
             ) : (
               <NavLink to="/Newhistory">
                 <Button>New History</Button>
@@ -158,7 +158,7 @@ function Board({ modalOpener }) {
         </MapSection>
       </MapContainer>
       {/* ---------------------------------- */}
-      <div
+      {/* <div
         style={{ display: "flex", flexDirection: "column", textAlign: "right" }}
       >
         <div>
@@ -214,7 +214,7 @@ function Board({ modalOpener }) {
             />
           );
         })}
-      </ul>
+      </ul> */}
       {/* ---------------------------------- */}
     </div>
   );
@@ -224,7 +224,7 @@ export default Board;
 
 const MapContainer = styled.div`
   width: 100%;
-  height: 90vh;
+  height: auto;
   display: flex;
   flex-direction: column;
 `;
@@ -233,7 +233,7 @@ const MapSection = styled.section`
   width: auto;
   height: 95%;
   padding: 5vh 5vw;
-  background-color: #082032;
+  background-color: white;
 `;
 
 const MapDiv = styled.div`
@@ -241,6 +241,6 @@ const MapDiv = styled.div`
   height: 85%;
   padding: 5vh 5vw;
   border: 5px solid #2c394b;
-  background-color: #082032;
+  background-color: white;
   box-shadow: 15px 15px 10px #334756;
 `;
