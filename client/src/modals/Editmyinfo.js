@@ -127,7 +127,7 @@ const EditConfirmButton = styled.div`
 
   background: #0E0E0E;
   :hover {
-    border: 2px solid #0E0E0E;
+    border: 2px solid #2c394b;
   }
 `;
 
@@ -143,7 +143,7 @@ const CancelButton = styled.div`
   border-radius: 5em;
   cursor: pointer;
   :hover {
-    border: 2px solid #eee;
+    border: 2px solid #2c394b;
   }
   background: #eee;
 `;
