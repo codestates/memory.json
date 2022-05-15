@@ -27,7 +27,7 @@ const MainSection = styled.section`
   width: auto;
   height: 95%;
   padding: 5vh 5vw;
-  background-color: #082032;
+  background-color: white;
 `;
 
 const MainDiv = styled.div`
@@ -35,7 +35,7 @@ const MainDiv = styled.div`
   height: 80%;
   padding: 5vh 5vw;
   border: 5px solid #2c394b;
-  background-color: #082032;
+  background-color: white;
   box-shadow: 15px 15px 10px #334756;
 `;
 
@@ -51,18 +51,18 @@ const ServiceContainer = styled.div`
 `;
 
 const ServiceSection = styled.section`
-  width: auto;
+  width: 70%;
   height: 100%;
   padding: 5vh 10vw;
-  background-color: #082032;
+  background-color: white;
 `;
 
 const ServiceDiv = styled.div`
   width: auto;
   height: 80%;
-  padding: 5vh 10vw;
+  padding: 5vh 5vw;
   border: 5px solid #2c394b;
-  background-color: #082032;
+  background-color: white;
   box-shadow: 15px 15px 10px #334756;
 `;
 
@@ -81,7 +81,7 @@ const ViewSection = styled.section`
   width: auto;
   height: 100%;
   padding: 5vh 10vw;
-  background-color: #082032;
+  background-color: white;
 `;
 
 const ViewDiv = styled.div`
@@ -89,7 +89,7 @@ const ViewDiv = styled.div`
   height: 80%;
   padding: 5vh 10vw;
   border: 5px solid #2c394b;
-  background-color: #082032;
+  background-color: white;
   box-shadow: 15px 15px 10px #334756;
 `;
 
