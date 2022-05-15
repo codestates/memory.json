@@ -11,9 +11,10 @@ module.exports = async (req, res) => {
     // console.log(user_id);
 
     // 쿼리 스트링을 조회한다.
-    // console.log(req.query)
+    console.log(req.query)
     const pageNumber = req.query.page;
-    // console.log(pageNumber)
+    console.log(pageNumber)
+
     let offset = 0;
 
     if (pageNumber > 1) {

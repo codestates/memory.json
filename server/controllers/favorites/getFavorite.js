@@ -3,12 +3,12 @@ const { favorite } = require("../../models");
 
 module.exports = async (req, res) => {
   try {
-    const userInfo = {}
+    let userInfo = {}
     if(req.headers.authorization) {
       userInfo = await userAuthen(req);
     }
     const history_id = req.params.historyId;
-    // console.log(userInfo.id);
+    console.log(userInfo.id);
     // console.log(history_id);
 
     const isFavorite = await favorite.findOne({

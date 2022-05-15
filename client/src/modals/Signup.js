@@ -363,7 +363,7 @@ function Signup({
         </div>
 
         <div style={{ color: "red" }}>{validateErr}</div>
-
+        <S.Btndiv>
         <S.SignUpBtn onClick={() => signupHandler()}>
           회원 가입 하기
         </S.SignUpBtn>
@@ -371,6 +371,7 @@ function Signup({
         <S.SignInBtn onClick={changeformToSignin}>
           이미 회원이신가요?
         </S.SignInBtn>
+        </S.Btndiv>
       </S.SignUpArea>
       <S.Modalback onClick={modalCloser}></S.Modalback>
     </S.ModalArea>

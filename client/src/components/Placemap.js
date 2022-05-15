@@ -43,6 +43,7 @@ export default function Map() {
       });
 
       // 마커 클릭 시 함수 실행. (historyList 및 imageList 생성)
+
       kakao.maps.event.addListener(marker, "click", function () {
         // 게시물 노출 => 무한스크롤.
         axios.get(`${serverUrl}histories/place/${el.id}`).then((res) => {
