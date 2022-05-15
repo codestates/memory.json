@@ -19,7 +19,7 @@ const FirstDiv = styled.div`
 `;
 
 const ImageLog = styled.img`
-  width: 300px;
+  width: 100%;
   height: 50px;
   margin-top: 1%;
   margin-left: 5%;
@@ -87,5 +87,5 @@ export {
   ImageLog,
   LoginbuttonStyle,
   MypagebuttonStyle,
-  BoardbuttonStyle
+  BoardbuttonStyle,
 };

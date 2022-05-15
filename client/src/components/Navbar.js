@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { signinAction } from "../store/actions";
 import { FaRegUser } from "react-icons/fa";
 import { FaSearchLocation } from "react-icons/fa";
+import { GoSignIn, GoSignOut } from "react-icons/go";
 
 // axios 설정 / 전역변수 가져오기
 axios.defaults.withCredentials = true;
@@ -158,7 +159,7 @@ function Navbar({
             onClick={modalOpener}
             style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
           >
-            로그인
+            <GoSignIn size="24" color="#fff"></GoSignIn>
           </S.LoginbuttonStyle>
         ) : (
           <S.LoginbuttonStyle
@@ -166,7 +167,7 @@ function Navbar({
             onClick={logoutIndicator}
             style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
           >
-            로그아웃
+            <GoSignOut size="24" color="#fff"></GoSignOut>
           </S.LoginbuttonStyle>
         )}
       </S.FourthDiv>

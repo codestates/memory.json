@@ -50,7 +50,8 @@ export default function Map() {
           if (res.status === 200) {
             setHistoryList(res.data.data);
             setIsHistory(true);
-            return getImage(); // 해당 장소의 모든 히스토리의 각각의 이미지 가져오기.
+            return getImage();
+            // 해당 장소의 모든 히스토리의 각각의 이미지 가져오기.
           }
         });
       });
@@ -60,6 +61,7 @@ export default function Map() {
     console.log("id", historyList.length);
     console.log(isHistory);
   };
+
   // placeList 가져오기. 문제없음.
   const getPlaceList = () => {
     axios.get(`${serverUrl}places?place_address=${inputText}`).then((res) => {
@@ -130,8 +132,8 @@ export default function Map() {
   };
 
   const Image = styled.img`
-    max-width: 300px;
-    max-height: 300px;
+    max-width: 50%;
+    max-height: 50%;
   `;
 
   const Slide = () => {
@@ -333,15 +335,6 @@ export default function Map() {
                     </S.Image>
                     <S.YearFavorite>
                       <div>{el.history_year}</div>
-                      <div>좋아요</div>
-                    </S.YearFavorite>
-                    <S.Title>
-                      <div>{el.history_title}</div>
-                    </S.Title>
-                    <S.Content>
-                      <div>{el.history_content}</div>
-                    </S.Content>
-                    <S.Commentdiv>
                       <div
                         style={{
                           display: "flex",
@@ -369,49 +362,61 @@ export default function Map() {
                             {isFavorite.like_count}
                           </span>
                         </div>
-                        <div>
-                          <input
-                            id="comment"
-                            type="text"
-                            style={{ width: "500px", height: "50px" }}
-                            placehoder="여기에 댓글을 작성하세요"
-                          ></input>
-                        </div>
+                      </div>
+                    </S.YearFavorite>
+                    <S.Title>
+                      <div>{el.history_title}</div>
+                    </S.Title>
+                    <S.Content>
+                      <div>{el.history_content}</div>
+                    </S.Content>
+                    <S.Commentdiv>
+                      <Commentinput>
+                        <input
+                          id="comment"
+                          type="text"
+                          style={{
+                            width: "100%",
+                            height: "50px",
+                            backgroundColor: "#DBD0C0",
+                            border: "none",
+                          }}
+                          placehoder="여기에 댓글을 작성하세요"
+                        ></input>
                         <div>
                           {!accessToken ? (
                             <Button
                               onClick={registCommentHandler}
                               style={{ display: "none" }}
                             >
-                              댓글작성
+                              Comment
                             </Button>
                           ) : (
                             <Button onClick={registCommentHandler}>
-                              댓글작성
+                              Comment
                             </Button>
                           )}
                         </div>
-                      </div>
-                      <ul
-                        style={{
-                          display: "flex",
-                          border: "black solid 2px",
-                          flexDirection: "column",
-                        }}
-                      >
-                        {listComment.map((comment) => {
-                          return (
-                            <Comment
-                              key={comment.id}
-                              comment={comment}
-                              userId={userId}
-                              deleteComment={deleteCommentHandler}
-                              changeComment={changeCommentHandler}
-                            />
-                          );
-                        })}
-                        //{" "}
-                      </ul>
+                      </Commentinput>
+                      <Commentarea>
+                        <ul
+                          style={{
+                            width: "80%",
+                          }}
+                        >
+                          {listComment.map((comment) => {
+                            return (
+                              <Comment
+                                key={comment.id}
+                                comment={comment}
+                                userId={userId}
+                                deleteComment={deleteCommentHandler}
+                                changeComment={changeCommentHandler}
+                              />
+                            );
+                          })}
+                        </ul>
+                      </Commentarea>
                     </S.Commentdiv>
                   </S.HistoryDiv>
                 </S.OuterDiv>
@@ -423,3 +428,25 @@ export default function Map() {
     </>
   );
 }
+
+const Commentinput = styled.div`
+  width: 98%;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 5px 1px 5px 1px;
+`;
+
+const Commentarea = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100px;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  margin: 5px 1px 5px 1px;
+`;
