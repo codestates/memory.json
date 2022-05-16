@@ -8,12 +8,12 @@ module.exports = async (req, res) => {
 
     // 패스 파라미터를 조회한다.
     const user_id = req.params.userId;
-    // console.log(user_id);
+    console.log("user_id",user_id);
 
     // 쿼리 스트링을 조회한다.
     console.log(req.query)
     const pageNumber = req.query.page;
-    console.log(pageNumber)
+    console.log("pageNumber",pageNumber)
 
     let offset = 0;
 

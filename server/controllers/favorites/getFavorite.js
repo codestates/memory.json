@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
     const isFavorite = await favorite.findOne({
       where: {
         history_id: history_id,
-        user_id: userInfo.id,
+        // user_id: userInfo.id,
       },
     });
 
