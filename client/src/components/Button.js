@@ -18,12 +18,12 @@ const StyledButton = styled.button`
   font-size: 1rem;
 
   /* 색상 */
-  background: #228be6;
+  background: #ceab93;
   &:hover {
-    background: #339af0;
+    background: #e3caa5;
   }
   &:active {
-    background: #1c7ed6;
+    background: #ad8b73;
   }
 
   /* 기타 */
