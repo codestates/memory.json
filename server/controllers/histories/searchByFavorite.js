@@ -4,9 +4,11 @@ module.exports = async (req, res) => {
   try {
     // 패스 파라미터 조회
     const user_id = req.params.userId;
+    // console.log("user_id",user_id)
 
     // 쿼리 스트링을 조회한다.
     const pageNumber = req.query.page;
+    // console.log(pageNumber)
     // console.log(pageNumber);
     let offset = 0;
     
