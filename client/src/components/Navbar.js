@@ -251,7 +251,7 @@ function Navbar({
               onClick={modalOpener}
               style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
             >
-              로그인<GoSignIn size="15" color="#fff"></GoSignIn>
+              LOGIN <GoSignIn size="15" color="#fff"></GoSignIn>
             </LoginbuttonStyle>
           ) : (
             <LoginbuttonStyle
@@ -259,7 +259,7 @@ function Navbar({
               onClick={logoutIndicator}
               style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
             >
-              로그아웃<GoSignOut size="15" color="#fff"></GoSignOut>
+              LOGOUT <GoSignOut size="15" color="#fff"></GoSignOut>
             </LoginbuttonStyle>
           )}
         </FourthDiv>
