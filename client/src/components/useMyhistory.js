@@ -11,19 +11,20 @@ function useMyhistory(page) {
 
   const { id } = userState;
   const user_id = id;
-  console.log(user_id);
+  console.log("page" ,page)
 
   const [loading, setLoading] = useState(true);
   const [historyFeed, setHistoryfeed] = useState([]);
+  // console.log("historyfeed", historyFeed);
   const [error, setError] = useState(false);
 
   const accessTokenJson = localStorage.getItem("accessToken");
   const accessTokenObject = JSON.parse(accessTokenJson);
   const accessToken = Object.values(accessTokenObject);
 
-  const historyHandler = useCallback(async () => {
+  const historyHandler = useCallback( async () => {
     try {
-      setLoading(true);
+      setLoading(false);
       setError(false);
       const res = await axios.get(
         `${serverUrl}histories/user/${user_id}?page=${page}`,
@@ -31,18 +32,19 @@ function useMyhistory(page) {
           headers: { authorization: `Bearer ${accessToken}` },
         }
       );
-      console.log(res);
+      // console.log(res);
       // console.log(res.data.data.rows);
       setHistoryfeed((prev) => [...prev, ...res.data.data.rows]);
-      console.log(res.data.data.rows)
-      console.log("historyfeed",historyFeed);
+      // console.log("historyfeed", historyFeed);
       setLoading(false);
     } catch (err) {
       setError(err);
     }
+    // console.log("historyfeed", historyFeed);
   }, [page]);
 
   useEffect(() => {
+    console.log("넌 몇번 작동 했니", accessToken)
     historyHandler(page);
   }, [historyHandler, page]);
 

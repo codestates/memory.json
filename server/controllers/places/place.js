@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
       raw: true,
       where: {
         place_address: {
-          [Op.like]: `${placeAddress}%`,
+          [Op.like]: `%${placeAddress}%`,
         },
       },
     });

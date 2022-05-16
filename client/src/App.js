@@ -245,8 +245,6 @@ function Router() {
         onRequestClose={() => modalCloser()}
       >
         <Mypage
-          isGoogelLogin={isGoogelLogin}
-          isKakaoLogin={isKakaoLogin}
           modalCloser={modalCloser}
           mypageModalOpener={mypageModalOpener}
           changeformToEditmyinfo={changeformToEditmyinfo}
@@ -270,8 +268,6 @@ function Router() {
         onRequestClose={() => modalCloser()}
       >
         <Editmyinfo
-          isGoogelLogin={isGoogelLogin}
-          isKakaoLogin={isKakaoLogin}
           modalCloser={modalCloser}
           mypageModalOpener={mypageModalOpener}
           changeformToMyinfoFromEdit={changeformToMyinfoFromEdit}
@@ -283,8 +279,9 @@ function Router() {
         style={{
           content: {
             background: "#92a8d1",
-            left: "35%",
-            right: "35%",
+            left: "15%",
+            right: "15%",
+            bottom: "10%",
             border: "5px solid #697F6E",
             borderRadius: "1em",
           },
@@ -320,11 +317,9 @@ function Router() {
       <Modal
         style={{
           content: {
-            background: "#92a8d1",
-            left: "35%",
-            right: "35%",
-            border: "5px solid #697F6E",
-            borderRadius: "1em",
+            left: "100%",
+            right: "100%",
+            bottom: "100%",
           },
         }}
         isOpen={isSignoutModal}

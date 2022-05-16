@@ -51,6 +51,14 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        id: 1004,
+        user_name: "체험손님",
+        user_account: "guest",
+        password: "$2b$10$RDP.sfYXsNSW3QD2X9r7Zuvvvb95oeSxLQX67DbL5vy/yewBp34OS",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
 
     await queryInterface.bulkInsert("places", [

@@ -31,8 +31,8 @@ export default function Map() {
       level: 8,
     };
 
-    const map = new kakao.maps.Map(container, options);
-
+    let map = new kakao.maps.Map(container, options);
+    let geocoder = new kakao.maps.services.Geocoder();
     placeList.map((el) => {
       // 마커 생성
       let marker = new kakao.maps.Marker({
@@ -42,8 +42,16 @@ export default function Map() {
         position: new kakao.maps.LatLng(el.place_lat, el.place_lng),
       });
 
-      // 마커 클릭 시 함수 실행. (historyList 및 imageList 생성)
+      // kakao.maps.event.addListener(map, "position_changed", function () {
+      //   geocoder.addressSearch(`${inputText}`, function (result, status) {
+      //     if (status === kakao.maps.services.Status.OK) {
+      //       let nowloca = new kakao.maps.LatLng(result[0].y, result[0].x);
+      //       map.setCenter(nowloca);
+      //     }
+      //   });
+      // });
 
+      // 마커 클릭 시 함수 실행. (historyList 및 imageList 생성)
       kakao.maps.event.addListener(marker, "click", function () {
         // 게시물 노출 => 무한스크롤.
         axios.get(`${serverUrl}histories/place/${el.id}`).then((res) => {
