@@ -2,10 +2,13 @@ import axios from "axios";
 import React, { useState } from "react";
 import Button from "../components/Button";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
+import Newhistory from "../pages/Newhistory";
 
 const PostBoard = () => {
   const signinState = useSelector((state) => state.authReducer);
   const { isSignin } = signinState;
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
   console.log(signinState);
 
   // 토큰 가져오기
@@ -111,7 +114,7 @@ const PostBoard = () => {
       },
     };
     const res = await axios.post(
-      `http://localhost:4000/histories/${address.place_id}`,
+      `${serverUrl}histories/${address.place_id}`,
       formData,
       config
     );
@@ -120,17 +123,17 @@ const PostBoard = () => {
 
   return (
     <>
-      <div>
-        <span style={{ color: "white" }}>제목</span>
+      <Div>
+        <span style={{ color: "#ad8b73" }}>제목</span>
         <input
           type={"text"}
           onChange={historyInputValue("history_title")}
           placeholder={"제목을 입력해주세요."}
         ></input>
-      </div>
-      <div>
+      </Div>
+      <Div>
         <div>
-          <span style={{ color: "white" }}>장소</span>
+          <span style={{ color: "#ad8b73" }}>장소</span>
           <input
             type={"text"}
             value={addressText}
@@ -139,37 +142,40 @@ const PostBoard = () => {
           ></input>
           <Button onClick={callAddress}>검색</Button>
         </div>
-      </div>
-      <div>
-        <span style={{ color: "white" }}>연도</span>
+      </Div>
+      <Div>
+        <span style={{ color: "#ad8b73" }}>연도</span>
         <input
           type={"number"}
           onChange={historyInputValue("history_year")}
           placeholder={"연도를 입력해주세요.(4자리)"}
-          maxLength={"4"}
         ></input>
-      </div>
-      <div>
-        <span style={{ color: "white" }}>내용</span>
+      </Div>
+      <Div>
+        <span style={{ color: "#ad8b73" }}>내용</span>
         <input
           type={"text"}
           onChange={historyInputValue("history_content")}
           placeholder={"추억을 적어주세요.(30자 이내)"}
           maxLength={"30"}
         ></input>
-      </div>
-      <div>
-        <span style={{ color: "white" }}>사진</span>
-      </div>
-      <div className="PostBoard">
+      </Div>
+      <Div>
+        <span style={{ color: "#ad8b73" }}>사진</span>
+      </Div>
+      <Div className="PostBoard">
         <div
           style={{
-            background: "white",
-            width: "90%",
+            width: "50%",
             height: "auto",
           }}
         >
-          <img src={postFiles.previewURL} alt="img" />
+          <img
+            src={postFiles.previewURL}
+            alt="img"
+            width={"150px"}
+            height={"150px"}
+          />
         </div>
         <input
           type="file"
@@ -178,9 +184,19 @@ const PostBoard = () => {
           style={{ background: "white" }}
         />
         <Button onClick={onClick}>작성</Button>
-      </div>
+      </Div>
     </>
   );
 };
 
 export default PostBoard;
+
+const Div = styled.div`
+  background-color: #f9e4c8;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.5rem;
+  margin: 5px 1px 5px 1px;
+  box-shadow: 3px 3px 2px #826f66;
+`;

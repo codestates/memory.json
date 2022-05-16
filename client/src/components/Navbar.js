@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { signinAction } from "../store/actions";
 import { FaRegUser } from "react-icons/fa";
 import { FaSearchLocation } from "react-icons/fa";
+import { GoSignIn, GoSignOut } from "react-icons/go";
 
 const NavArea = styled.div`
   position: relative;
@@ -42,7 +43,7 @@ const Btndiv = styled.div`
   flex-grow: 1;
   align-items: center;
   color: white;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   position: relative;
   background-size: contain;
 `;
@@ -215,53 +216,53 @@ function Navbar({
         />
       </FirstDiv>
       <Btndiv>
-      <SecondDiv>
-        <BoardbuttonStyle
-          type="button"
-          onClick={boardLink}
-          style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
-        >
-          <FaSearchLocation size="24" color="#fff"></FaSearchLocation>
-        </BoardbuttonStyle>
-      </SecondDiv>
-      <ThirdDiv>
-        {!isSignin ? (
-          <MypagebuttonStyle
+        <SecondDiv>
+          <BoardbuttonStyle
             type="button"
-            onClick={checkedLogin}
+            onClick={boardLink}
             style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
           >
-            <FaRegUser size="24" color="#fff"></FaRegUser>
-          </MypagebuttonStyle>
-        ) : (
-          <MypagebuttonStyle
-            type="button"
-            onClick={mypageModalOpener}
-            style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
-          >
-            <FaRegUser size="24" color="#fff"></FaRegUser>
-          </MypagebuttonStyle>
-        )}
-      </ThirdDiv>
-      <FourthDiv>
-        {!isSignin ? (
-          <LoginbuttonStyle
-            type="button"
-            onClick={modalOpener}
-            style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
-          >
-            로그인
-          </LoginbuttonStyle>
-        ) : (
-          <LoginbuttonStyle
-            type="button"
-            onClick={logoutIndicator}
-            style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
-          >
-            로그아웃
-          </LoginbuttonStyle>
-        )}
-      </FourthDiv>
+            <FaSearchLocation size="24" color="#fff"></FaSearchLocation>
+          </BoardbuttonStyle>
+        </SecondDiv>
+        <ThirdDiv>
+          {!isSignin ? (
+            <MypagebuttonStyle
+              type="button"
+              onClick={checkedLogin}
+              style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
+            >
+              <FaRegUser size="24" color="#fff"></FaRegUser>
+            </MypagebuttonStyle>
+          ) : (
+            <MypagebuttonStyle
+              type="button"
+              onClick={mypageModalOpener}
+              style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
+            >
+              <FaRegUser size="24" color="#fff"></FaRegUser>
+            </MypagebuttonStyle>
+          )}
+        </ThirdDiv>
+        <FourthDiv>
+          {!isSignin ? (
+            <LoginbuttonStyle
+              type="button"
+              onClick={modalOpener}
+              style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
+            >
+              <GoSignIn size="24" color="#fff"></GoSignIn>
+            </LoginbuttonStyle>
+          ) : (
+            <LoginbuttonStyle
+              type="button"
+              onClick={logoutIndicator}
+              style={{ color: "white", fontSize: "120%", fontWeight: "700" }}
+            >
+              <GoSignOut size="24" color="#fff"></GoSignOut>
+            </LoginbuttonStyle>
+          )}
+        </FourthDiv>
       </Btndiv>
     </NavArea>
   );

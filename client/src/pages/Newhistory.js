@@ -6,11 +6,9 @@ import SearchAddress from "../components/Search";
 function Newhistory() {
   return (
     <MapContainer>
-      <MapSection>
-        <MapDiv>
-          <PostBoard></PostBoard>
-        </MapDiv>
-      </MapSection>
+      <NewHistoryDiv>
+        <PostBoard></PostBoard>
+      </NewHistoryDiv>
     </MapContainer>
   );
 }
@@ -23,18 +21,15 @@ const MapContainer = styled.div`
   flex-direction: column;
 `;
 
-const MapSection = styled.section`
-  width: auto;
-  height: 95%;
-  padding: 5vh 5vw;
-  background-color: #082032;
-`;
-
-const MapDiv = styled.div`
-  width: auto;
-  height: 85%;
-  padding: 5vh 5vw;
-  border: 5px solid #2c394b;
-  background-color: #2c394b;
+const NewHistoryDiv = styled.div`
+  width: 50%;
+  height: 70vh;
+  border-radius: 2rem;
+  margin: auto;
+  background-color: #faeee0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   box-shadow: 15px 15px 10px #334756;
 `;
