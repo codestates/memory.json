@@ -28,9 +28,9 @@ const MyhistoryArea = styled.div`
     width: 550px;
     height: 200px;
     display: flex;
-    font-size: 1.2em;
+    font-size: 1.3em;
     font-weight: 700;
-    text-align: center;
+    text-align: left;
     flex-direction: column;
     background-color: #929398;
     margin: 1rem;
@@ -80,7 +80,7 @@ const Myhistory = ({ modalCloser }) => {
     };
     const observer = new IntersectionObserver(handleObserver, option);
     loader.current = observer;
-    console.log("넌 누구니", observer);
+    // console.log("넌 누구니", observer);
   }, []);
 
   useEffect(() => {
