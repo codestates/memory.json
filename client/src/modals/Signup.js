@@ -219,6 +219,11 @@ function Signup({
     setSignupInfo({ ...signupInfo, [key]: ageValue });
   };
 
+  const [validateUserAccount, setValidateUserAccount] = useState(false)
+  const [validateUserName, setValidateUserName] = useState(false)
+  const [validatePassword, setValidatePassword] = useState(false)
+  const [validatePasswordCheck, setValidatePasswordCheck] = useState(false)
+
   // 유효성 검사
   const validateCheck = (inputName) => {
     const idCheck = /^[a-z]+[a-z0-9]{5,19}$/g;
@@ -240,21 +245,37 @@ function Signup({
 
     if (inputName === "user_account") {
       if (!idCheck.test(user_account)) {
+        setValidateUserAccount(false)
         return "영문자로 시작하는 영문자 또는 숫자 6~20자로 해야 합니다.";
+      }else{
+        setValidateUserAccount(true)
       }
     }
     if (inputName === "user_name") {
-      return user_name.includes(" ") || user_name === "";
+      if(user_name.includes(" ") || user_name === ""){
+        setValidateUserName(false)
+        return "닉네임에 공백이 있거나 비어 있으면 안됩니다.";
+      }else{
+        setValidateUserName(true)
+      };
     }
     if (inputName === "password") {
-      return !passwordCheck.test(password);
+      if(!passwordCheck.test(password)){
+        setValidatePassword(false)
+        return "비밀번호는 숫자와 특수문자가 포함된 6~12자리 여야 합니다.";
+      }else{
+        setValidatePassword(true)
+      }
     }
     if (inputName === "checkedPassword") {
-      if (!passwordCheck.test(password)) {
-        return "숫자와 특수문자가 포함되어야 합니다.";
+      if (!passwordCheck.test(checkedPassword)) {
+        return "비밀번호는 숫자와 특수문자가 포함된 6~12자리 여야 합니다.";
       }
-      if (passwordCheck.test(password) && password !== checkedPassword) {
+      if (password !== checkedPassword && checkedPassword !== "") {
+        setValidatePasswordCheck(false)
         return "비밀번호가 같지 않습니다.";
+      }else{
+        setValidatePasswordCheck(true)
       }
     }
     if (inputName === "mobile") {
@@ -277,17 +298,17 @@ function Signup({
 
   const checkedInfo = (inputName) => {
     let validate = validateCheck(inputName);
-    let { password, checkedPassword } = signupInfo;
+    let { password } = signupInfo;
     if (validate) {
       if (inputName === "user_account") {
         setValidateErr(validate);
       }
       if (inputName === "user_name") {
-        setValidateErr("닉네임에 공백이 있어선 안됩니다.");
+        setValidateErr(validate);
       }
 
       if (inputName === "password") {
-        setValidateErr("비밀번호는 숫자와 특수문자가 포함되어야 합니다.");
+        setValidateErr(validate);
         if (password === "") {
           return setValidateErr("비밀번호를 입력해주세요");
         }
@@ -309,28 +330,34 @@ function Signup({
       }
     } else {
       setValidateErr("");
-      if (inputName === "password") {
-        if (password !== checkedPassword && checkedPassword !== "") {
-          return setValidateErr("비밀번호가 같지 않습니다.");
-        }
-        setValidateErr("");
-      }
     }
   };
-  //---------------------------------------------------------------------------------
+  //--------------------------------------------------------------------------------- 
 
   //회원가입 버튼을 눌렀을때 서버 교신
   const signupHandler = () => {
     let { user_name, user_account, password, checkedPassword, age } = signupInfo;
-    if (password !== checkedPassword) {
-      setValidateErr("비밀번호가 같지 않습니다.");
+    if(validateUserAccount === false){
+      alert("영문자로 시작하는 영문자 또는 숫자 6~20자로 해야 합니다.")
+      return;
+    }
+    if(validateUserName === false){
+      alert("닉네임에 공백이 있거나 비어 있으면 안됩니다.")
+      return;
+    }
+    if(validatePassword === false){
+      alert("비밀번호는 숫자와 특수문자가 포함된 6~12자리 여야 합니다.")
+      return;
+    }
+    if(validatePasswordCheck === false){
+      alert("비밀번호가 같지 않습니다.")
       return;
     }
     if(typeof age !== 'number'){
-      setValidateErr("나이에 숫자를 입력해주세요");
+      alert("나이에 숫자를 입력해주세요");
       return;
     }
-    if (user_name && user_account && password !== undefined) {
+    if (user_name && user_account && password !== "") {
       axios
         .post(
           `${serverUrl}users/signup`,
@@ -361,7 +388,7 @@ function Signup({
           setValidateErr("회원가입에 실패하였습니다!");
         });
     } else {
-      setValidateErr("아이디, 닉네임, 비밀번호는 반드시 기입해주세요");
+      alert("아이디, 닉네임, 비밀번호는 반드시 기입해 주시고, 양식에 맞게 기입해 주세요");
     }
   };
 
