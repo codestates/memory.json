@@ -14,7 +14,7 @@ const ModalArea = styled.div`
 
 const SignUpArea = styled.div`
   z-index: 999;
-  width: 80vmin;
+  width: 100vmin;
   height: 90vmin;
   min-height: 400px;
   background: #BDBDBD;
@@ -23,7 +23,7 @@ const SignUpArea = styled.div`
   margin: -0.9vh auto;
   padding-top: 1vh;
   border-radius: 0.5em;
-  font-size: 1.3em;
+  font-size: 1.0em;
   font-weight: 700;
   left: 0;
   right: 0;

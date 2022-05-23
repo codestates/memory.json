@@ -40,15 +40,23 @@ const ModalView = styled.div`
   overflow: hidden;
 `;
 
+const FirstButtonWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 80% 20%;
+  grid-template-rows: 100%;
+  border-top: 5px solid #333;
+  border-bottom: 5px solid #333;
+`;
+
 const Background = styled.article`
   background: #265353;
   width: max-content;
   padding: 30px;
-  margin-left: 40px; ;
+  margin-left: 100px; ;
 `;
 
 const Wrapper = styled.div`
-  min-width: 300px;
+  min-width: 500px;
   border-radius: 32px;
   padding: 24px;
   background: white;
@@ -68,11 +76,39 @@ const NickDiv = styled.div`
   color: hsl(0deg 0% 40%);
 `;
 
-const MyhistoryButton = styled.aside`
-  width: 30%;
+const ModifiedButton = styled.aside`
+  width: 100%;
   height: 1vh;
   padding: 10px 10px 20px 10px;
-  margin: 20px 40px 30px 70px;
+  margin-left: -100px;
+  margin-top: 50px;
+  color: white;
+  font-weight: 700;
+  font-size: 20px;
+  background-color: #fafafa;
+  border: 5px solid #265353;
+  border-radius: 5em;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+    overflow: hidden;
+  }
+`;
+
+const SecondButtonWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 100%;
+  margin-top: 3%;
+  border-bottom: 5px solid #333;
+`;
+
+const MyhistoryButton = styled.aside`
+  width: 50%;
+  height: 1vh;
+  padding: 10px 10px 20px 10px;
+  margin: 20px 40px 30px 100px;
   color: white;
   font-weight: 700;
   font-size: 20px;
@@ -88,29 +124,10 @@ const MyhistoryButton = styled.aside`
 `;
 
 const MyfavoriteButton = styled.aside`
-  width: 30%;
+  width: 50%;
   height: 1vh;
   padding: 10px 10px 20px 10px;
-  margin: 20px 40px 30px 70px;
-  color: white;
-  font-weight: 700;
-  font-size: 20px;
-  background-color: #fafafa;
-  border: 5px solid #265353;
-  border-radius: 5em;
-  cursor: pointer;
-
-  &:hover {
-    transform: scale(1.05);
-    overflow: hidden;
-  }
-`;
-
-const ModifiedButton = styled.aside`
-  width: 30%;
-  height: 1vh;
-  padding: 10px 10px 20px 10px;
-  margin: 20px 40px 30px 70px;
+  margin: 20px 40px 30px 100px;
   color: white;
   font-weight: 700;
   font-size: 20px;
@@ -181,6 +198,14 @@ function Mypage({
       .catch((err) => {
         console.log(err);
       });
+// 내가 받은 좋아요 수 표현
+    // useEffect(() => {
+    //   bringUserFavorite();
+    // }, []);
+    // const bringUserFavorite = () => {
+    //   axios
+    //   get
+    // }
   };
   // 카카오 로그인이나 구글 로그인일 경우에는 소셜 아이디로 보여준다.
   return (
@@ -189,98 +214,102 @@ function Mypage({
         <ModalView>
           <div>
             <h1>My Page</h1>
-            {social_id === null ? (
-              <Background>
-                <Wrapper>
-                  <IdDiv>
-                    <h2
-                      style={{
-                        color: "black",
-                        fontSize: "100%",
-                        fontWeight: "500",
-                        margin: "0px",
-                      }}
-                    >
-                      ID: {user_account}
-                    </h2>
-                  </IdDiv>
-                  <NickDiv>
-                    <h2
-                      style={{
-                        color: "black",
-                        fontSize: "100%",
-                        fontWeight: "500",
-                        margin: "0px",
-                      }}
-                    >
-                      NickName: {user_name}
-                    </h2>
-                  </NickDiv>
-                </Wrapper>
-              </Background>
-            ) : (
-              <Background>
-                <Wrapper>
-                  <IdDiv>
-                    <h2
-                      style={{
-                        color: "black",
-                        fontSize: "100%",
-                        fontWeight: "500",
-                        margin: "0px",
-                      }}
-                    >
-                      ID: {social_id}
-                    </h2>
-                  </IdDiv>
-                  <NickDiv>
-                    <h2
-                      style={{
-                        color: "black",
-                        fontSize: "100%",
-                        fontWeight: "500",
-                        margin: "0px",
-                      }}
-                    >
-                      NickName: {user_name}
-                    </h2>
-                  </NickDiv>
-                </Wrapper>
-              </Background>
-            )}
-            <ModifiedButton
-              type="button"
-              onClick={() => changeformToEditmyinfo()}
-              style={{
-                color: "#28282A",
-                fontSize: "120%",
-                fontWeight: "700",
-              }}
-            >
-              내 정보 수정
-            </ModifiedButton>
-            <MyhistoryButton
-              type="button"
-              onClick={() => changeformToMyhistory()}
-              style={{
-                color: "#28282A",
-                fontSize: "120%",
-                fontWeight: "700",
-              }}
-            >
-              My History
-            </MyhistoryButton>
-            <MyfavoriteButton
-              type="button"
-              onClick={() => changeformToMyfavorite()}
-              style={{
-                color: "#28282A",
-                fontSize: "120%",
-                fontWeight: "700",
-              }}
-            >
-              My Favorite
-            </MyfavoriteButton>
+            <FirstButtonWrapper>
+              {social_id === null ? (
+                <Background>
+                  <Wrapper>
+                    <IdDiv>
+                      <h2
+                        style={{
+                          color: "black",
+                          fontSize: "100%",
+                          fontWeight: "500",
+                          margin: "0px",
+                        }}
+                      >
+                        ID: {user_account}
+                      </h2>
+                    </IdDiv>
+                    <NickDiv>
+                      <h2
+                        style={{
+                          color: "black",
+                          fontSize: "100%",
+                          fontWeight: "500",
+                          margin: "0px",
+                        }}
+                      >
+                        NickName: {user_name}
+                      </h2>
+                    </NickDiv>
+                  </Wrapper>
+                </Background>
+              ) : (
+                <Background>
+                  <Wrapper>
+                    <IdDiv>
+                      <h2
+                        style={{
+                          color: "black",
+                          fontSize: "100%",
+                          fontWeight: "500",
+                          margin: "0px",
+                        }}
+                      >
+                        ID: {social_id}
+                      </h2>
+                    </IdDiv>
+                    <NickDiv>
+                      <h2
+                        style={{
+                          color: "black",
+                          fontSize: "100%",
+                          fontWeight: "500",
+                          margin: "0px",
+                        }}
+                      >
+                        NickName: {user_name}
+                      </h2>
+                    </NickDiv>
+                  </Wrapper>
+                </Background>
+              )}
+              <ModifiedButton
+                type="button"
+                onClick={() => changeformToEditmyinfo()}
+                style={{
+                  color: "#28282A",
+                  fontSize: "120%",
+                  fontWeight: "700",
+                }}
+              >
+                내 정보 수정
+              </ModifiedButton>
+            </FirstButtonWrapper>
+            <SecondButtonWrapper>
+              <MyhistoryButton
+                type="button"
+                onClick={() => changeformToMyhistory()}
+                style={{
+                  color: "#28282A",
+                  fontSize: "120%",
+                  fontWeight: "700",
+                }}
+              >
+                My History
+              </MyhistoryButton>
+              <MyfavoriteButton
+                type="button"
+                onClick={() => changeformToMyfavorite()}
+                style={{
+                  color: "#28282A",
+                  fontSize: "120%",
+                  fontWeight: "700",
+                }}
+              >
+                My Favorite
+              </MyfavoriteButton>
+            </SecondButtonWrapper>
           </div>
         </ModalView>
         <Modalback onClick={modalCloser}></Modalback>
