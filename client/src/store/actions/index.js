@@ -57,7 +57,8 @@ export const userinfoAction = (
   sex,
   social_id,
   user_account,
-  user_name
+  user_name,
+  user_image
 ) => ({
   type: USER_INFORMATION,
   data: {
@@ -71,6 +72,7 @@ export const userinfoAction = (
     social_id: social_id,
     user_account: user_account,
     user_name: user_name,
+    user_image: user_image
   },
 });
 export const signinModalOnAction = {

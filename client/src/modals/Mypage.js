@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { userinfoAction } from "../store/actions";
@@ -41,9 +41,10 @@ const ModalView = styled.div`
 `;
 
 const FirstButtonWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 80% 20%;
-  grid-template-rows: 100%;
+  display: flex;
+  flex-direction: rows;
+  max-height: 160px;
+  justify-content: space-evenly;
   border-top: 5px solid #333;
   border-bottom: 5px solid #333;
 `;
@@ -52,16 +53,30 @@ const Background = styled.article`
   background: #265353;
   width: max-content;
   padding: 30px;
-  margin-left: 100px; ;
 `;
 
 const Wrapper = styled.div`
-  min-width: 500px;
+  min-width: 300px;
   border-radius: 32px;
-  padding: 24px;
+  padding: 15px;
   background: white;
   box-shadow: 0px 2px 20px hsl(248deg 53% 40%);
   text-align: center;
+`;
+
+const ImageDiv = styled.div`
+  max-width: 150px;
+  min-height: 150px;
+  object-fit: cover;
+  background-color: #fafafa;
+  border: 5px solid #265353;
+  border-radius: 5em;
+
+  &:hover {
+    transform: scale(1.05);
+    overflow: hidden;
+    cursor: pointer;
+  }
 `;
 
 const IdDiv = styled.div`
@@ -77,10 +92,9 @@ const NickDiv = styled.div`
 `;
 
 const ModifiedButton = styled.aside`
-  width: 100%;
+  width: 150px;
   height: 1vh;
   padding: 10px 10px 20px 10px;
-  margin-left: -100px;
   margin-top: 50px;
   color: white;
   font-weight: 700;
@@ -93,6 +107,7 @@ const ModifiedButton = styled.aside`
   &:hover {
     transform: scale(1.05);
     overflow: hidden;
+    cursor: pointer;
   }
 `;
 
@@ -165,7 +180,28 @@ function Mypage({
   const dispatch = useDispatch();
   const userState = useSelector((state) => state.userinfoReducer);
 
-  const { social_id, user_account, user_name } = userState;
+  const { social_id, user_account, user_name, user_image } = userState;
+
+  console.log(user_image)
+  // 프로필 사진
+
+  // useRef 사용해서 파일 업로드 띄우기
+  const fileInput = useRef(null);
+
+  const [image, setImage] = useState("../img/avartarimage.jpg");
+  console.log("image", image);
+
+  const profileImageHandler = (e) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    console.log(reader);
+    reader.addEventListener("load", function () {
+      console.log(this.result)
+      setImage(this.result);
+    });
+    reader.readAsDataURL(file);
+  };
 
   useEffect(() => {
     bringUserinformation();
@@ -179,6 +215,7 @@ function Mypage({
       .then((res) => {
         if (res.status === 200) {
           const userInformation = res.data.data;
+          console.log(userInformation)
           dispatch(
             userinfoAction(
               userInformation.address,
@@ -190,7 +227,8 @@ function Mypage({
               userInformation.sex,
               userInformation.social_id,
               userInformation.user_account,
-              userInformation.user_name
+              userInformation.user_name,
+              userInformation.user_image
             )
           );
         }
@@ -198,7 +236,8 @@ function Mypage({
       .catch((err) => {
         console.log(err);
       });
-// 내가 받은 좋아요 수 표현
+
+    // 내가 받은 좋아요 수 표현
     // useEffect(() => {
     //   bringUserFavorite();
     // }, []);
@@ -207,7 +246,7 @@ function Mypage({
     //   get
     // }
   };
-  // 카카오 로그인이나 구글 로그인일 경우에는 소셜 아이디로 보여준다.
+
   return (
     <ModalArea>
       <MarginDiv>
@@ -215,6 +254,24 @@ function Mypage({
           <div>
             <h1>My Page</h1>
             <FirstButtonWrapper>
+              <ImageDiv>
+                <input
+                  type="file"
+                  id="img"
+                  accept="image/jpg,impge/png,image/jpeg"
+                  style={{ display: "none" }}
+                  ref={fileInput}
+                  onChange={profileImageHandler}
+                />
+                <img
+                  alt="profile"
+                  onClick={() => fileInput.current.click()}
+                  src={image}
+                  width="150"
+                  height="150"
+                  style={{ borderRadius: "50%", objectFit: "cover" }}
+                ></img>
+              </ImageDiv>
               {social_id === null ? (
                 <Background>
                   <Wrapper>
@@ -239,7 +296,7 @@ function Mypage({
                           margin: "0px",
                         }}
                       >
-                        NickName: {user_name}
+                        닉네임: {user_name}
                       </h2>
                     </NickDiv>
                   </Wrapper>
@@ -268,7 +325,7 @@ function Mypage({
                           margin: "0px",
                         }}
                       >
-                        NickName: {user_name}
+                        닉네임: {user_name}
                       </h2>
                     </NickDiv>
                   </Wrapper>
