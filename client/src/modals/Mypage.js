@@ -203,8 +203,8 @@ function Mypage({
 
     if (file) {
       const formData = new FormData();
-      formData.append("files", file);
-      await axios({
+      formData.append("profile", file);
+      const res = await axios({
         method: "post",
         url: `${serverUrl}users/signup`,
         data: formData,
@@ -212,7 +212,8 @@ function Mypage({
           authorization: `Bearer ${accessToken}`,
           "Content-Type": "multipart/form-data",
         },
-      });
+      })
+      console.log(res);
     }
   };
 
