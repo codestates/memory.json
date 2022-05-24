@@ -7,7 +7,7 @@ const initialState = {
   id: 0,
   mobile: "",
   provider: null,
-  sex: "",
+  sex: "",  
   social_id: null,
   user_account: "",
   user_name: "",

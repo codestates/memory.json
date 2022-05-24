@@ -57,7 +57,7 @@ export const userinfoAction = (
   sex,
   social_id,
   user_account,
-  user_name
+  user_name,
 ) => ({
   type: USER_INFORMATION,
   data: {
