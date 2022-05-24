@@ -180,9 +180,8 @@ function Mypage({
   const dispatch = useDispatch();
   const userState = useSelector((state) => state.userinfoReducer);
 
-  const { social_id, user_account, user_name, user_image } = userState;
+  const { social_id, user_account, user_name } = userState;
 
-  console.log(user_image)
   // 프로필 사진
 
   // useRef 사용해서 파일 업로드 띄우기
@@ -191,16 +190,30 @@ function Mypage({
   const [image, setImage] = useState("../img/avartarimage.jpg");
   console.log("image", image);
 
-  const profileImageHandler = (e) => {
+  const profileImageHandler = async (e) => {
     e.preventDefault();
     const file = e.target.files[0];
     const reader = new FileReader();
     console.log(reader);
     reader.addEventListener("load", function () {
-      console.log(this.result)
+      console.log(this.result);
       setImage(this.result);
     });
     reader.readAsDataURL(file);
+
+    if (file) {
+      const formData = new FormData();
+      formData.append("files", file);
+      await axios({
+        method: "post",
+        url: `${serverUrl}users/signup`,
+        data: formData,
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    }
   };
 
   useEffect(() => {
@@ -215,7 +228,7 @@ function Mypage({
       .then((res) => {
         if (res.status === 200) {
           const userInformation = res.data.data;
-          console.log(userInformation)
+          console.log(userInformation);
           dispatch(
             userinfoAction(
               userInformation.address,
@@ -227,10 +240,14 @@ function Mypage({
               userInformation.sex,
               userInformation.social_id,
               userInformation.user_account,
-              userInformation.user_name,
-              userInformation.user_image
+              userInformation.user_name
             )
           );
+          if (userInformation.user_image === undefined) {
+            return;
+          } else {
+            setImage(userInformation.user_image);
+          }
         }
       })
       .catch((err) => {

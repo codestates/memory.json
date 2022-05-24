@@ -11,7 +11,6 @@ const initialState = {
   social_id: null,
   user_account: "",
   user_name: "",
-  user_image: "../../img/avartarimage.jpg",
 };
 
 const userinfoReducer = (prevState = initialState, action) => {
@@ -30,7 +29,6 @@ const userinfoReducer = (prevState = initialState, action) => {
         social_id: action.data.social_id,
         user_account: action.data.user_account,
         user_name: action.data.user_name,
-        user_image: action.data.user_image
       };
       break;
     default:
