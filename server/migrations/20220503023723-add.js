@@ -13,7 +13,7 @@ module.exports = {
         // Users라는 테이블에
         "users",
         // provider라는 컬럼을 추가하고 싶다.
-        "provider",
+        "profile",
         {
           type: Sequelize.DataTypes.STRING,
         }
@@ -31,6 +31,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-     await queryInterface.removeColumn('users', 'provider');
+     await queryInterface.removeColumn('users', 'profile');
   },
 };

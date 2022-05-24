@@ -8,6 +8,9 @@ module.exports = (sequelize, DataTypes) => {
       user_account: {
         type: DataTypes.STRING(100),
       },
+      profile: {
+        type: DataTypes.STRING(255),
+      },
       social_id: {
         type: DataTypes.STRING(100),
       },
