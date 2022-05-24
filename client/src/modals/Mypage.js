@@ -206,7 +206,7 @@ function Mypage({
       formData.append("profile", file);
       const res = await axios({
         method: "post",
-        url: `${serverUrl}users/signup`,
+        url: `${serverUrl}users/profile`,
         data: formData,
         headers: {
           authorization: `Bearer ${accessToken}`,
@@ -222,6 +222,7 @@ function Mypage({
   }, []);
 
   const bringUserinformation = () => {
+    console.log(accessToken)
     axios
       .get(`${serverUrl}users`, {
         headers: { authorization: `Bearer ${accessToken}` },
@@ -230,6 +231,7 @@ function Mypage({
         if (res.status === 200) {
           const userInformation = res.data.data;
           console.log(userInformation);
+          console.log(userInformation.profile)
           dispatch(
             userinfoAction(
               userInformation.address,
@@ -244,10 +246,8 @@ function Mypage({
               userInformation.user_name
             )
           );
-          if (userInformation.user_image === undefined) {
-            return;
-          } else {
-            setImage(userInformation.user_image);
+          if(userInformation.profile !== null){
+            setImage(userInformation.profile);
           }
         }
       })
