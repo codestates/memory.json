@@ -8,6 +8,9 @@ const cookieParser = require("cookie-parser");
 const controllers = require("./controllers");
 const logger = require("./config/winston");
 const morgan = require("morgan")
+const swaggerUi = require("swagger-ui-express");
+const ymal = require('yamljs');
+const path = require('path')
 
 const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
 const HTTP_PORT = process.env.HTTP_PORT || 4000;
@@ -23,7 +26,13 @@ app.use(
 app.use(cookieParser());
 app.use(morgan('dev'));
 
+// swagger
+const swaggerSpec = ymal.load(path.join(__dirname, './middlewares/swagger/openapi.yaml'))
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// 컨트롤러
 app.use("/", controllers);
+
 app.use("/", (req, res) => {
   res.send("memory.json 화이팅 합시다.!!!!");
 });

@@ -1,0 +1,2 @@
+/app/promise-list:
+  $ref: "./api/users.yaml"
