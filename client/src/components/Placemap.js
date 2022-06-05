@@ -14,42 +14,119 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 const { kakao } = window;
 
 export default function Map() {
-  useEffect(() => {
-    mapscript();
-    console.log("placeList", placeList);
-  });
-
-  // 상태값
-
   const [isHistory, setIsHistory] = useState(false);
   const [placeList, setPlaceList] = useState([]);
 
-  const mapscript = () => {
-    let container = document.getElementById("map");
-    let options = {
-      center: new kakao.maps.LatLng(37.565805, 126.975161),
-      level: 8,
+  // 위도 경도 상태값
+  const [statePlace, setStatePlace] = useState({
+    center: { lat: 37.565805, lng: 126.975161 },
+  });
+
+  // 주소검색창 안 값의 변화
+  const [inputText, setInputText] = useState(" ");
+
+  // 입력 시 검색 창 상태 변화.
+  const onChange = (e) => {
+    setInputText(e.target.value);
+    console.log(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
+  // DB로부터 장소에 해당하는 사진 목록을 모두 불러와서 imageList에 담아줌.
+  const [imageList, setImageList] = useState([]);
+
+  // 히스토리 목록 불러오기.
+  const [historyList, setHistoryList] = useState([]);
+
+  const mapFirst = () => {
+    const container = document.getElementById("map");
+    const options = {
+      center: new kakao.maps.LatLng(
+        statePlace.center.lat,
+        statePlace.center.lng
+      ),
+      level: 9,
     };
 
-    let map = new kakao.maps.Map(container, options);
-    let geocoder = new kakao.maps.services.Geocoder();
+    const map = new kakao.maps.Map(container, options);
+    kakao.maps.event.addListener(map, "dragend", function () {
+      // 지도 중심좌표를 얻어옵니다
+      const latlng = map.getCenter();
+      setStatePlace({
+        center: { lat: latlng.getLat(), lng: latlng.getLng() },
+      });
+      console.log(statePlace)
+    });
+  };
+  useEffect(() => {
+    mapFirst();
+  }, [statePlace]);
+
+  const mapSearch = () => {
+    const container = document.getElementById("map");
+    const options = {
+      center: new kakao.maps.LatLng(
+        statePlace.center.lat,
+        statePlace.center.lng
+      ),
+      level: 9,
+    };
+
+    const map = new kakao.maps.Map(container, options);
+
+    const geocoder = new kakao.maps.services.Geocoder();
+
+    geocoder.addressSearch(inputText, function (result, status) {
+      // 정상적으로 검색이 완료됐으면
+      if (status === kakao.maps.services.Status.OK) {
+        const newSearch = result[0];
+        setStatePlace({
+          center: { lat: newSearch.y, lng: newSearch.x },
+        });
+        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+        map.setCenter(coords);
+        console.log(statePlace.center.lat);
+      }
+    });
+  };
+
+  // placeList 가져오기. 문제없음.
+  const getPlaceList = () => {
+    axios
+      .get(`${serverUrl}places?place_address=${inputText}`)
+      .then((res) => {
+        if (res.status === 200) {
+          setPlaceList(res.data.data);
+        }
+      })
+      .then(() => {
+        mapscript();
+      });
+  };
+
+  const mapscript = () => {
+    console.log("실행");
+    const container = document.getElementById("map");
+    const options = {
+      center: new kakao.maps.LatLng(
+        statePlace.center.lat,
+        statePlace.center.lng
+      ),
+      level: 9,
+    };
+    const map = new kakao.maps.Map(container, options);
+
     placeList.map((el) => {
       // 마커 생성
-      let marker = new kakao.maps.Marker({
+      const marker = new kakao.maps.Marker({
         // 마커가 표시 될 지도
         map: map,
         // 마커가 표시 될 위치
         position: new kakao.maps.LatLng(el.place_lat, el.place_lng),
       });
-
-      // kakao.maps.event.addListener(map, "position_changed", function () {
-      //   geocoder.addressSearch(`${inputText}`, function (result, status) {
-      //     if (status === kakao.maps.services.Status.OK) {
-      //       let nowloca = new kakao.maps.LatLng(result[0].y, result[0].x);
-      //       map.setCenter(nowloca);
-      //     }
-      //   });
-      // });
 
       // 마커 클릭 시 함수 실행. (historyList 및 imageList 생성)
       kakao.maps.event.addListener(marker, "click", function () {
@@ -70,17 +147,6 @@ export default function Map() {
     console.log(isHistory);
   };
 
-  // placeList 가져오기. 문제없음.
-  const getPlaceList = () => {
-    axios.get(`${serverUrl}places?place_address=${inputText}`).then((res) => {
-      if (res.status === 200) {
-        // const allPlaceList = res.data.data;
-        // console.log(allPlaceList);
-        setPlaceList(res.data.data);
-      }
-    });
-  };
-
   //사진 가져오기 (수정중)
   const getImage = () => {
     historyList.map((el) => {
@@ -92,51 +158,6 @@ export default function Map() {
           }
         });
     });
-  };
-
-  // const ShowHistory = () => {
-  //   for (let i = 0; i < placeList.length; i++) {
-  //     return (
-  //       <S.ViewContainer>
-  //         <S.ViewSection>
-  //           <S.ViewDiv>
-  //             <h1
-  //               style={{ color: "white" }}
-  //             >{`${historyList[i].history_title}`}</h1>
-  //             <h1
-  //               style={{ color: "white" }}
-  //             >{`${historyList[i].history_content}`}</h1>
-  //             <h1
-  //               style={{ color: "white" }}
-  //             >{`${historyList[i].history_year}`}</h1>
-  //           </S.ViewDiv>
-  //         </S.ViewSection>
-  //       </S.ViewContainer>
-  //     );
-  //   }
-  // };
-  // 주소검색창 안 값의 변화
-  const [inputText, setInputText] = useState(" ");
-  // DB로부터 모든 장소정보를 가져와서 placeList에 담아줌.
-  const [place, setPlace] = useState("");
-
-  // DB로부터 장소에 해당하는 사진 목록을 모두 불러와서 imageList에 담아줌.
-  const [imageList, setImageList] = useState([]);
-
-  // 히스토리 목록 불러오기.
-  const [historyList, setHistoryList] = useState([]);
-
-  // 입력 시 검색 창 상태 변화.
-  const onChange = (e) => {
-    setInputText(e.target.value);
-    console.log(e.target.value);
-  };
-  console.log("inputText", inputText);
-  // 검색 버튼 클릭 시 상태 변화
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // setPlace(inputText);
-    // setInputText(e.target.value);
   };
 
   const Image = styled.img`
@@ -310,10 +331,17 @@ export default function Map() {
             />
             <button
               type="submit"
-              onClick={getPlaceList}
+              onClick={mapSearch}
               style={{ width: "48px", height: "50px" }}
             >
               검색
+            </button>
+            <button
+              type="submit"
+              onClick={getPlaceList}
+              style={{ width: "130px", height: "50px" }}
+            >
+              주변 히스토리 검색
             </button>
           </S.Inputbutton>
         </form>
@@ -458,3 +486,5 @@ const Commentarea = styled.div`
   }
   margin: 5px 1px 5px 1px;
 `;
+
+// 지도를 스크롤할때 그 위치정보를 가져와서 inputtext에 넣어준다
