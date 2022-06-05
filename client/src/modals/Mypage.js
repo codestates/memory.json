@@ -213,7 +213,7 @@ function Mypage({
           "Content-Type": "multipart/form-data",
         },
       })
-      console.log(res);
+      // console.log(res);
     }
   };
 
@@ -222,7 +222,7 @@ function Mypage({
   }, []);
 
   const bringUserinformation = () => {
-    console.log(accessToken)
+    // console.log(accessToken)
     axios
       .get(`${serverUrl}users`, {
         headers: { authorization: `Bearer ${accessToken}` },
@@ -254,15 +254,6 @@ function Mypage({
       .catch((err) => {
         console.log(err);
       });
-
-    // 내가 받은 좋아요 수 표현
-    // useEffect(() => {
-    //   bringUserFavorite();
-    // }, []);
-    // const bringUserFavorite = () => {
-    //   axios
-    //   get
-    // }
   };
 
   return (
