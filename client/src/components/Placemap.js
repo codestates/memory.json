@@ -55,8 +55,10 @@ export default function Map() {
     kakao.maps.event.addListener(map, "dragend", function () {
       // 지도 중심좌표를 얻어옵니다
       const latlng = map.getCenter();
+      let latCheck = latlng.getLat()
+      let lngCheck = latlng.getLng()
       setStatePlace({
-        center: { lat: latlng.getLat(), lng: latlng.getLng() },
+        center: { lat: latCheck, lng: lngCheck },
       });
       console.log(statePlace)
     });
