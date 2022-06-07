@@ -57,7 +57,6 @@ export default function Map() {
       ),
       level: zoomLevel,
     };
-
     const map = new kakao.maps.Map(container, options);
     setKakaoMap(map);
 
