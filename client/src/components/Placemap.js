@@ -81,13 +81,13 @@ export default function Map() {
   };
   useEffect(() => {
     mapFirst();
-  }, []);
+  }, [statePlace, zoomLevel]);
 
   const mapSearch = () => {
     const geocoder = new kakao.maps.services.Geocoder();
 
     geocoder.addressSearch(inputText, function (result, status) {
-      // 정상적으로 검색이 완료됐으면
+      // 정상적으로 검색이 완료됐으면      
       if (status === kakao.maps.services.Status.OK) {
         const newSearch = result[0];
         setStatePlace({
@@ -96,12 +96,18 @@ export default function Map() {
         const coords = new kakao.maps.LatLng(newSearch.y, newSearch.x);
         kakaoMap.panTo(coords);
 
-        // const marker = new kakao.maps.Marker({
-        //   map: kakaoMap,
-        //   position: coords,
-        //   clickable: true,
-        // });
-        // setKakaoMarker(marker);
+        console.log(statePlace)
+
+        const marker = new kakao.maps.Marker({
+          map: kakaoMap,
+          position: coords,
+          clickable: true,
+        });
+
+        kakao.maps.event.addListener(marker, "click", function () {
+          // 클릭시 마커 삭제
+          marker.setMap(null);
+        });
 
         // const infowindow = new kakao.maps.InfoWindow({
         //   content: `<div style="width:150px;text-align:center;padding:6px 0;">${inputText}</div>`,
@@ -162,7 +168,6 @@ export default function Map() {
           if (res.status === 200) {
             setHistoryList(res.data.data);
             setIsHistory(true);
-            return getImage();
             // 해당 장소의 모든 히스토리의 각각의 이미지 가져오기.
           }
         });
@@ -186,6 +191,9 @@ export default function Map() {
         });
     });
   };
+  useEffect(() => {
+    getImage();
+  }, [historyList]);
 
   const Image = styled.img`
     max-width: 50%;
