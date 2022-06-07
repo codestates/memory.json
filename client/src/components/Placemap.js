@@ -380,7 +380,7 @@ export default function Map() {
               height: "600px",
               zIndex: "0",
             }}
-            level={8}
+            level={zoomLevel}
           ></div>
         </S.Kakaomap>
       </S.Searchmapflex>
