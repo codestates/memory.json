@@ -8,8 +8,6 @@ import styled from "styled-components";
 import Comment from "./Comment";
 import { useSelector } from "react-redux";
 import Button from "./Button";
-import PopupDom from "./PopupDom";
-import PopupPostCode from "./PopupPostCode";
 
 axios.defaults.withCredentials = true;
 const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -20,13 +18,13 @@ export default function Map() {
   const [placeList, setPlaceList] = useState([]);
 
   const [kakaoMap, setKakaoMap] = useState(null);
-  const [kakaoMarker, setKakaoMarker] = useState(null);
-  const [kakaoInfo, setKakaoInfo] = useState(null);
-
   // 위도 경도 상태값
   const [statePlace, setStatePlace] = useState({
     center: { lat: 37.565805, lng: 126.975161 },
   });
+
+  // 줌 값
+  const [zoomLevel, setZoomLevel] = useState(9);
 
   // 주소검색창 안 값의 변화
   const [inputText, setInputText] = useState(" ");
@@ -50,14 +48,14 @@ export default function Map() {
   const [historyList, setHistoryList] = useState([]);
 
   const mapFirst = () => {
-    console.log("myFirst실행");
+    console.log("mapFirst실행");
     const container = document.getElementById("map");
     const options = {
       center: new kakao.maps.LatLng(
         statePlace.center.lat,
         statePlace.center.lng
       ),
-      level: 9,
+      level: zoomLevel,
     };
 
     const map = new kakao.maps.Map(container, options);
@@ -74,6 +72,12 @@ export default function Map() {
       });
       console.log(coords);
       map.panTo(coords);
+    });
+    kakao.maps.event.addListener(map, "zoom_changed", function () {
+      // 지도의 현재 레벨을 얻어옵니다
+      const level = map.getLevel();
+      console.log(level);
+      setZoomLevel(level);
     });
   };
   useEffect(() => {
@@ -93,25 +97,24 @@ export default function Map() {
         const coords = new kakao.maps.LatLng(newSearch.y, newSearch.x);
         kakaoMap.panTo(coords);
 
-        const marker = new kakao.maps.Marker({
-          map: kakaoMap,
-          position: coords,
-          clickable: true,
-        });
-        setKakaoMarker(marker)
+        // const marker = new kakao.maps.Marker({
+        //   map: kakaoMap,
+        //   position: coords,
+        //   clickable: true,
+        // });
+        // setKakaoMarker(marker);
 
-        const infowindow = new kakao.maps.InfoWindow({
-          content: `<div style="width:150px;text-align:center;padding:6px 0;">${inputText}</div>`,
-        });
-        setKakaoInfo(infowindow)
-        infowindow.open(kakaoMap, marker);
-        
+        // const infowindow = new kakao.maps.InfoWindow({
+        //   content: `<div style="width:150px;text-align:center;padding:6px 0;">${inputText}</div>`,
+        // });
+        // setKakaoInfo(infowindow);
+        // infowindow.open(kakaoMap, marker);
 
-        kakao.maps.event.addListener(marker, "click", function () {
-          // 클릭시 마커 윈포윈도우 삭제
-          infowindow.close(kakaoMap, marker);
-          marker.setMap(null); 
-        });
+        // kakao.maps.event.addListener(marker, "click", function () {
+        //   // 클릭시 마커 윈포윈도우 삭제
+        //   infowindow.close(kakaoMap, marker);
+        //   marker.setMap(null);
+        // });
       }
     });
   };
@@ -130,15 +133,16 @@ export default function Map() {
         setPlaceList(res.data.data);
         console.log(placeList);
       }
-      mapscript();
     } catch (err) {
       setError(err);
     }
   };
+  useEffect(() => {
+    mapscript();
+  }, [placeList]);
 
   const mapscript = () => {
-    kakaoMarker.setMap(null);
-    kakaoInfo.close(kakaoMap, kakaoMarker);
+    console.log("mapScript실행");
 
     placeList.map((el) => {
       // 마커 생성
@@ -147,8 +151,10 @@ export default function Map() {
         map: kakaoMap,
         // 마커가 표시 될 위치
         position: new kakao.maps.LatLng(el.place_lat, el.place_lng),
-        clickable: true
+        clickable: true,
+        level: zoomLevel,
       });
+      console.log(marker);
 
       // 마커 클릭 시 함수 실행. (historyList 및 imageList 생성)
       kakao.maps.event.addListener(marker, "click", function () {
@@ -363,7 +369,7 @@ export default function Map() {
               onClick={getPlaceList}
               style={{ width: "130px", height: "50px" }}
             >
-              해당동네 히스토리 
+              검색동네 히스토리
             </button>
           </S.Inputbutton>
         </form>
@@ -384,100 +390,102 @@ export default function Map() {
           <></>
         ) : (
           <>
-            {historyList.map((el) => {
+            {historyList.map((el, i) => {
               return (
-                <S.OuterDiv>
-                  <S.HistoryDiv>
-                    <S.Image>
-                      <Slide />
-                    </S.Image>
-                    <S.YearFavorite>
-                      <div>{el.history_year}</div>
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          textAlign: "right",
-                        }}
-                      >
-                        <div>
-                          {isFavorite.like === "T" ? (
-                            <Button
-                              style={{ background: "red" }}
-                              onClick={favoriteHandler}
-                            >
-                              좋아요
-                            </Button>
-                          ) : (
-                            <Button
-                              style={{ background: `white`, color: "black" }}
-                              onClick={favoriteHandler}
-                            >
-                              ♥︎
-                            </Button>
-                          )}
-                          <span style={{ padding: "10px", color: "white" }}>
-                            {isFavorite.like_count}
-                          </span>
-                        </div>
-                      </div>
-                    </S.YearFavorite>
-                    <S.Title>
-                      <div>{el.history_title}</div>
-                    </S.Title>
-                    <S.Content>
-                      <div>{el.history_content}</div>
-                    </S.Content>
-                    <S.Commentdiv>
-                      <Commentinput>
-                        <input
-                          id="comment"
-                          type="text"
+                <div key={i}>
+                  <S.OuterDiv>
+                    <S.HistoryDiv>
+                      <S.Image>
+                        <Slide />
+                      </S.Image>
+                      <S.YearFavorite>
+                        <div>{el.history_year}</div>
+                        <div
                           style={{
-                            width: "100%",
-                            height: "50px",
-                            backgroundColor: "#DBD0C0",
-                            border: "none",
-                          }}
-                          placehoder="여기에 댓글을 작성하세요"
-                        ></input>
-                        <div>
-                          {!accessToken ? (
-                            <Button
-                              onClick={registCommentHandler}
-                              style={{ display: "none" }}
-                            >
-                              Comment
-                            </Button>
-                          ) : (
-                            <Button onClick={registCommentHandler}>
-                              Comment
-                            </Button>
-                          )}
-                        </div>
-                      </Commentinput>
-                      <Commentarea>
-                        <ul
-                          style={{
-                            width: "80%",
+                            display: "flex",
+                            flexDirection: "column",
+                            textAlign: "right",
                           }}
                         >
-                          {listComment.map((comment) => {
-                            return (
-                              <Comment
-                                key={comment.id}
-                                comment={comment}
-                                userId={userId}
-                                deleteComment={deleteCommentHandler}
-                                changeComment={changeCommentHandler}
-                              />
-                            );
-                          })}
-                        </ul>
-                      </Commentarea>
-                    </S.Commentdiv>
-                  </S.HistoryDiv>
-                </S.OuterDiv>
+                          <div>
+                            {isFavorite.like === "T" ? (
+                              <Button
+                                style={{ background: "red" }}
+                                onClick={favoriteHandler}
+                              >
+                                좋아요
+                              </Button>
+                            ) : (
+                              <Button
+                                style={{ background: `white`, color: "black" }}
+                                onClick={favoriteHandler}
+                              >
+                                ♥︎
+                              </Button>
+                            )}
+                            <span style={{ padding: "10px", color: "white" }}>
+                              {isFavorite.like_count}
+                            </span>
+                          </div>
+                        </div>
+                      </S.YearFavorite>
+                      <S.Title>
+                        <div>{el.history_title}</div>
+                      </S.Title>
+                      <S.Content>
+                        <div>{el.history_content}</div>
+                      </S.Content>
+                      <S.Commentdiv>
+                        <Commentinput>
+                          <input
+                            id="comment"
+                            type="text"
+                            style={{
+                              width: "100%",
+                              height: "50px",
+                              backgroundColor: "#DBD0C0",
+                              border: "none",
+                            }}
+                            placehoder="여기에 댓글을 작성하세요"
+                          ></input>
+                          <div>
+                            {!accessToken ? (
+                              <Button
+                                onClick={registCommentHandler}
+                                style={{ display: "none" }}
+                              >
+                                Comment
+                              </Button>
+                            ) : (
+                              <Button onClick={registCommentHandler}>
+                                Comment
+                              </Button>
+                            )}
+                          </div>
+                        </Commentinput>
+                        <Commentarea>
+                          <ul
+                            style={{
+                              width: "80%",
+                            }}
+                          >
+                            {listComment.map((comment) => {
+                              return (
+                                <Comment
+                                  key={comment.id}
+                                  comment={comment}
+                                  userId={userId}
+                                  deleteComment={deleteCommentHandler}
+                                  changeComment={changeCommentHandler}
+                                />
+                              );
+                            })}
+                          </ul>
+                        </Commentarea>
+                      </S.Commentdiv>
+                    </S.HistoryDiv>
+                  </S.OuterDiv>
+                </div>
               );
             })}
           </>
@@ -509,5 +517,6 @@ const Commentarea = styled.div`
   margin: 5px 1px 5px 1px;
 `;
 
-
 //useEffect를 써서 , 위도 경도가 바뀔때, 그값을 인풋텍스트로 불러오는걸 만들기
+
+//우리데이타 파일들 윈도우 인포 만들기 , 카카오
