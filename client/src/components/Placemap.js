@@ -26,6 +26,9 @@ export default function Map() {
   // 줌 값
   const [zoomLevel, setZoomLevel] = useState(9);
 
+  // 주소검색 마커
+  const [addressMarker, setAddressMarker] = useState(null);
+
   // 주소검색창 안 값의 변화
   const [inputText, setInputText] = useState(" ");
 
@@ -62,6 +65,7 @@ export default function Map() {
 
     kakao.maps.event.addListener(map, "dragend", function () {
       // 지도 중심좌표를 얻어옵니다
+      const geocoder = new kakao.maps.services.Geocoder();
       const latlng = map.getCenter();
       const latCheck = latlng.getLat();
       const lngCheck = latlng.getLng();
@@ -71,6 +75,12 @@ export default function Map() {
       });
       console.log(coords);
       map.panTo(coords);
+      let callback = function(result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+            console.log(result[0]);
+        }
+    }
+    geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
     });
     kakao.maps.event.addListener(map, "zoom_changed", function () {
       // 지도의 현재 레벨을 얻어옵니다
@@ -81,13 +91,17 @@ export default function Map() {
   };
   useEffect(() => {
     mapFirst();
-  }, [statePlace, zoomLevel]);
+  }, []);
 
   const mapSearch = () => {
     const geocoder = new kakao.maps.services.Geocoder();
+    // 이전 마크 사라짐
+    if (addressMarker !== null) {
+      addressMarker.setMap(null);
+    }
 
     geocoder.addressSearch(inputText, function (result, status) {
-      // 정상적으로 검색이 완료됐으면      
+      // 정상적으로 검색이 완료됐으면
       if (status === kakao.maps.services.Status.OK) {
         const newSearch = result[0];
         setStatePlace({
@@ -96,13 +110,16 @@ export default function Map() {
         const coords = new kakao.maps.LatLng(newSearch.y, newSearch.x);
         kakaoMap.panTo(coords);
 
-        console.log(statePlace)
+        console.log(statePlace);
 
         const marker = new kakao.maps.Marker({
           map: kakaoMap,
           position: coords,
           clickable: true,
         });
+        setAddressMarker(marker);
+
+        marker.setMap(kakaoMap);
 
         kakao.maps.event.addListener(marker, "click", function () {
           // 클릭시 마커 삭제
@@ -524,6 +541,7 @@ const Commentarea = styled.div`
   margin: 5px 1px 5px 1px;
 `;
 
-//useEffect를 써서 , 위도 경도가 바뀔때, 그값을 인풋텍스트로 불러오는걸 만들기
-
 //우리데이타 파일들 윈도우 인포 만들기 , 카카오
+//지도 좌표 검색시 텍스트 갱신
+
+// 커멘트 좋아요

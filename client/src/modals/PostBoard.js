@@ -53,12 +53,12 @@ const PostBoard = () => {
       withCredentials: false,
     };
     console.log(config);
-    const url = `https://dapi.kakao.com/v2/local/search/address.json?query=${addressText}`;
+    const url = `https://dapi.kakao.com/v2/local/search/address.json?analyze_type: similar&query=${addressText}`;
     // console.log(url);
     const res = await axios
       .get(url, config)
       .then((res) => {
-        console.log(res);
+        console.log("res", res);
         const location = res.data.documents[0];
         setAddress({
           place_id: "",
@@ -72,6 +72,10 @@ const PostBoard = () => {
       });
     // console.log("address", address);
   };
+
+  // 맵을써서 푸쉬를 해서 모든 값을 담은 후에, 그 값을 화면에 띄어준다. 선택할수 있게 만들고 선택받은 텍스트를 값으로 만들어준다.
+
+  // 반복문 써서 푸쉬한다.
 
   // 히스토리 데이터
   const historyInputValue = (key) => (e) => {
@@ -118,7 +122,11 @@ const PostBoard = () => {
       formData,
       config
     );
-    console.log("res", res);
+    console.log("res", res.status);
+    if (res.status === 201) {
+      alert("히스토리가 등록되었습니다");
+      window.location.replace("/board");
+    }
   };
 
   return (
