@@ -75,12 +75,12 @@ export default function Map() {
       });
       console.log(coords);
       map.panTo(coords);
-      let callback = function(result, status) {
+      let callback = function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
-            console.log(result[0]);
+          console.log(result[0]);
         }
-    }
-    geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+      };
+      geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
     });
     kakao.maps.event.addListener(map, "zoom_changed", function () {
       // 지도의 현재 레벨을 얻어옵니다
@@ -197,15 +197,23 @@ export default function Map() {
   };
 
   //사진 가져오기 (수정중)
+  // map으로 반복하더라도 결국 imageList에는 하나의 히스토리에 대한 내용이 갱신되는 것이기 때문에,
+  // imgList라는 빈배열을 하나 만들어서, 여기에 map으로 반복된 결과물을 담아주는 식으로 바꿨음.
   const getImage = () => {
+    const imgList = [];
     historyList.map((el) => {
       axios
         .get(`${serverUrl}histories/photo?historyid=${el.id}`)
         .then((res) => {
           if (res.status === 200) {
-            setImageList(res.data.data);
+            setImageList((prev) => [...prev, ...res.data.data]);
+            imgList.push(imageList);
+            // console.log("imageList", imageList);
           }
         });
+      console.log("imaList", imgList);
+      console.log("imaList 0", imgList[0]);
+      console.log("imaList 1", imgList[1]);
     });
   };
   useEffect(() => {
