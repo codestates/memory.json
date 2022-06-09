@@ -166,7 +166,6 @@ const PostBoard = () => {
   // 팝업창 닫기
   const closePostCode = () => {
     setIsPopupOpen(false);
-    setAddressText(address.place_address)
   };
   //-------------------------------------------------------------
 
@@ -205,6 +204,7 @@ const PostBoard = () => {
                   addressList={addressList}
                   onClose={closePostCode}
                   setAddress={setAddress}
+                  setAddressText={setAddressText}
                 />
               </PopupDom>
             )}

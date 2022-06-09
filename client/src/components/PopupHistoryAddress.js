@@ -19,8 +19,14 @@ const PopupHistoryAddress = (props) => {
     const eleid = document.getElementById(`${id}`).innerText;
     console.log(eleid)
     console.log(locationList)
-    const abc = locationList.filter(el=> el.address_name === eleid)
-    console.log(abc)
+    const location = locationList.filter(el=> el.address_name === eleid);
+    props.setAddress({  
+      place_id: "",
+      place_address: location[0].address_name,
+      place_lng: location[0].x,
+      place_lat: location[0].y,
+    });
+    props.setAddressText(`${location[0].address_name}`)
     props.onClose(); 
   };
 
