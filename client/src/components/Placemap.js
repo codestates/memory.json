@@ -46,9 +46,11 @@ export default function Map() {
 
   // DB로부터 장소에 해당하는 사진 목록을 모두 불러와서 imageList에 담아줌.
   const [imageList, setImageList] = useState([]);
+  console.log(imageList)
 
   // 히스토리 목록 불러오기.
   const [historyList, setHistoryList] = useState([]);
+  console.log(historyList)
 
   const mapFirst = () => {
     console.log("mapFirst실행");
@@ -190,10 +192,10 @@ export default function Map() {
         });
       });
     });
-    console.log("history", historyList);
-    console.log("imageList", imageList);
-    console.log("id", historyList.length);
-    console.log(isHistory);
+    // console.log("history", historyList);
+    // console.log("imageList", imageList);
+    // console.log("id", historyList.length);
+    // console.log(isHistory);
   };
 
   //사진 가져오기 (수정중)
