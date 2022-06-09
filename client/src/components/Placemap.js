@@ -16,6 +16,7 @@ const { kakao } = window;
 export default function Map() {
   const [isHistory, setIsHistory] = useState(false);
   const [placeList, setPlaceList] = useState([]);
+  console.log("placeList", placeList)
 
   const [kakaoMap, setKakaoMap] = useState(null);
   // 위도 경도 상태값
@@ -31,6 +32,7 @@ export default function Map() {
 
   // 주소검색창 안 값의 변화
   const [inputText, setInputText] = useState(" ");
+  console.log(inputText)
 
   // 입력 시 검색 창 상태 변화.
   const onChange = (e) => {
@@ -46,11 +48,11 @@ export default function Map() {
 
   // DB로부터 장소에 해당하는 사진 목록을 모두 불러와서 imageList에 담아줌.
   const [imageList, setImageList] = useState([]);
-  console.log(imageList)
+  console.log("imageList",imageList)
 
   // 히스토리 목록 불러오기.
   const [historyList, setHistoryList] = useState([]);
-  console.log(historyList)
+  console.log("historyList",historyList)
 
   const mapFirst = () => {
     console.log("mapFirst실행");
@@ -80,6 +82,9 @@ export default function Map() {
       let callback = function(result, status) {
         if (status === kakao.maps.services.Status.OK) {
             console.log(result[0]);
+            let searchAddress = result[0]
+            console.log(searchAddress.address.region_1depth_name)
+            setInputText(`${searchAddress.address.region_1depth_name}`+' '+`${searchAddress.address.region_2depth_name}`+' '+`${searchAddress.address.region_3depth_name}`)
         }
     }
     geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
@@ -153,9 +158,8 @@ export default function Map() {
         }
       );
       console.log(res.status);
-      if (res.status === 200) {
+      if (res.status === 200) { 
         setPlaceList(res.data.data);
-        console.log(placeList);
       }
     } catch (err) {
       setError(err);
@@ -192,10 +196,6 @@ export default function Map() {
         });
       });
     });
-    // console.log("history", historyList);
-    // console.log("imageList", imageList);
-    // console.log("id", historyList.length);
-    // console.log(isHistory);
   };
 
   //사진 가져오기 (수정중)
@@ -205,7 +205,7 @@ export default function Map() {
         .get(`${serverUrl}histories/photo?historyid=${el.id}`)
         .then((res) => {
           if (res.status === 200) {
-            setImageList(res.data.data);
+            setImageList((prev) => [...prev, ...res.data.data]);
           }
         });
     });
