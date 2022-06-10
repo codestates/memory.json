@@ -29,15 +29,14 @@ export default function Map() {
 
   // 주소검색 마커
   const [addressMarker, setAddressMarker] = useState(null);
-
   // 인포윈도우
   const [kakaoInfo, setKakaoInfo] = useState(null);
+  // 히스토리 마커
+  const [historyMakrer, setHistoryMarker]= useState(null);
 
   // 주소검색창 안 값의 변화
   const [inputText, setInputText] = useState(" ");
   console.log(inputText);
-
-  const [tempText, setTempText] = useState(" ");
 
   // 입력 시 검색 창 상태 변화.
   const onChange = (e) => {
@@ -188,6 +187,10 @@ export default function Map() {
     if (kakaoInfo !== null) {
       kakaoInfo.close(kakaoMap);
     }
+    if (historyMakrer !== null) {
+      historyMakrer.setMap(null);
+    }
+
     const imageSrc = "../img/historyMarker.png", // 마커이미지의 주소입니다
       imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
       imageOption = {offset: new kakao.maps.Point(27, 69)}; 
@@ -206,6 +209,7 @@ export default function Map() {
         level: zoomLevel,
       });
 
+      setHistoryMarker(marker)
       console.log(marker);
 
       // 마커 클릭 시 함수 실행. (historyList 및 imageList 생성)
@@ -480,7 +484,6 @@ export default function Map() {
                         })}
                       </S.Image>
                       <S.YearFavorite>
-                        <div>{el.id}</div>
                         <div>{el.history_year}</div>
                         <div
                           style={{
