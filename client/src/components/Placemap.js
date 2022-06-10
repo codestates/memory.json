@@ -30,9 +30,14 @@ export default function Map() {
   // 주소검색 마커
   const [addressMarker, setAddressMarker] = useState(null);
 
+  // 인포윈도우
+  const [kakaoInfo, setKakaoInfo] = useState(null);
+
   // 주소검색창 안 값의 변화
   const [inputText, setInputText] = useState(" ");
   console.log(inputText);
+
+  const [tempText, setTempText] = useState(" ");
 
   // 입력 시 검색 창 상태 변화.
   const onChange = (e) => {
@@ -113,6 +118,10 @@ export default function Map() {
       addressMarker.setMap(null);
     }
 
+    if (kakaoInfo !== null) {
+      kakaoInfo.close(kakaoMap);
+    }
+
     geocoder.addressSearch(inputText, function (result, status) {
       // 정상적으로 검색이 완료됐으면
       if (status === kakao.maps.services.Status.OK) {
@@ -134,22 +143,17 @@ export default function Map() {
 
         marker.setMap(kakaoMap);
 
+        const infowindow = new kakao.maps.InfoWindow({
+          content: `<div style="width:150px;text-align:center;padding:6px 0;">${inputText}</div>`,
+        });
+        setKakaoInfo(infowindow);
+        infowindow.open(kakaoMap, marker);
+
         kakao.maps.event.addListener(marker, "click", function () {
-          // 클릭시 마커 삭제
+          // 클릭시 마커 윈포윈도우 삭제
+          infowindow.close(kakaoMap, marker);
           marker.setMap(null);
         });
-
-        // const infowindow = new kakao.maps.InfoWindow({
-        //   content: `<div style="width:150px;text-align:center;padding:6px 0;">${inputText}</div>`,
-        // });
-        // setKakaoInfo(infowindow);
-        // infowindow.open(kakaoMap, marker);
-
-        // kakao.maps.event.addListener(marker, "click", function () {
-        //   // 클릭시 마커 윈포윈도우 삭제
-        //   infowindow.close(kakaoMap, marker);
-        //   marker.setMap(null);
-        // });
       }
     });
   };
@@ -178,6 +182,18 @@ export default function Map() {
   const mapscript = () => {
     console.log("mapScript실행");
 
+    if (addressMarker !== null) {
+      addressMarker.setMap(null);
+    }
+    if (kakaoInfo !== null) {
+      kakaoInfo.close(kakaoMap);
+    }
+    const imageSrc = "../img/historyMarker.png", // 마커이미지의 주소입니다
+      imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
+      imageOption = {offset: new kakao.maps.Point(27, 69)}; 
+
+    const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption)
+
     placeList.map((el) => {
       // 마커 생성
       const marker = new kakao.maps.Marker({
@@ -186,8 +202,10 @@ export default function Map() {
         // 마커가 표시 될 위치
         position: new kakao.maps.LatLng(el.place_lat, el.place_lng),
         clickable: true,
+        image: markerImage,
         level: zoomLevel,
       });
+
       console.log(marker);
 
       // 마커 클릭 시 함수 실행. (historyList 및 imageList 생성)
@@ -221,12 +239,12 @@ export default function Map() {
     getImage();
   }, [historyList]);
 
-  const [carocelImage, setCarocelImage] = useState([]);
-  console.log(carocelImage);
+  const [historyIdArr, setHistoryIdArr] = useState([]);
+  console.log(historyIdArr);
 
   const checklist = () => {
     // imagelist에서 히스토리 아이디만 가져오기
-    setCarocelImage([]);
+    setHistoryIdArr([]);
     const searchHistoryId = imageList.map(function (data) {
       return data.history_id;
     });
@@ -240,7 +258,7 @@ export default function Map() {
 
     // 중복제거 숫자로 바꾸기
     const numberUnique = searchHistoryIdUnique.map((el) => Number(el));
-    setCarocelImage(numberUnique);
+    setHistoryIdArr(numberUnique);
   };
   useEffect(() => {
     checklist();
@@ -457,9 +475,8 @@ export default function Map() {
                   <S.OuterDiv>
                     <S.HistoryDiv>
                       <S.Image>
-                        {carocelImage.map((ele) => {
-                          if(ele === el.id)
-                          return Slide(ele);
+                        {historyIdArr.map((ele) => {
+                          if (ele === el.id) return Slide(ele);
                         })}
                       </S.Image>
                       <S.YearFavorite>
@@ -582,6 +599,6 @@ const Commentarea = styled.div`
   margin: 5px 1px 5px 1px;
 `;
 
-//우리데이타 파일들 윈도우 인포 만들기 , 카카오
-
 // 커멘트 getElementId 를통해서 historyId의 값과 userId의 값을 가져오기
+
+// 반응형 컴포넌트 무한스크롤 특정확대값에서만 작동함
