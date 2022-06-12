@@ -1,0 +1,27 @@
+모든 명령어는 server폴더에서 터미널로 실행합니다.
+
+// 시퀄라이즈 시더 파일(더미데이터)를 DB에 넣는 과정 
+
+1. sequelize db:seed:all 을 터미널에 입력하여 시더파일을 DB에 넣습니다.
+
+2. sequelize db:seed:undo:all 을 터미널에 입력하여 시더파일내용을 DB에서 삭제합니다.
+
+
+// 시퀄라이즈 마이그레이션 사용법
+
+1. sequelize db:migrate --env development 명령어로 마이그레이션 폴더안의 파일 내용을
+
+ 마이그레이션내용을 development환경(./config/config.js) DB에 추가합니다.
+
+2. sequelize db:migrate:undo --env development 명령어로 마이그레이션내용을 DB에서 삭제합니다. 
+
+
+// 파일 수정으로 시퀄라이즈 DB 구조를 변경할게 되면 개인 컴퓨터에 들어있는 DB 구조를 포맷해야합니다(마이그레이션 미사용)
+따라서 /server/index.js에서 
+sequelize
+  .sync({
+    force: false,
+  })
+이부분에서 force를 false에서 true로 바꿔주신다음 저장 후 서버를 실행하시면 모델파일들과 맞게끔 개인 컴퓨터의 db 구조가 초기화됩니다.
+
+대신 true로 계속 놔두게 되면 서버실행마다 DB 데이터가 초기화 되므로 한번 동기화 시키면 다시 false로 바꾼다음 꼭 저장해 주십시오.
