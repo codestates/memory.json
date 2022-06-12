@@ -5,7 +5,7 @@ const upload = require("../../middlewares/uploadprofile/uploadprofile.js");
 const userInfo = require("./userInfo");
 const secession = require("./secession");
 const change = require("./change");
-const signup = require("./signup.ts");
+const signup = require("./signup");
 const signin = require("./signin");
 const signout = require("./signout");
 const socialByGoogle = require("./socialByGoogle");
@@ -17,9 +17,9 @@ router.delete("/", secession);
 router.patch("/", change);
 router.post("/signup", signup);
 router.post("/signin", signin);
+router.post("/socialbygoogle", socialByGoogle);
+router.post("/socialbykakao", socialByKakao);
 router.post("/signout", signout);
-router.post("/socialByGoogle", socialByGoogle);
-router.post("/socialByKakao", socialByKakao);
 router.post("/profile", upload.single("profile"), profile);
 
 

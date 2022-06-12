@@ -1,0 +1,228 @@
+/users:
+  get:
+    tags:
+      - /users
+    summary: 유저 회원정보 조회 기능
+    parameters:
+      $ref: "../components/authentication.yaml#/token"
+    responses:
+      "200":
+        description: 유저정보조회 성공
+        content:
+          application/json:
+            schema:
+              $ref: "../components/userdata.yaml#/userdata"
+      "401":
+        $ref: "../components/error.yaml#/tokenError"
+      "500":
+        $ref: "../components/error.yaml#/internalError"
+
+  delete:
+    tags:
+      - /users
+    summary: 유저 회원탈퇴 기능
+    parameters:
+      $ref: "../components/authentication.yaml#/token"
+    responses:
+      "204":
+        description: 회원탈퇴에 성공하였을때
+      "401":
+        $ref: "../components/error.yaml#/tokenError"
+
+      "500":
+        $ref: "../components/error.yaml#/internalError"
+  patch:
+    tags:
+      - /users
+    summary: 유저 회원정보 수정 기능
+    parameters:
+      $ref: "../components/authentication.yaml#/token"
+    requestBody:
+      description: 유저 회원 수정 정보가 필요합니다.
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              password:
+                type: string
+              mobile:
+                type: string
+              email:
+                type: string
+              age:
+                type: string
+    responses:
+      "200":
+        description: 유저 로그인 성공
+        content:
+          application/json:
+            schema:
+              $ref: "../components/userdata.yaml#/userdata"
+      "401":
+        $ref: "../components/error.yaml#/tokenError"
+
+      "500":
+        $ref: "../components/error.yaml#/internalError"
+/users/signup:
+  post:
+    tags:
+      - /users
+    summary: 유저 로컬 회원가입 기능
+    requestBody:
+      description: 유저 회원 가입 정보가 필요합니다.
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+              - password
+              - user_account
+              - user_name
+            properties:
+              user_name:
+                type: string
+              user_account:
+                type: string
+              password:
+                type: string
+              mobile:
+                type: string
+              email:
+                type: email
+              address:
+                type: string
+              age:
+                type: number
+              sex:
+                type: string
+                example: F
+    responses:
+      "200":
+        description: 유저 회원가입 성공
+        content:
+          application/json:
+            schema:
+              $ref: "../components/userdata.yaml#/userdata"
+      "400":
+        description: bad request
+      "409":
+        description: 이미 존재하는 회원가입정보
+      "500":
+        $ref: "../components/error.yaml#/internalError"
+/users/signin:
+  post:
+    tags:
+      - /users
+    summary: 유저 로그인 기능
+    requestBody:
+      description: 유저 회원 가입 정보가 필요합니다.
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+              - password
+              - user_account
+            properties:
+              password:
+                type: string
+              user_account:
+                type: string
+    responses:
+      "200":
+        description: 유저 로그인 성공
+        content:
+          application/json:
+            schema:
+              $ref: "../components/userdata.yaml#/usertokendata"
+      "400":
+        description: email 이나 비밀번호가 없을 경우
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: 로그인 정보를 확인해주세요
+      "401":
+        description: user_account와 password와 일치하는 정보가 DB에 없을경우
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: 허가되지 않은 로그인입니다
+      "500":
+        $ref: "../components/error.yaml#/internalError"
+/users/socialbygoogle:
+  post:
+    tags:
+      - /users
+    summary: 구글 소셜 로그인 기능
+    responses:
+      "200":
+        description: 유저 로그인 성공
+        content:
+          application/json:
+            schema:
+              $ref: "../components/userdata.yaml#/usertokendata"
+      "400":
+        description: bad request
+      "500":
+        $ref: "../components/error.yaml#/internalError"
+
+/users/socialbykakao:
+  post:
+    tags:
+      - /users
+    summary: 카카오 소셜 로그인 기능
+    responses:
+      "200":
+        description: 유저 로그인 성공
+        content:
+          application/json:
+            schema:
+              $ref: "../components/userdata.yaml#/usertokendata"
+      "400":
+        description: bad request
+      "500":
+        $ref: "../components/error.yaml#/internalError"
+/users/signout:
+  tags:
+    - /users
+  summary: 유저 로그아웃 기능
+  parameters:
+    $ref: "../components/authentication.yaml#/token"
+  responses:
+    "200":
+      description: 로그아웃 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Logout is Success!"
+    "401":
+      $ref: "../components/error.yaml#/tokenError"
+    "500":
+      $ref: "../components/error.yaml#/internalError"
+/users/profile:
+  post:
+    tags:
+      - /users
+    summary: 유저 프로필 사진 업로드 기능
+    consumes:
+      - multipart/form-data
+    parameters:
+      - name: file
+        in: formData
+        description: file to upload
+        required: false
+        type: file
+        $ref: "../components/authentication.yaml#/token"

@@ -1,16 +1,15 @@
-const express = require("express");
-const cors = require("cors");
-const https = require("https");
-const fs = require("fs");
-const { sequelize } = require("./models");
+import * as express from "express";
+import * as cors from "cors";
+import * as https from "https";
+import * as fs from "fs";
+import { sequelize } from "./models";
 const app = express();
-const cookieParser = require("cookie-parser");
-const controllers = require("./controllers");
-const logger = require("./config/winston");
-const morgan = require("morgan")
-const swaggerUi = require("swagger-ui-express");
-const ymal = require('yamljs');
-const path = require('path')
+import * as controllers from "./controllers";
+import * as logger from "./config/winston";
+import * as morgan from "morgan";
+import * as swaggerUi from "swagger-ui-express";
+import * as ymal from "yamljs";
+import * as path from "path";
 
 const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
 const HTTP_PORT = process.env.HTTP_PORT || 4000;
@@ -23,12 +22,13 @@ app.use(
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
   })
 );
-app.use(cookieParser());
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 
 // swagger
-const swaggerSpec = ymal.load(path.join(__dirname, './middlewares/swagger/openapi.yaml'))
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+const swaggerSpec = ymal.load(
+  path.join(__dirname, './build/swagger.yaml')
+);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // 컨트롤러
 app.use("/", controllers);
@@ -45,7 +45,7 @@ sequelize
     console.log("데이터베이스 연결 성공");
     logger.info("데이터베이스가 연결되었습니다.");
   })
-  .catch((err) => {
+  .catch((err: any) => {
     console.error(err);
     logger.error(err);
   });

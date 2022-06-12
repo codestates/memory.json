@@ -7,9 +7,13 @@
     "lib": ["ES2015", "DOM", "DOM.Iterable"],
     "noImplicitAny": true,
     "strict": true,
-    
-    
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
   },
-  "include": ["./controllers/users/*"],
+  "include": ["./*.ts"],
   "exclude": ["node_modules", "dist"]
 }
