@@ -1,8 +1,11 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../components/Button";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import PopupHistoryAddress from "../components/PopupHistoryAddress";
+import PopupDom from "../components/PopupDom";
 import Newhistory from "../pages/Newhistory";
 
 const PostBoard = () => {
@@ -10,6 +13,8 @@ const PostBoard = () => {
   const { isSignin } = signinState;
   const serverUrl = process.env.REACT_APP_SERVER_URL;
   console.log(signinState);
+
+  const navigate = useNavigate();
 
   // 토큰 가져오기
   const accessTokenJson = localStorage.getItem("accessToken");
@@ -29,10 +34,12 @@ const PostBoard = () => {
     history_content: "",
     history_year: 0,
   });
-  console.log("historyInfo", historyInfo);
 
   // 주소 정보
   const [address, setAddress] = useState({});
+  console.log("address", address)
+
+  const [addressList, setAddressList] = useState([]);
   // 주소 검색 창
   const [addressText, setAddressText] = useState("");
   console.log(addressText);
@@ -44,6 +51,10 @@ const PostBoard = () => {
     // console.log("주소 검색 창", addressText);
   };
 
+  const onReset = () => {
+    setAddressText("");
+  };
+
   // 주소 정보 불러오기
   const callAddress = async () => {
     const config = {
@@ -52,20 +63,28 @@ const PostBoard = () => {
       },
       withCredentials: false,
     };
-    console.log(config);
+    // console.log(config);
     const url = `https://dapi.kakao.com/v2/local/search/address.json?analyze_type: similar&query=${addressText}`;
     // console.log(url);
     const res = await axios
       .get(url, config)
       .then((res) => {
         console.log("res", res);
-        const location = res.data.documents[0];
-        setAddress({
-          place_id: "",
-          place_address: location.address_name,
-          place_lng: location.x,
-          place_lat: location.y,
-        });
+        // console.log(res.data.documents);
+        // console.log(res.data.meta.total_count)
+        setAddressList([]);
+        const addressLength = res.data.meta.total_count;
+        const addressArray = res.data.documents;
+        if (addressLength >= 0) {
+          if (addressLength === 0) {
+            alert("해당 지역이 없습니다 다시 검색해주세요");
+            return;
+          } else {
+            for (let n = 0; n < addressLength; n++) {
+              setAddressList((prev) => [...prev, addressArray[n]]);
+            }
+          }
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -75,7 +94,13 @@ const PostBoard = () => {
 
   // 맵을써서 푸쉬를 해서 모든 값을 담은 후에, 그 값을 화면에 띄어준다. 선택할수 있게 만들고 선택받은 텍스트를 값으로 만들어준다.
 
-  // 반복문 써서 푸쉬한다.
+  const addressSelect = () => {
+    console.log("실행");
+    console.log("check", addressList);
+  };
+  useEffect(() => {
+    addressSelect();
+  }, [addressList]);
 
   // 히스토리 데이터
   const historyInputValue = (key) => (e) => {
@@ -125,9 +150,24 @@ const PostBoard = () => {
     console.log("res", res.status);
     if (res.status === 201) {
       alert("히스토리가 등록되었습니다");
-      window.location.replace("/board");
+      navigate("/board");
     }
   };
+
+  //-------------------------------------------------------------
+  // 팝업창 상태 관리
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  // 팝업창 열기
+  const openPostCode = () => {
+    setIsPopupOpen(true);
+  };
+
+  // 팝업창 닫기
+  const closePostCode = () => {
+    setIsPopupOpen(false);
+  };
+  //-------------------------------------------------------------
 
   return (
     <>
@@ -148,7 +188,27 @@ const PostBoard = () => {
             placeholder={"주소를 입력해주세요."}
             onChange={searchInputAddress}
           ></input>
-          <Button onClick={callAddress}>검색</Button>
+          <Button
+            onClick={() => {
+              callAddress();
+              openPostCode();
+              onReset();
+            }}
+          >
+            검색
+          </Button>
+          <div id="popupDom">
+            {isPopupOpen && (
+              <PopupDom>
+                <PopupHistoryAddress
+                  addressList={addressList}
+                  onClose={closePostCode}
+                  setAddress={setAddress}
+                  setAddressText={setAddressText}
+                />
+              </PopupDom>
+            )}
+          </div>
         </div>
       </Div>
       <Div>
@@ -161,12 +221,12 @@ const PostBoard = () => {
       </Div>
       <Div>
         <span style={{ color: "#ad8b73" }}>내용</span>
-        <input
-          type={"text"}
+        <TextArea
+          type={"textarea"}
           onChange={historyInputValue("history_content")}
-          placeholder={"추억을 적어주세요.(30자 이내)"}
-          maxLength={"30"}
-        ></input>
+          placeholder={"추억을 적어주세요.(100자 이내)"}
+          maxLength={"100"}
+        ></TextArea>
       </Div>
       <Div>
         <span style={{ color: "#ad8b73" }}>사진</span>
@@ -202,9 +262,16 @@ export default PostBoard;
 const Div = styled.div`
   background-color: #f9e4c8;
   width: 90%;
+  max-height: 400%;
   display: flex;
   flex-direction: column;
   border-radius: 0.5rem;
   margin: 5px 1px 5px 1px;
   box-shadow: 3px 3px 2px #826f66;
+`;
+
+const TextArea = styled.textarea`
+  width: auto;
+  height: 150px;
+  resize: none;
 `;
