@@ -46,6 +46,7 @@ export default function Map() {
 
   // DB로부터 장소에 해당하는 사진 목록을 모두 불러와서 imageList에 담아줌.
   const [imageList, setImageList] = useState([]);
+  // const [imgList, setImgList] = useState();
 
   // 히스토리 목록 불러오기.
   const [historyList, setHistoryList] = useState([]);
@@ -91,6 +92,7 @@ export default function Map() {
   };
   useEffect(() => {
     mapFirst();
+    console.log("1번째 렌더링");
   }, []);
 
   const mapSearch = () => {
@@ -161,6 +163,7 @@ export default function Map() {
   };
   useEffect(() => {
     mapscript();
+    console.log("2번째 렌더링");
   }, [placeList]);
 
   const mapscript = () => {
@@ -190,35 +193,37 @@ export default function Map() {
         });
       });
     });
-    console.log("history", historyList);
+
     console.log("imageList", imageList);
     console.log("id", historyList.length);
     console.log(isHistory);
   };
-
+  console.log("history", historyList);
   //사진 가져오기 (수정중)
   // map으로 반복하더라도 결국 imageList에는 하나의 히스토리에 대한 내용이 갱신되는 것이기 때문에,
   // imgList라는 빈배열을 하나 만들어서, 여기에 map으로 반복된 결과물을 담아주는 식으로 바꿨음.
   const getImage = () => {
-    const imgList = [];
+    // const imgList = [];
+    // setImageList();
     historyList.map((el) => {
       axios
         .get(`${serverUrl}histories/photo?historyid=${el.id}`)
         .then((res) => {
           if (res.status === 200) {
-            setImageList((prev) => [...prev, ...res.data.data]);
-            imgList.push(imageList);
+            setImageList((prev) => [...prev, [...res.data.data]]);
+            // imgList.push(imageList);
+
             // console.log("imageList", imageList);
           }
         });
-      console.log("imaList", imgList);
-      console.log("imaList 0", imgList[0]);
-      console.log("imaList 1", imgList[1]);
     });
   };
   useEffect(() => {
     getImage();
+    console.log("3번째 렌더링");
   }, [historyList]);
+
+  console.log("imageList", imageList);
 
   const Image = styled.img`
     max-width: 50%;
@@ -236,21 +241,23 @@ export default function Map() {
     return (
       <div>
         <Slider {...settings}>
-          {imageList.map((el, i) => {
-            return (
-              <div key={i}>
-                <Image
-                  src={el.image_name}
-                  style={{
-                    // objectFit: "contain",
-                    display: "block",
-                    margin: "auto",
-                    justifyContent: "center",
-                  }}
-                />
-              </div>
-            );
-          })}
+          {imageList.map((el) =>
+            el.map((ele) => {
+              return (
+                <div>
+                  <Image
+                    src={ele.image_name}
+                    style={{
+                      // objectFit: "contain",
+                      display: "block",
+                      margin: "auto",
+                      justifyContent: "center",
+                    }}
+                  />
+                </div>
+              );
+            })
+          )}
         </Slider>
       </div>
     );
@@ -383,7 +390,8 @@ export default function Map() {
             <input
               style={{
                 width: "500px",
-                height: "50px",
+                height: "px",
+                marginBottom: "5px",
               }}
               placeholder="Search Place..."
               onChange={onChange}
@@ -392,16 +400,16 @@ export default function Map() {
             <button
               type="submit"
               onClick={mapSearch}
-              style={{ width: "48px", height: "50px" }}
+              style={{ width: "50px", height: "50px" }}
             >
               검색
             </button>
             <button
               type="submit"
               onClick={getPlaceList}
-              style={{ width: "130px", height: "50px" }}
+              style={{ width: "100px", height: "50px" }}
             >
-              검색동네 히스토리
+              주변 히스토리
             </button>
           </S.Inputbutton>
         </form>
@@ -409,8 +417,8 @@ export default function Map() {
           <div
             id="map"
             style={{
-              width: "1300px",
-              height: "600px",
+              width: "52vw",
+              height: "60vh",
               zIndex: "0",
             }}
             level={zoomLevel}

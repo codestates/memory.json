@@ -1,13 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Slide from "./CarouselSlide";
 import styled from "styled-components";
-// 이미지도 여기서 불러와야 할듯함.
-// 1. imgList를 가져와야한다.
-// 2.
 
-// Placemap으로부터 imageList를 props로 불러옴.
-let imgList = props.imageList;
-export default function Slider() {
+export default function MainSlider() {
   // 전체 슬라이드의 갯수를 imageList배열안의 배열의 길이로 설정해주어야함.
 
   const total_slides = imageList.length - 1;
@@ -40,6 +35,7 @@ export default function Slider() {
       <CarouContainer>
         <CarouText>
           <h1>memory</h1>
+          <p>{currentSlide}</p>
         </CarouText>
         <SliderContainer ref={slideRef}>
           <Slide />
