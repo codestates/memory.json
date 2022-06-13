@@ -382,7 +382,6 @@ export default function Map() {
   // 커맨트 입력 값
   const [commentInput, setCommentInput] = useState("");
   const [isFavorite, setIsFavorite] = useState({});
-  const [commentId, setCommentId] = useState("");
 
   const commentOnChange = (e) => {
     setCommentInput(e.target.value);
@@ -405,13 +404,14 @@ export default function Map() {
         }
       )
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         updateCommentHandler(historyId);
       })
       .catch((err) => console.log(err));
   }
 
-  function deleteCommentHandler(commentId) {
+  function deleteCommentHandler(commentId, historyId) {
+    console.log(historyId)
     axios
       .delete(`${serverUrl}comments/${commentId}`, {
         headers: {
@@ -420,7 +420,8 @@ export default function Map() {
         },
       })
       .then((res) => {
-        listCommentHandler();
+        console.log(res)
+        updateCommentHandler(historyId);
       })
       .catch((err) => {
         console.log(err);
@@ -430,6 +431,7 @@ export default function Map() {
   function changeCommentHandler(commentId) {}
 
   const updateCommentHandler = (historyId) => {
+    console.log(historyId)
     let headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
@@ -443,6 +445,7 @@ export default function Map() {
         // 댓글이 없는 경우
         if (listComment.length === 0) {
           setListComment(data.data.data.listComment);
+          return;
         }
         // 댓글이 있는 경우
         if (listComment.length > 0) {
@@ -456,21 +459,31 @@ export default function Map() {
           const searchHistoryIdUnique = Object.keys(idUnique);
           const commentIdNumber = searchHistoryIdUnique.map((el) => Number(el));
           console.log(commentIdNumber); // [1,7,8,9] // historyId 8
+          let count = 0;
           for (let n = 0; n < commentIdNumber.length; n++) {
             let arr = listComment;
+            count++;
             console.log(arr);
             console.log(data.data.data.listComment);
             if (commentIdNumber[n] === historyId) {
-              // 기존에 댓글이 있는 게시글에 댓글을 추가 하는 경우
-              let tempComment = arr.filter((element) => element.history_id !== historyId);
+              // 기존에 댓글이 있는 게시글에 댓글을 추가 하는 경우// 댓글을 삭제하는 경우
+              let tempComment = arr.filter(
+                (element) => element.history_id !== historyId
+              );
               console.log(tempComment);
-              setListComment(()=> [...tempComment,...data.data.data.listComment]);
-            } else {
-              // 여러 게시글이 있는데 다른 게시글에는 댓글이 있는데, 내가 쓰려는게시글 댓글 처음 쓰는 경우
-              setListComment((prev) => [
-                ...prev,
+              setListComment(() => [
+                ...tempComment,
                 ...data.data.data.listComment,
               ]);
+              break;
+            } else {
+              // 여러 게시글이 있는데 다른 게시글에는 댓글이 있는데, 내가 쓰려는 게시글 댓글 처음 쓰는 경우
+              if (count === commentIdNumber.length) {
+                setListComment((prev) => [
+                  ...prev,
+                  ...data.data.data.listComment
+                ]);
+              }
             }
           }
         }
@@ -697,6 +710,7 @@ export default function Map() {
                                   <Comment
                                     key={comment.id}
                                     comment={comment}
+                                    historyid ={comment.history_id}
                                     userId={userId}
                                     deleteComment={deleteCommentHandler}
                                     changeComment={changeCommentHandler}
@@ -740,9 +754,5 @@ const Commentarea = styled.div`
   margin: 5px 1px 5px 1px;
 `;
 
-// 반응형 컴포넌트 무한스크롤 특정확대값에서만 작동함
-
 // 문제 사항
-// (2) 기존커맨트를 불러오는 영역을 게시글이 불러와 질때 작동을 하게 해야 한다.\
-// (3) listComment는 맨처음에도 작동이 되어야 하고 , 커맨트를 누군가가 삭제를 할때나, 제거를 할때 사용 되어야 한다.
-//(4) useEffect가 맨처음랜더링 될때 사용 안되게 할수 있을까 ?
+// (1) 삭제가 안먹힘 ( 화면에 안나타남 렌더링 문제)
