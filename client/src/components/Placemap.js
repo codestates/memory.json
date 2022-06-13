@@ -6,14 +6,55 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styled from "styled-components";
 import Comment from "./Comment";
-import { useSelector } from "react-redux";
 import Button from "./Button";
+import { useDispatch, useSelector } from "react-redux";
+import { userinfoAction } from "../store/actions";
 
 axios.defaults.withCredentials = true;
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 const { kakao } = window;
 
 export default function Map() {
+  // 유저 정보 가져오기
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    bringUserinformation();
+  }, []);
+
+  const bringUserinformation = () => {
+    // console.log(accessToken)
+    axios
+      .get(`${serverUrl}users`, {
+        headers: { authorization: `Bearer ${accessToken}` },
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          const userInformation = res.data.data;
+          console.log(userInformation);
+          console.log(userInformation.profile);
+          dispatch(
+            userinfoAction(
+              userInformation.address,
+              userInformation.age,
+              userInformation.email,
+              userInformation.id,
+              userInformation.mobile,
+              userInformation.provider,
+              userInformation.sex,
+              userInformation.social_id,
+              userInformation.user_account,
+              userInformation.user_name
+            )
+          );
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  //
+
   const [isHistory, setIsHistory] = useState(false);
   const [placeList, setPlaceList] = useState([]);
   console.log("placeList", placeList);
@@ -29,15 +70,14 @@ export default function Map() {
 
   // 주소검색 마커
   const [addressMarker, setAddressMarker] = useState(null);
-
   // 인포윈도우
   const [kakaoInfo, setKakaoInfo] = useState(null);
+  // 히스토리 마커
+  const [historyMakrer, setHistoryMarker] = useState(null);
 
   // 주소검색창 안 값의 변화
   const [inputText, setInputText] = useState(" ");
   console.log(inputText);
-
-  const [tempText, setTempText] = useState(" ");
 
   // 입력 시 검색 창 상태 변화.
   const onChange = (e) => {
@@ -170,6 +210,7 @@ export default function Map() {
       console.log(res.status);
       if (res.status === 200) {
         setPlaceList(res.data.data);
+        console.log(res.data.data);
       }
     } catch (err) {
       setError(err);
@@ -180,7 +221,7 @@ export default function Map() {
   }, [placeList]);
 
   const mapscript = () => {
-    console.log("mapScript실행");
+    // console.log("mapScript실행");
 
     if (addressMarker !== null) {
       addressMarker.setMap(null);
@@ -188,11 +229,19 @@ export default function Map() {
     if (kakaoInfo !== null) {
       kakaoInfo.close(kakaoMap);
     }
+    if (historyMakrer !== null) {
+      historyMakrer.setMap(null);
+    }
+
     const imageSrc = "../img/historyMarker.png", // 마커이미지의 주소입니다
       imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
-      imageOption = {offset: new kakao.maps.Point(27, 69)}; 
+      imageOption = { offset: new kakao.maps.Point(27, 69) };
 
-    const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption)
+    const markerImage = new kakao.maps.MarkerImage(
+      imageSrc,
+      imageSize,
+      imageOption
+    );
 
     placeList.map((el) => {
       // 마커 생성
@@ -206,6 +255,7 @@ export default function Map() {
         level: zoomLevel,
       });
 
+      setHistoryMarker(marker);
       console.log(marker);
 
       // 마커 클릭 시 함수 실행. (historyList 및 imageList 생성)
@@ -224,13 +274,20 @@ export default function Map() {
 
   //사진 가져오기
   const getImage = () => {
-    setImageList([]);
+    console.log("stop");
+    const arr = [];
     historyList.map((el) => {
       axios
         .get(`${serverUrl}histories/photo?historyid=${el.id}`)
         .then((res) => {
           if (res.status === 200) {
-            setImageList((prev) => [...prev, ...res.data.data]);
+            arr.push(...[res.data.data]);
+            if (arr.length === historyList.length) {
+              setImageList([]);
+              for (let n = 0; n < arr.length; n++) {
+                setImageList((prev) => [...prev, ...arr[n]]);
+              }
+            }
           }
         });
     });
@@ -244,7 +301,6 @@ export default function Map() {
 
   const checklist = () => {
     // imagelist에서 히스토리 아이디만 가져오기
-    setHistoryIdArr([]);
     const searchHistoryId = imageList.map(function (data) {
       return data.history_id;
     });
@@ -258,7 +314,9 @@ export default function Map() {
 
     // 중복제거 숫자로 바꾸기
     const numberUnique = searchHistoryIdUnique.map((el) => Number(el));
+
     setHistoryIdArr(numberUnique);
+    console.log("historyId 실행시점");
   };
   useEffect(() => {
     checklist();
@@ -303,27 +361,42 @@ export default function Map() {
     );
   };
 
-  const [listComment, setListComment] = useState([]);
-  const [isFavorite, setIsFavorite] = useState({});
-
+  // 댓글 , 좋아요 부분
   const serverUrl = process.env.REACT_APP_SERVER_URL;
   let accessToken = "";
   if (localStorage.accessToken) {
     accessToken = JSON.parse(localStorage.accessToken).accessToken;
   }
-
-  const historyId = 1001; // 이건 ishistoryId가 있을 대체해야 함
-  const userId = accessToken ? 1007 : ""; // 이건 isUserId가 있을 때 대체해야 함
-
   console.log(accessToken);
 
-  function registCommentHandler() {
-    const comment = document.querySelector("#comment").value;
+  // 아이디 값 가져오기
+  const userState = useSelector((state) => state.userinfoReducer);
 
+  const { id } = userState;
+  const userId = id;
+
+  // 댓글 목록
+  const [listComment, setListComment] = useState([]);
+  console.log("listComment", listComment);
+
+  // 커맨트 입력 값
+  const [commentInput, setCommentInput] = useState("");
+  const [isFavorite, setIsFavorite] = useState({});
+  const [commentId, setCommentId] = useState("");
+
+  const commentOnChange = (e) => {
+    setCommentInput(e.target.value);
+    console.log(e.target.value);
+  };
+  const onReset = () => {
+    setCommentInput("");
+  };
+
+  function registCommentHandler(historyId) {
     axios
       .post(
         `${serverUrl}comments/${historyId}`,
-        { comments_content: comment },
+        { comments_content: commentInput },
         {
           headers: {
             "Content-Type": "application/json",
@@ -332,7 +405,8 @@ export default function Map() {
         }
       )
       .then((res) => {
-        listCommentHandler();
+        console.log(res);
+        updateCommentHandler(historyId);
       })
       .catch((err) => console.log(err));
   }
@@ -355,7 +429,7 @@ export default function Map() {
 
   function changeCommentHandler(commentId) {}
 
-  const listCommentHandler = () => {
+  const updateCommentHandler = (historyId) => {
     let headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
@@ -366,14 +440,75 @@ export default function Map() {
     axios
       .get(`${serverUrl}comments/${historyId}`, { headers: headers })
       .then((data) => {
-        setListComment(data.data.data.listComment);
+        // 댓글이 없는 경우
+        if (listComment.length === 0) {
+          setListComment(data.data.data.listComment);
+        }
+        // 댓글이 있는 경우
+        if (listComment.length > 0) {
+          const searchHistoryId = listComment.map(function (dataId) {
+            return dataId.history_id;
+          });
+          const idUnique = {};
+          searchHistoryId.forEach((el) => {
+            idUnique[el] = true;
+          });
+          const searchHistoryIdUnique = Object.keys(idUnique);
+          const commentIdNumber = searchHistoryIdUnique.map((el) => Number(el));
+          console.log(commentIdNumber); // [1,7,8,9] // historyId 8
+          for (let n = 0; n < commentIdNumber.length; n++) {
+            let arr = listComment;
+            console.log(arr);
+            console.log(data.data.data.listComment);
+            if (commentIdNumber[n] === historyId) {
+              // 기존에 댓글이 있는 게시글에 댓글을 추가 하는 경우
+              let tempComment = arr.filter((element) => element.history_id !== historyId);
+              console.log(tempComment);
+              setListComment(()=> [...tempComment,...data.data.data.listComment]);
+            } else {
+              // 여러 게시글이 있는데 다른 게시글에는 댓글이 있는데, 내가 쓰려는게시글 댓글 처음 쓰는 경우
+              setListComment((prev) => [
+                ...prev,
+                ...data.data.data.listComment,
+              ]);
+            }
+          }
+        }
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  function favoriteHandler() {
+  // 초기 게시글 커맨트 랜더링
+  const listCommentHandler = (historyId) => {
+    console.log("listId", historyId);
+    let headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    };
+    if (!accessToken) {
+      headers = { "Content-Type": "application/json" };
+    }
+    axios
+      .get(`${serverUrl}comments/${historyId}`, { headers: headers })
+      .then((data) => {
+        console.log("data", data);
+        setListComment((prev) => [...prev, ...data.data.data.listComment]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    setListComment([]);
+    historyIdArr.map((id) => {
+      console.log("몇번실행됫니?");
+      listCommentHandler(id);
+    });
+  }, [historyIdArr]);
+
+  function favoriteHandler(historyId) {
     if (!accessToken) {
       return alert("회원만 좋아요 할 수 있습니다.");
     }
@@ -396,7 +531,7 @@ export default function Map() {
       });
   }
 
-  const getFavorite = () => {
+  const getFavorite = (historyId) => {
     let headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
@@ -418,7 +553,6 @@ export default function Map() {
   useEffect(() => {
     if (isFavorite.like === undefined) {
       getFavorite();
-      listCommentHandler();
     }
   }, []);
 
@@ -480,7 +614,6 @@ export default function Map() {
                         })}
                       </S.Image>
                       <S.YearFavorite>
-                        <div>{el.id}</div>
                         <div>{el.history_year}</div>
                         <div
                           style={{
@@ -493,14 +626,14 @@ export default function Map() {
                             {isFavorite.like === "T" ? (
                               <Button
                                 style={{ background: "red" }}
-                                onClick={favoriteHandler}
+                                onClick={() => favoriteHandler(el.id)}
                               >
                                 좋아요
                               </Button>
                             ) : (
                               <Button
                                 style={{ background: `white`, color: "black" }}
-                                onClick={favoriteHandler}
+                                onClick={() => favoriteHandler(el.id)}
                               >
                                 ♥︎
                               </Button>
@@ -529,17 +662,24 @@ export default function Map() {
                               border: "none",
                             }}
                             placehoder="여기에 댓글을 작성하세요"
+                            value={commentInput}
+                            onChange={commentOnChange}
                           ></input>
                           <div>
                             {!accessToken ? (
                               <Button
-                                onClick={registCommentHandler}
+                                onClick={() => registCommentHandler(el.id)}
                                 style={{ display: "none" }}
                               >
                                 Comment
                               </Button>
                             ) : (
-                              <Button onClick={registCommentHandler}>
+                              <Button
+                                onClick={() => {
+                                  registCommentHandler(el.id);
+                                  onReset();
+                                }}
+                              >
                                 Comment
                               </Button>
                             )}
@@ -552,15 +692,16 @@ export default function Map() {
                             }}
                           >
                             {listComment.map((comment) => {
-                              return (
-                                <Comment
-                                  key={comment.id}
-                                  comment={comment}
-                                  userId={userId}
-                                  deleteComment={deleteCommentHandler}
-                                  changeComment={changeCommentHandler}
-                                />
-                              );
+                              if (comment.history_id === el.id)
+                                return (
+                                  <Comment
+                                    key={comment.id}
+                                    comment={comment}
+                                    userId={userId}
+                                    deleteComment={deleteCommentHandler}
+                                    changeComment={changeCommentHandler}
+                                  />
+                                );
                             })}
                           </ul>
                         </Commentarea>
@@ -599,6 +740,9 @@ const Commentarea = styled.div`
   margin: 5px 1px 5px 1px;
 `;
 
-// 커멘트 getElementId 를통해서 historyId의 값과 userId의 값을 가져오기
-
 // 반응형 컴포넌트 무한스크롤 특정확대값에서만 작동함
+
+// 문제 사항
+// (2) 기존커맨트를 불러오는 영역을 게시글이 불러와 질때 작동을 하게 해야 한다.\
+// (3) listComment는 맨처음에도 작동이 되어야 하고 , 커맨트를 누군가가 삭제를 할때나, 제거를 할때 사용 되어야 한다.
+//(4) useEffect가 맨처음랜더링 될때 사용 안되게 할수 있을까 ?
