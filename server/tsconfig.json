@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "target": "ES5",
+    "outDir": "./dist",
+    "moduleResolution": "Node",
+    "lib": ["ES2015", "DOM", "DOM.Iterable"],
+    "noImplicitAny": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+  },
+  "include": ["./*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

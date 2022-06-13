@@ -1,0 +1,14 @@
+token:
+  - in: header
+    name: accessToken
+    description: 헤더에 토큰을 입력하세요
+    required: true
+    schema:
+      type: string
+    examples:
+      Sample:
+        value: "accesstoken"
+        summary: A sample token
+BearerAuth:
+  type: http
+  scheme: bearer

@@ -1,0 +1,41 @@
+openapi: "3.0.0"
+info:
+  title: Sample API
+  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+  version: 0.1.9
+host: http://localhost:4000
+basePath: /
+servers:
+  - url: http://localhost:4000
+    description: Memory.json API에 오신것을 환영합니다!
+paths:
+  /users:
+    $ref: "./paths/user.yaml#/~1users"
+  /users/signup:
+    $ref: "./paths/user.yaml#/~1users~1signup"
+  /users/signin:
+    $ref: "./paths/user.yaml#/~1users~1signin"
+  /users/socialbygoogle:
+    $ref: "./paths/user.yaml#/~1users~1socialbygoogle"
+  /users/socialbykakao:
+    $ref: "./paths/user.yaml#/~1users~1socialbykakao"
+  /users/signout:
+    $ref: "./paths/user.yaml#/~1users~1signout"
+  /users/profile:
+    $ref: "./paths/user.yaml#/~1users~1profile"
+  /places:
+    $ref: "./paths/place.yaml#/~1places"
+  /histories/{placeId}:
+    $ref: "./paths/history.yaml#/~1histories"
+
+    
+
+components:
+  responses:
+    successResponse:
+      description: successful request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
