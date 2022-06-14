@@ -31,8 +31,8 @@ export default function Map() {
       .then((res) => {
         if (res.status === 200) {
           const userInformation = res.data.data;
-          console.log(userInformation);
-          console.log(userInformation.profile);
+          // console.log(userInformation);
+          // console.log(userInformation.profile);
           dispatch(
             userinfoAction(
               userInformation.address,
@@ -57,7 +57,7 @@ export default function Map() {
 
   const [isHistory, setIsHistory] = useState(false);
   const [placeList, setPlaceList] = useState([]);
-  console.log("placeList", placeList);
+  // console.log("placeList", placeList);
 
   const [kakaoMap, setKakaoMap] = useState(null);
   // 위도 경도 상태값
@@ -77,12 +77,12 @@ export default function Map() {
 
   // 주소검색창 안 값의 변화
   const [inputText, setInputText] = useState(" ");
-  console.log(inputText);
+  // console.log(inputText);
 
   // 입력 시 검색 창 상태 변화.
   const onChange = (e) => {
     setInputText(e.target.value);
-    console.log(e.target.value);
+    // console.log(e.target.value);
   };
 
   const handleSubmit = (e) => {
@@ -93,14 +93,14 @@ export default function Map() {
 
   // DB로부터 장소에 해당하는 사진 목록을 모두 불러와서 imageList에 담아줌.
   const [imageList, setImageList] = useState([]);
-  console.log("imageList", imageList);
+  // console.log("imageList", imageList);
 
   // 히스토리 목록 불러오기.
   const [historyList, setHistoryList] = useState([]);
-  console.log("historyList", historyList);
+  // console.log("historyList", historyList);
 
   const mapFirst = () => {
-    console.log("mapFirst실행");
+    // console.log("mapFirst실행");
     const container = document.getElementById("map");
     const options = {
       center: new kakao.maps.LatLng(
@@ -122,7 +122,7 @@ export default function Map() {
       setStatePlace({
         center: { lat: coords.Ma, lng: coords.La },
       });
-      console.log(coords);
+      // console.log(coords);
       map.panTo(coords);
       let callback = function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
@@ -172,7 +172,7 @@ export default function Map() {
         const coords = new kakao.maps.LatLng(newSearch.y, newSearch.x);
         kakaoMap.panTo(coords);
 
-        console.log(statePlace);
+        // console.log(statePlace);
 
         const marker = new kakao.maps.Marker({
           map: kakaoMap,
@@ -207,10 +207,10 @@ export default function Map() {
           headers: { authorization: `Bearer ${accessToken}` },
         }
       );
-      console.log(res.status);
+      // console.log(res.status);
       if (res.status === 200) {
         setPlaceList(res.data.data);
-        console.log(res.data.data);
+        // console.log(res.data.data);
       }
     } catch (err) {
       setError(err);
@@ -256,7 +256,7 @@ export default function Map() {
       });
 
       setHistoryMarker(marker);
-      console.log(marker);
+      // console.log(marker);
 
       // 마커 클릭 시 함수 실행. (historyList 및 imageList 생성)
       kakao.maps.event.addListener(marker, "click", function () {
@@ -274,7 +274,7 @@ export default function Map() {
 
   //사진 가져오기
   const getImage = () => {
-    console.log("stop");
+    // console.log("stop");
     const arr = [];
     historyList.map((el) => {
       axios
@@ -297,7 +297,7 @@ export default function Map() {
   }, [historyList]);
 
   const [historyIdArr, setHistoryIdArr] = useState([]);
-  console.log(historyIdArr);
+  // console.log(historyIdArr);
 
   const checklist = () => {
     // imagelist에서 히스토리 아이디만 가져오기
@@ -316,7 +316,7 @@ export default function Map() {
     const numberUnique = searchHistoryIdUnique.map((el) => Number(el));
 
     setHistoryIdArr(numberUnique);
-    console.log("historyId 실행시점");
+    // console.log("historyId 실행시점");
   };
   useEffect(() => {
     checklist();
@@ -367,7 +367,7 @@ export default function Map() {
   if (localStorage.accessToken) {
     accessToken = JSON.parse(localStorage.accessToken).accessToken;
   }
-  console.log(accessToken);
+  // console.log(accessToken);
 
   // 아이디 값 가져오기
   const userState = useSelector((state) => state.userinfoReducer);
@@ -377,20 +377,21 @@ export default function Map() {
 
   // 댓글 목록
   const [listComment, setListComment] = useState([]);
-  console.log("listComment", listComment);
+  // console.log("listComment", listComment);
 
   // 커맨트 입력 값
   const [commentInput, setCommentInput] = useState("");
-  console.log("input",commentInput)
+  // console.log("input",commentInput)
   const [isFavorite, setIsFavorite] = useState({});
+  console.log(isFavorite)
 
   // 커맨트 수정 입력값
   const [commentFixInput, setCommentFixInput] = useState("");
-  console.log("fixinput",commentFixInput)
+  // console.log("fixinput",commentFixInput)
 
   const commentOnChange = (e) => {
     setCommentInput(e.target.value);
-    console.log(e.target.value);
+    // console.log(e.target.value);
   };
   const onReset = () => {
     setCommentInput("");
@@ -528,18 +529,18 @@ export default function Map() {
 
   // 초기 게시글 커맨트 랜더링
   const listCommentHandler = (historyId) => {
-    console.log("listId", historyId);
+    // console.log("listId", historyId);
     let headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     };
-    if (!accessToken) {
+    if (!accessToken) { 
       headers = { "Content-Type": "application/json" };
     }
     axios
       .get(`${serverUrl}comments/${historyId}`, { headers: headers })
       .then((data) => {
-        console.log("data", data);
+        // console.log("data", data);
         setListComment((prev) => [...prev, ...data.data.data.listComment]);
       })
       .catch((err) => {
@@ -549,12 +550,13 @@ export default function Map() {
   useEffect(() => {
     setListComment([]);
     historyIdArr.map((id) => {
-      console.log("몇번실행됫니?");
+      // console.log("몇번실행됫니?");
       listCommentHandler(id);
     });
   }, [historyIdArr]);
 
   function favoriteHandler(historyId) {
+    console.log(historyId)
     if (!accessToken) {
       return alert("회원만 좋아요 할 수 있습니다.");
     }
@@ -570,6 +572,8 @@ export default function Map() {
         }
       )
       .then((data) => {
+        console.log("favor",data)
+        console.log(data.data.data)
         setIsFavorite(data.data.data);
       })
       .catch((err) => {
@@ -588,13 +592,13 @@ export default function Map() {
     axios
       .get(`${serverUrl}favorites/${historyId}`, { headers: headers })
       .then((data) => {
+        console.log("get",data)
         setIsFavorite(data.data.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  console.log(isFavorite);
 
   useEffect(() => {
     if (isFavorite.like === undefined) {
@@ -821,3 +825,7 @@ const Commentarea = styled.div`
   }
   margin: 5px 1px 5px 1px;
 `;
+
+
+// (1) 좋아요가 같이 표시 되는 문제
+// (2) 히스토리 아이디가 응답으로 와라
