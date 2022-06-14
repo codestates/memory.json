@@ -6,7 +6,6 @@ module.exports = async (req, res) => {
   try {
     // 파라미터 조회
     const placeAddress = req.query.place_address;
-    // console.log(placeAddress);
 
     // DB에서 파라미터와 유사한 결과를 모두 조회. 예를들어 파라미터가 서울특별시 용산이면
     // 서울특별시 용산에 대한 모든 결과를 조회함.

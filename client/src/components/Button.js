@@ -12,7 +12,7 @@ const StyledButton = styled.button`
   cursor: pointer;
   padding: 0.25rem 1rem;
   float: inline-end;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 
   /* 크기 */
   font-size: 1rem;
@@ -28,7 +28,7 @@ const StyledButton = styled.button`
 
   /* 기타 */
   & + & {
-    margin-left: 1rem;
+    margin-top: 0.5rem;
   }
 `;
 

@@ -1,0 +1,102 @@
+/histories:
+  post:
+    tags:
+      - /histories
+    summary: 새로운 history를 등록하기 위한 요청을 보냅니다.
+    parameters:
+      - in: path
+        name: placeId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: place Id를 입력해야 합니다.
+    requestBody:
+      description: history 생성 정보가 필요합니다.
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              history_title:
+                type: string
+              history_content:
+                type: string
+              history_year:
+                type: number
+                exmaple: 1980
+    responses:
+      "201":
+        description: history 등록 성공
+        content:
+          application.json:
+            schema:
+              type: object
+              properties:
+                historyInfo:
+                  $ref: "../components/historydata.yaml#/historydata"
+                photoInfo:
+                  $ref: "../components/photodata.yaml#/photodata"
+                placeInfo:
+                  $ref: "../components/placedata.yaml#/placedata"
+      "500":
+        $ref: "../components/error.yaml#/internalError"
+
+/histories/place:
+  get:
+    tags:
+      - /histories
+    summary: place에 기록되어 있는 history의 목록을 조회하기 위한 요청을 보냅니다.
+    parameters:
+      - in: path
+        name: placeId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: place Id를 입력해야 합니다.
+    responses:
+      "200":
+        description: history 목록 조회 성공
+        content:
+          application.json:
+            schema:
+              type: object
+              properties:
+                data:
+                  $ref: "../components/historydata.yaml#/historydata"
+                message:
+                  type: string
+      "404":
+        description: not found
+      "500":
+        $ref: "../components/error.yaml#/internalError"
+
+/histories/user:
+  get:
+    tags:
+      - /histories
+    summary: user가 작성한 history 목록을 조회합니다.
+    parameters:
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: user Id를 입력해야 합니다.
+
+    responses:
+      "200":
+        description: history 목록 조회 성공
+        content:
+          application.json:
+            schema:
+              type: object
+              properties:
+                data:
+                  $ref: "../components/historydata.yaml#/historydata"
+                message:
+                  type: string
+      "500":
+        $ref: "../components/error.yaml#/internalError"

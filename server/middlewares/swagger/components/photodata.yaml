@@ -1,0 +1,15 @@
+photodata:
+  type: object
+  properties:
+    id:
+      type: number
+    history_id:
+      type: number
+    image_name:
+      type: string
+    thumbnail:
+      type: string
+    createdAt:
+      type: string
+    updatedAt:
+      type: string
