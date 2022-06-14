@@ -27,6 +27,10 @@ paths:
     $ref: "./paths/place.yaml#/~1places"
   /histories/{placeId}:
     $ref: "./paths/history.yaml#/~1histories"
+  /histories/place/{placeId}:
+    $ref: "./paths/history.yaml#/~1histories~1place"
+  /histories/user/{userId}:
+    $ref: "./paths/history.yaml#/~1histories~1user"    
 
     
 

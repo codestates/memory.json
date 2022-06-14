@@ -1,0 +1,21 @@
+historydata:
+  type: object
+  properties:
+    id:
+      type: number
+    place_id:
+      type: number
+    user_id:
+      type: number
+    history_title:
+      type: string
+      example: 제목입니다
+    history_content:
+      type: string
+      example: 내용입니다
+    history_year:
+      type: number
+    createdAt:
+      type: string
+    updatedAt:
+      type: string

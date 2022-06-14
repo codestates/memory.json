@@ -15,34 +15,7 @@
         content:
           application.json:
             schema:
-              type: object
-              properties:
-                id:
-                  type: number
-                  example: 1001
-                user_id:
-                  type: number
-                  example: 1001            
-                place_name:
-                  type: string
-                  example:            
-                place_address:
-                  type: string
-                  example: 서울특별시 용산구 한강대로 405
-                place_lat:
-                  type: string
-                  example: 45.1928
-                place_lng:
-                  type: string
-                  example: 34.293             
-                createdAt:
-                  type: string
-                  example: 2022-05-24T12:27:19.000Z
-                updatedAt:
-                  type: string
-                  example: 2022-05-24T12:27:19.000Z
-                message:
-                  type: string
+              $ref: "../components/placedata.yaml#/placedata"
       "500":
         $ref: "../components/error.yaml#/internalError"
         

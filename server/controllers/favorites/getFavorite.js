@@ -3,8 +3,8 @@ const { favorite } = require("../../models");
 
 module.exports = async (req, res) => {
   try {
-    let userInfo = {}
-    if(req.headers.authorization) {
+    let userInfo = {};
+    if (req.headers.authorization) {
       userInfo = await userAuthen(req);
     }
     const history_id = req.params.historyId;
@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
     });
 
     const isLike = !isFavorite ? "F" : isFavorite.dataValues.like;
-    console.log(isLike)
+    console.log(isLike);
 
     const likeCount = await favorite
       .findAll({
@@ -32,14 +32,16 @@ module.exports = async (req, res) => {
         return data.length;
       });
     console.log(likeCount);
+    console.log(isFavorite);
 
-    
-      return res
-        .status(200)
-        .send({
-          data: { like: isLike, like_count: likeCount },
-          message: "ok",
-        });
+    return res.status(200).send({
+      data: {
+        like: isLike,
+        like_count: likeCount,
+        history_id: isFavorite.dataValues.history_id,
+      },
+      message: "ok",
+    });
   } catch (err) {
     return res
       .status(500)
