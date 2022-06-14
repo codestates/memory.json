@@ -381,7 +381,12 @@ export default function Map() {
 
   // 커맨트 입력 값
   const [commentInput, setCommentInput] = useState("");
+  console.log("input",commentInput)
   const [isFavorite, setIsFavorite] = useState({});
+
+  // 커맨트 수정 입력값
+  const [commentFixInput, setCommentFixInput] = useState("");
+  console.log("fixinput",commentFixInput)
 
   const commentOnChange = (e) => {
     setCommentInput(e.target.value);
@@ -389,6 +394,13 @@ export default function Map() {
   };
   const onReset = () => {
     setCommentInput("");
+  };
+
+  // 댓글 보기
+  const [isOpen, setIsOpen] = useState(false);
+
+  const commentToggle = () => {
+    setIsOpen((isOpen) => !isOpen); // on,off 개념 boolean
   };
 
   function registCommentHandler(historyId) {
@@ -411,7 +423,7 @@ export default function Map() {
   }
 
   function deleteCommentHandler(commentId, historyId) {
-    console.log(historyId)
+    console.log(historyId);
     axios
       .delete(`${serverUrl}comments/${commentId}`, {
         headers: {
@@ -420,7 +432,7 @@ export default function Map() {
         },
       })
       .then((res) => {
-        console.log(res)
+        console.log(res);
         updateCommentHandler(historyId);
       })
       .catch((err) => {
@@ -428,10 +440,31 @@ export default function Map() {
       });
   }
 
-  function changeCommentHandler(commentId) {}
+  function changeCommentHandler(commentId, historyId) {
+    console.log(historyId);
+    console.log(commentId);
+    axios
+      .patch(
+        `${serverUrl}comments/${commentId}`,
+        { comment_content: commentFixInput },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        updateCommentHandler(historyId);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   const updateCommentHandler = (historyId) => {
-    console.log(historyId)
+    console.log(historyId);
     let headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
@@ -458,7 +491,7 @@ export default function Map() {
           });
           const searchHistoryIdUnique = Object.keys(idUnique);
           const commentIdNumber = searchHistoryIdUnique.map((el) => Number(el));
-          console.log(commentIdNumber); // [1,7,8,9] // historyId 8
+          console.log(commentIdNumber);
           let count = 0;
           for (let n = 0; n < commentIdNumber.length; n++) {
             let arr = listComment;
@@ -481,7 +514,7 @@ export default function Map() {
               if (count === commentIdNumber.length) {
                 setListComment((prev) => [
                   ...prev,
-                  ...data.data.data.listComment
+                  ...data.data.data.listComment,
                 ]);
               }
             }
@@ -678,13 +711,24 @@ export default function Map() {
                             value={commentInput}
                             onChange={commentOnChange}
                           ></input>
-                          <div>
+                          <div
+                            style={{
+                              flex: "1 1 auto",
+                              display: "flex",
+                              flexDirection: "column",
+                              flexwrap: "wrap",
+                              alignContent: "space-evenly",
+                              alignItems: "center",
+                              flexBasis: "150px",
+                              height: "auto",
+                              width: "150px",
+                            }}
+                          >
                             {!accessToken ? (
                               <Button
-                                onClick={() => registCommentHandler(el.id)}
                                 style={{ display: "none" }}
                               >
-                                Comment
+                                댓글 작성
                               </Button>
                             ) : (
                               <Button
@@ -693,32 +737,56 @@ export default function Map() {
                                   onReset();
                                 }}
                               >
-                                Comment
+                                댓글 작성
+                              </Button>
+                            )}
+                            {!isOpen ? (
+                              <Button
+                                onClick={() => {
+                                  commentToggle();
+                                }}
+                              >
+                                댓글 보기
+                              </Button>
+                            ) : (
+                              <Button
+                                onClick={() => {
+                                  commentToggle();
+                                }}
+                              >
+                                댓글 닫기
                               </Button>
                             )}
                           </div>
                         </Commentinput>
-                        <Commentarea>
-                          <ul
-                            style={{
-                              width: "80%",
-                            }}
-                          >
-                            {listComment.map((comment) => {
-                              if (comment.history_id === el.id)
-                                return (
-                                  <Comment
-                                    key={comment.id}
-                                    comment={comment}
-                                    historyid ={comment.history_id}
-                                    userId={userId}
-                                    deleteComment={deleteCommentHandler}
-                                    changeComment={changeCommentHandler}
-                                  />
-                                );
-                            })}
-                          </ul>
-                        </Commentarea>
+                        {isOpen ? (
+                          <Commentarea>
+                            <ul
+                              style={{
+                                width: "80%",
+                              }}
+                            >
+                              {listComment.map((comment) => {
+                                if (comment.history_id === el.id)
+                                  return (
+                                    <Comment
+                                      key={comment.id}
+                                      comment={comment}
+                                      historyid={comment.history_id}
+                                      userId={userId}
+                                      setCommentFixInput={setCommentFixInput}
+                                      deleteComment={deleteCommentHandler}
+                                      changeComment={changeCommentHandler}
+                                    />
+                                  );
+                              })}
+                            </ul>
+                          </Commentarea>
+                        ) : (
+                          <Commentarea
+                            style={{ display: "none" }}
+                          ></Commentarea>
+                        )}
                       </S.Commentdiv>
                     </S.HistoryDiv>
                   </S.OuterDiv>
@@ -744,7 +812,7 @@ const Commentinput = styled.div`
 const Commentarea = styled.div`
   display: flex;
   width: 100%;
-  height: 100px;
+  height: 200px;
   align-items: center;
   justify-content: center;
   overflow-y: auto;
@@ -753,6 +821,3 @@ const Commentarea = styled.div`
   }
   margin: 5px 1px 5px 1px;
 `;
-
-// 문제 사항
-// (1) 삭제가 안먹힘 ( 화면에 안나타남 렌더링 문제)
