@@ -11,7 +11,13 @@
         content:
           application/json:
             schema:
-              $ref: "../components/userdata.yaml#/userdata"
+              type: object
+              properties:
+                data:
+                  $ref: "../components/userdata.yaml#/userdata"
+                message:
+                  type: string
+                  example: 유저 정보 조회 성공!
       "401":
         $ref: "../components/error.yaml#/tokenError"
       "500":
@@ -58,7 +64,13 @@
         content:
           application/json:
             schema:
-              $ref: "../components/userdata.yaml#/userdata"
+              type: object
+              properties:
+                data:
+                  $ref: "../components/userdata.yaml#/userdata"
+                message:
+                  type: string
+                  example: 유저 로그인 성공!
       "401":
         $ref: "../components/error.yaml#/tokenError"
 
@@ -103,7 +115,13 @@
         content:
           application/json:
             schema:
-              $ref: "../components/userdata.yaml#/userdata"
+              type: object
+              properties:
+                data:
+                  $ref: "../components/userdata.yaml#/userdata"
+                message:
+                  type: string
+                  example: 회원가입이 성공적으로 완료되었습니다!
       "400":
         description: bad request
       "409":
@@ -135,7 +153,13 @@
         content:
           application/json:
             schema:
-              $ref: "../components/userdata.yaml#/usertokendata"
+              type: object
+              properties:
+                data:
+                  $ref: "../components/userdata.yaml#/usertokendata"
+                message:
+                  type: string
+                  example: 홍일도가 로그인하였습니다!
       "400":
         description: email 이나 비밀번호가 없을 경우
         content:

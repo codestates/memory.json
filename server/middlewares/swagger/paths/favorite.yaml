@@ -1,0 +1,75 @@
+/favorites:
+  get:
+    tags:
+      - /favorites
+    summary: 히스토리에 해당하는 좋아요 개수를 가져오는 요청을 보냅니다.
+    parameters:
+      - in: path
+        name: historyId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: history Id를 입력해야 합니다.
+    responses:
+      "200":
+        description: 좋아요 개수 조회 성공
+        content:
+          application.json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    like:
+                      type: string
+                      example: T
+                    like_count:
+                      type: number
+                      example: 3
+                    history_id:
+                      type: number
+                      example: 1001
+                message:
+                  type: string
+                  example: 좋아요 개수 조회 성공
+      "500":
+        $ref: "../components/error.yaml#/internalError"
+  post:
+    tags:
+      - /favorites
+    summary: 히스토리에 해당하는 좋아요 개수를 업데이트 요청을 보냅니다.
+    parameters:
+      - in: path
+        name: historyId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: history Id를 입력해야 합니다.
+    responses:
+      "200":
+        description: 좋아요 개수 조회 성공
+        content:
+          application.json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    like:
+                      type: string
+                      example: T
+                    like_count:
+                      type: number
+                      example: 3
+                    history_id:
+                      type: number
+                      example: 1001
+                message:
+                  type: string
+                  example: 좋아요 개수 업데이트 성공
+      "500":
+        $ref: "../components/error.yaml#/internalError"

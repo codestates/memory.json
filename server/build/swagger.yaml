@@ -24,40 +24,47 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: number
-                    example: 10001
-                  user_name:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 10001
+                      user_name:
+                        type: string
+                      user_account:
+                        type: string
+                        example: test9911
+                      profile:
+                        type: string
+                        example: test.png
+                      social_id:
+                        type: number
+                        example: 1020201
+                      provider:
+                        type: string
+                        example: kakao
+                      email:
+                        type: string
+                        example: test@naver.com
+                      address:
+                        type: string
+                        example: 서울특별시
+                      age:
+                        type: number
+                        example: 25
+                      sex:
+                        type: string
+                        example: F
+                      createdAt:
+                        type: string
+                        example: 2022-06-09T04:54:20.000Z
+                      updatedAt:
+                        type: strings
+                        example: 2022-06-09T04:54:20.000Z
+                  message:
                     type: string
-                  user_account:
-                    type: string
-                    example: test9911
-                  profile:
-                    type: string
-                    example: test.png
-                  social_id:
-                    type: number
-                    example: 1020201
-                  provider:
-                    type: string
-                    example: kakao
-                  email:
-                    type: email
-                  address:
-                    type: string
-                    example: 서울특별시
-                  age:
-                    type: number
-                    example: 25
-                  sex:
-                    type: string
-                    example: F
-                  createdAt:
-                    type: string
-                    example: 2022-06-09T04:54:20.000Z
-                  updatedAt:
-                    type: strings
-                    example: 2022-06-09T04:54:20.000Z
+                    example: 유저 정보 조회 성공!
         '401':
           $ref: '#/paths/~1users~1signout/responses/401'
         '500':
@@ -102,7 +109,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1users/get/responses/200/content/application~1json/schema'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/paths/~1users/get/responses/200/content/application~1json/schema/properties/data'
+                  message:
+                    type: string
+                    example: 유저 로그인 성공!
         '401':
           $ref: '#/paths/~1users~1signout/responses/401'
         '500':
@@ -146,7 +159,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1users/get/responses/200/content/application~1json/schema'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/paths/~1users/get/responses/200/content/application~1json/schema/properties/data'
+                  message:
+                    type: string
+                    example: 회원가입이 성공적으로 완료되었습니다!
         '400':
           description: bad request
         '409':
@@ -180,12 +199,11 @@ paths:
               schema:
                 type: object
                 properties:
-                  accessToken:
-                    type: string
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+                  data:
+                    $ref: '#/paths/~1users~1socialbykakao/post/responses/200/content/application~1json/schema'
                   message:
                     type: string
-                    example: login success
+                    example: 홍일도가 로그인하였습니다!
         '400':
           description: email 이나 비밀번호가 없을 경우
           content:
@@ -219,7 +237,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1users~1signin/post/responses/200/content/application~1json/schema'
+                $ref: '#/paths/~1users~1socialbykakao/post/responses/200/content/application~1json/schema'
         '400':
           description: bad request
         '500':
@@ -235,7 +253,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1users~1signin/post/responses/200/content/application~1json/schema'
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+                  message:
+                    type: string
+                    example: login success
         '400':
           description: bad request
         '500':
@@ -319,32 +344,38 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: number
-                    example: 1001
-                  user_id:
-                    type: number
-                    example: 1001
-                  place_name:
-                    type: string
-                    example: null
-                  place_address:
-                    type: string
-                    example: 서울특별시 용산구 한강대로 405
-                  place_lat:
-                    type: string
-                    example: 45.1928
-                  place_lng:
-                    type: string
-                    example: 34.293
-                  createdAt:
-                    type: string
-                    example: 2022-05-24T12:27:19.000Z
-                  updatedAt:
-                    type: string
-                    example: 2022-05-24T12:27:19.000Z
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1001
+                      user_id:
+                        type: number
+                        example: 1001
+                      place_name:
+                        type: string
+                        example: null
+                      place_address:
+                        type: string
+                        example: 서울특별시 용산구 한강대로 405
+                      place_lat:
+                        type: string
+                        example: 45.1928
+                      place_lng:
+                        type: string
+                        example: 34.293
+                      createdAt:
+                        type: string
+                        example: 2022-05-24T12:27:19.000Z
+                      updatedAt:
+                        type: string
+                        example: 2022-05-24T12:27:19.000Z
+                      message:
+                        type: string
                   message:
                     type: string
+                    example: 장소 목록 조회 성공!
         '500':
           $ref: '#/paths/~1users~1signout/responses/500'
   '/histories/{placeId}':
@@ -385,22 +416,9 @@ paths:
                   historyInfo:
                     $ref: '#/paths/~1histories~1user~1%7BuserId%7D/get/responses/200/content/application.json/schema/properties/data'
                   photoInfo:
-                    type: object
-                    properties:
-                      id:
-                        type: number
-                      history_id:
-                        type: number
-                      image_name:
-                        type: string
-                      thumbnail:
-                        type: string
-                      createdAt:
-                        type: string
-                      updatedAt:
-                        type: string
+                    $ref: '#/paths/~1histories~1photo/get/responses/200/content/application.json/schema/properties/data'
                   placeInfo:
-                    $ref: '#/paths/~1places/get/responses/200/content/application.json/schema'
+                    $ref: '#/paths/~1places/get/responses/200/content/application.json/schema/properties/data'
         '500':
           $ref: '#/paths/~1users~1signout/responses/500'
   '/histories/place/{placeId}':
@@ -476,6 +494,396 @@ paths:
                         type: string
                   message:
                     type: string
+        '500':
+          $ref: '#/paths/~1users~1signout/responses/500'
+  '/histories/favorite/{userId}':
+    get:
+      tags:
+        - /histories
+      summary: user가 좋아요(favorite)한 history의 목록을 조회하기 위한 요청을 보냅니다.
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: user Id를 입력해야 합니다.
+      responses:
+        '200':
+          description: history 목록 조회 성공
+          content:
+            application.json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/paths/~1histories~1user~1%7BuserId%7D/get/responses/200/content/application.json/schema/properties/data'
+                  message:
+                    type: string
+        '500':
+          $ref: '#/paths/~1users~1signout/responses/500'
+  /histories/photo:
+    get:
+      tags:
+        - /histories
+      summary: history_id에 포함되어있는 사진을 조회하기 위한 요청을 보냅니다.
+      parameters:
+        - in: query
+          name: historyid
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: historyid를 입력해야 합니다.
+      responses:
+        '200':
+          description: 사진 목록 조회 성공
+          content:
+            application.json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      history_id:
+                        type: number
+                      image_name:
+                        type: string
+                      thumbnail:
+                        type: string
+                      createdAt:
+                        type: string
+                      updatedAt:
+                        type: string
+                  message:
+                    type: string
+        '500':
+          $ref: '#/paths/~1users~1signout/responses/500'
+  '/histories/{historyId}':
+    patch:
+      tags:
+        - /histories
+      summary: history를 수정하기 위한 요청을 보냅니다.
+      parameters:
+        - in: path
+          name: historyId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: history Id를 입력해야 합니다.
+      requestBody:
+        description: history 수정 정보가 필요합니다.
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                history_title:
+                  type: string
+                history_content:
+                  type: string
+                history_year:
+                  type: number
+                  exmaple: 1980
+      responses:
+        '201':
+          description: history 수정 성공
+          content:
+            application.json:
+              schema:
+                type: object
+                properties:
+                  newHistoryInfo:
+                    $ref: '#/paths/~1histories~1user~1%7BuserId%7D/get/responses/200/content/application.json/schema/properties/data'
+        '400':
+          description: bad request
+        '403':
+          description: forbidden
+        '404':
+          description: not found
+        '500':
+          $ref: '#/paths/~1users~1signout/responses/500'
+    delete:
+      tags:
+        - /histories
+      summary: history를 삭제하기 위한 요청을 보냅니다.
+      parameters:
+        - in: path
+          name: historyId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: history Id를 입력해야 합니다.
+      responses:
+        '201':
+          description: history 삭제 성공
+          content:
+            application.json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      historyId:
+                        type: integer
+                  message:
+                    type: string
+                    example: 1001번 히스토리 정보 삭제 성공!
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '404':
+          description: not found
+        '500':
+          $ref: '#/paths/~1users~1signout/responses/500'
+  '/favorites/{historyId}':
+    get:
+      tags:
+        - /favorites
+      summary: 히스토리에 해당하는 좋아요 개수를 가져오는 요청을 보냅니다.
+      parameters:
+        - in: path
+          name: historyId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: history Id를 입력해야 합니다.
+      responses:
+        '200':
+          description: 좋아요 개수 조회 성공
+          content:
+            application.json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      like:
+                        type: string
+                        example: T
+                      like_count:
+                        type: number
+                        example: 3
+                      history_id:
+                        type: number
+                        example: 1001
+                  message:
+                    type: string
+                    example: 좋아요 개수 조회 성공
+        '500':
+          $ref: '#/paths/~1users~1signout/responses/500'
+    post:
+      tags:
+        - /favorites
+      summary: 히스토리에 해당하는 좋아요 개수를 업데이트 요청을 보냅니다.
+      parameters:
+        - in: path
+          name: historyId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: history Id를 입력해야 합니다.
+      responses:
+        '200':
+          description: 좋아요 개수 조회 성공
+          content:
+            application.json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      like:
+                        type: string
+                        example: T
+                      like_count:
+                        type: number
+                        example: 3
+                      history_id:
+                        type: number
+                        example: 1001
+                  message:
+                    type: string
+                    example: 좋아요 개수 업데이트 성공
+        '500':
+          $ref: '#/paths/~1users~1signout/responses/500'
+  '/comments/{historyId}':
+    get:
+      tags:
+        - /comments
+      summary: 댓글 내용을 가져오는 요청을 보냅니다.
+      parameters:
+        - in: path
+          name: historyId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: history Id를 입력해야 합니다.
+      responses:
+        '200':
+          description: 댓글 내용 조회 성공
+          content:
+            application.json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      history_id:
+                        type: number
+                      user_id:
+                        type: number
+                      comment_content:
+                        type: string
+                        example: 댓글 내용입니다
+                      createdAt:
+                        type: string
+                      updatedAt:
+                        type: string
+                  message:
+                    type: string
+                    example: 댓글 조회 완료!
+        '500':
+          $ref: '#/paths/~1users~1signout/responses/500'
+    post:
+      tags:
+        - /comments
+      summary: 히스토리에 댓글을 등록하는 요청을 보냅니다.
+      parameters:
+        - in: path
+          name: historyId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: history Id를 입력해야 합니다.
+      requestBody:
+        description: 댓글 등록 정보가 필요합니다.
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                comment_content:
+                  type: string
+                  exmaple: 댓글 내용입니다
+      responses:
+        '201':
+          description: 댓글 등록 성공
+          content:
+            application.json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/paths/~1comments~1%7BhistoryId%7D/get/responses/200/content/application.json/schema/properties/data'
+                  message:
+                    type: string
+                    example: 댓글 작성 완료!
+        '400':
+          description: bad requests
+        '401':
+          description: unauthorized
+        '404':
+          description: not found
+        '500':
+          $ref: '#/paths/~1users~1signout/responses/500'
+  '/comments/{commentId}':
+    patch:
+      tags:
+        - /comments
+      summary: 댓글을 수정하는 요청을 보냅니다.
+      parameters:
+        - in: path
+          name: commentId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: comment Id를 입력해야 합니다.
+      requestBody:
+        description: 댓글 등록 정보가 필요합니다.
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                comment_content:
+                  type: string
+                  exmaple: 댓글 내용입니다
+      responses:
+        '201':
+          description: 댓글 수정 성공
+          content:
+            application.json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/paths/~1comments~1%7BhistoryId%7D/get/responses/200/content/application.json/schema/properties/data'
+                  message:
+                    type: string
+                    example: 댓글 수정 완료!
+        '400':
+          description: bad requests
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '404':
+          description: not found
+        '500':
+          $ref: '#/paths/~1users~1signout/responses/500'
+    delete:
+      tags:
+        - /comments
+      summary: 댓글을 삭제하는 요청을 보냅니다.
+      parameters:
+        - in: path
+          name: commentId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: commentId를 입력해야 합니다.
+      responses:
+        '200':
+          description: 댓글 삭제 성공
+          content:
+            application.json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      commentId:
+                        type: number
+                  message:
+                    type: string
+                    example: 1001번 히스토리 정보 삭제 성공
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '404':
+          description: not found
         '500':
           $ref: '#/paths/~1users~1signout/responses/500'
 components:

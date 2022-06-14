@@ -15,7 +15,13 @@
         content:
           application.json:
             schema:
-              $ref: "../components/placedata.yaml#/placedata"
+              type: object
+              properties:
+                data:
+                  $ref: "../components/placedata.yaml#/placedata"
+                message:
+                  type: string
+                  example: 장소 목록 조회 성공!
       "500":
         $ref: "../components/error.yaml#/internalError"
         
