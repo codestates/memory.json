@@ -50,7 +50,7 @@ module.exports = async (req, res) => {
       })
       .then((data) => {
         res
-          .status(200)
+          .status(201)
           .send({ data: data.dataValues, message: "댓글 수정 완료!" });
       })
       .catch((err) => {

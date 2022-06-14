@@ -29,7 +29,8 @@ userdata:
       type: string
       example: kakao
     email:
-      type: email
+      type: string
+      example: test@naver.com
     address:
       type: string
       example: 서울특별시

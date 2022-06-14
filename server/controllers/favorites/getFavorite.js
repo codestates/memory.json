@@ -40,7 +40,7 @@ module.exports = async (req, res) => {
         like_count: likeCount,
         history_id: isFavorite.dataValues.history_id,
       },
-      message: "ok",
+      message: "좋아요 개수 조회 성공",
     });
   } catch (err) {
     return res

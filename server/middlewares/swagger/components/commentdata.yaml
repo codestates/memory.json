@@ -1,0 +1,16 @@
+commentdata:
+  type: object
+  properties:
+    id:
+      type: number
+    history_id:
+      type: number
+    user_id:
+      type: number
+    comment_content:
+      type: string
+      example: 댓글 내용입니다
+    createdAt:
+      type: string
+    updatedAt:
+      type: string

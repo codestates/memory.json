@@ -26,13 +26,24 @@ paths:
   /places:
     $ref: "./paths/place.yaml#/~1places"
   /histories/{placeId}:
-    $ref: "./paths/history.yaml#/~1histories"
+    $ref: "./paths/history.yaml#/~1histories~1:placeId"
   /histories/place/{placeId}:
     $ref: "./paths/history.yaml#/~1histories~1place"
   /histories/user/{userId}:
-    $ref: "./paths/history.yaml#/~1histories~1user"    
+    $ref: "./paths/history.yaml#/~1histories~1user"
+  /histories/favorite/{userId}:
+    $ref: "./paths/history.yaml#/~1histories~1favorite"
+  /histories/photo:
+    $ref: "./paths/history.yaml#/~1histories~1photo"
+  /histories/{historyId}:
+    $ref: "./paths/history.yaml#/~1histories~1:historyId"
+  /favorites/{historyId}:
+    $ref: "./paths/favorite.yaml#/~1favorites"
+  /comments/{historyId}:
+    $ref: "./paths/comment.yaml#/~1comments~1:historyId"
+  /comments/{commentId}:
+    $ref: "./paths/comment.yaml#/~1comments~1:commentId"  
 
-    
 
 components:
   responses:

@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
     // 결과를 보내줌
     return res.status(200).json({
       data: findByKeyword,
-      message: "ok",
+      message: "장소 목록 조회 성공!",
     });
   } catch (err) {
     console.error(err);
