@@ -93,11 +93,7 @@ export default function Map() {
 
   // DB로부터 장소에 해당하는 사진 목록을 모두 불러와서 imageList에 담아줌.
   const [imageList, setImageList] = useState([]);
-<<<<<<< HEAD
-  // const [imgList, setImgList] = useState();
-=======
   console.log("imageList", imageList);
->>>>>>> 0d0ba3126a28d3c93ce69c4cddfce98643e55e9b
 
   // 히스토리 목록 불러오기.
   const [historyList, setHistoryList] = useState([]);
@@ -130,9 +126,6 @@ export default function Map() {
       map.panTo(coords);
       let callback = function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
-<<<<<<< HEAD
-          console.log(result[0]);
-=======
           // console.log(result[0]);
           let searchAddress = result[0];
           // console.log(searchAddress.address.region_1depth_name)
@@ -143,7 +136,6 @@ export default function Map() {
               " " +
               `${searchAddress.address.region_3depth_name}`
           );
->>>>>>> 0d0ba3126a28d3c93ce69c4cddfce98643e55e9b
         }
       };
       geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
@@ -280,38 +272,17 @@ export default function Map() {
         });
       });
     });
-<<<<<<< HEAD
-
-    console.log("imageList", imageList);
-    console.log("id", historyList.length);
-    console.log(isHistory);
-  };
-  console.log("history", historyList);
-  //사진 가져오기 (수정중)
-  // map으로 반복하더라도 결국 imageList에는 하나의 히스토리에 대한 내용이 갱신되는 것이기 때문에,
-  // imgList라는 빈배열을 하나 만들어서, 여기에 map으로 반복된 결과물을 담아주는 식으로 바꿨음.
-  const getImage = () => {
-    // const imgList = [];
-    // setImageList();
-=======
   };
 
   //사진 가져오기
   const getImage = () => {
     console.log("stop");
     const arr = [];
->>>>>>> 0d0ba3126a28d3c93ce69c4cddfce98643e55e9b
     historyList.map((el) => {
       axios
         .get(`${serverUrl}histories/photo?historyid=${el.id}`)
         .then((res) => {
           if (res.status === 200) {
-<<<<<<< HEAD
-            setImageList((prev) => [...prev, [...res.data.data]]);
-            // imgList.push(imageList);
-
-            // console.log("imageList", imageList);
-=======
             arr.push(...[res.data.data]);
             if (arr.length === historyList.length) {
               setImageList([]);
@@ -319,7 +290,6 @@ export default function Map() {
                 setImageList((prev) => [...prev, ...arr[n]]);
               }
             }
->>>>>>> 0d0ba3126a28d3c93ce69c4cddfce98643e55e9b
           }
         });
     });
@@ -329,9 +299,6 @@ export default function Map() {
     console.log("3번째 렌더링");
   }, [historyList]);
 
-<<<<<<< HEAD
-  console.log("imageList", imageList);
-=======
   const [historyIdArr, setHistoryIdArr] = useState([]);
   console.log(historyIdArr);
 
@@ -357,7 +324,6 @@ export default function Map() {
   useEffect(() => {
     checklist();
   }, [imageList]);
->>>>>>> 0d0ba3126a28d3c93ce69c4cddfce98643e55e9b
 
   const Image = styled.img`
     max-width: 50%;
@@ -376,14 +342,6 @@ export default function Map() {
     return (
       <div>
         <Slider {...settings}>
-<<<<<<< HEAD
-          {imageList.map((el) =>
-            el.map((ele) => {
-              return (
-                <div>
-                  <Image
-                    src={ele.image_name}
-=======
           {imageList
             .filter((el) => el.history_id === id)
             .map((el, i) => {
@@ -391,7 +349,6 @@ export default function Map() {
                 <div key={i}>
                   <Image
                     src={el.image_name}
->>>>>>> 0d0ba3126a28d3c93ce69c4cddfce98643e55e9b
                     style={{
                       // objectFit: "contain",
                       display: "block",
@@ -401,12 +358,7 @@ export default function Map() {
                   />
                 </div>
               );
-<<<<<<< HEAD
-            })
-          )}
-=======
             })}
->>>>>>> 0d0ba3126a28d3c93ce69c4cddfce98643e55e9b
         </Slider>
       </div>
     );
@@ -462,7 +414,7 @@ export default function Map() {
   }
 
   function deleteCommentHandler(commentId, historyId) {
-    console.log(historyId)
+    console.log(historyId);
     axios
       .delete(`${serverUrl}comments/${commentId}`, {
         headers: {
@@ -471,7 +423,7 @@ export default function Map() {
         },
       })
       .then((res) => {
-        console.log(res)
+        console.log(res);
         updateCommentHandler(historyId);
       })
       .catch((err) => {
@@ -482,7 +434,7 @@ export default function Map() {
   function changeCommentHandler(commentId) {}
 
   const updateCommentHandler = (historyId) => {
-    console.log(historyId)
+    console.log(historyId);
     let headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
@@ -532,7 +484,7 @@ export default function Map() {
               if (count === commentIdNumber.length) {
                 setListComment((prev) => [
                   ...prev,
-                  ...data.data.data.listComment
+                  ...data.data.data.listComment,
                 ]);
               }
             }
@@ -762,7 +714,7 @@ export default function Map() {
                                   <Comment
                                     key={comment.id}
                                     comment={comment}
-                                    historyid ={comment.history_id}
+                                    historyid={comment.history_id}
                                     userId={userId}
                                     deleteComment={deleteCommentHandler}
                                     changeComment={changeCommentHandler}
