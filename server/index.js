@@ -1,4 +1,4 @@
-aconst express = require("express");
+const express = require("express");
 const cors = require("cors");
 const https = require("https");
 const fs = require("fs");
@@ -30,7 +30,7 @@ app.use("/", (req, res) => {
 
 sequelize
   .sync({
-    force: true,
+    force: false,
   })
   .then(() => {
     console.log("데이터베이스 연결 성공");
