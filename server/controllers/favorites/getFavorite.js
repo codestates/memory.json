@@ -31,18 +31,17 @@ module.exports = async (req, res) => {
       .then((data) => {
         return data.length;
       });
-    console.log(likeCount);
-    console.log(isFavorite);
 
     return res.status(200).send({
       data: {
         like: isLike,
         like_count: likeCount,
-        history_id: isFavorite.dataValues.history_id,
+        history_id: history_id,
       },
       message: "좋아요 개수 조회 성공",
     });
   } catch (err) {
+    console.error(err)
     return res
       .status(500)
       .send({ data: null, message: "내부서버 오류입니다!" });
