@@ -17,9 +17,9 @@ router.delete("/", secession);
 router.patch("/", change);
 router.post("/signup", signup);
 router.post("/signin", signin);
+router.post("/socialbygoogle", socialByGoogle);
+router.post("/socialbykakao", socialByKakao);
 router.post("/signout", signout);
-router.post("/socialByGoogle", socialByGoogle);
-router.post("/socialByKakao", socialByKakao);
 router.post("/profile", upload.single("profile"), profile);
 
 

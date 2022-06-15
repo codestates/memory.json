@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
     if (!userInfo) {
       return res.status(401).json({
         data: null,
-        message: '먼저 로그인 해주세요!'
+        message: '로그인을 확인해주세요!'
       });
     };
     console.log(userInfo.dataValues);
@@ -21,12 +21,8 @@ module.exports = async (req, res) => {
     });
     // 토큰유효기간 삭제
     res.cookie('accessToken', null, { maxAge: 0 });
-    
-    // 질문) data를 {}을 null로 통일하지 않아도 괜찮은가. 
-     return res.status(200).json({
-       data: {},
-       message: 'Users infomation is deleted!'
-     });
+    W
+     return res.status(204)
 
   } catch(err) {
     //서버 에러

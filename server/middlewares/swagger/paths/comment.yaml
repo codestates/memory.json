@@ -1,0 +1,156 @@
+/comments/:historyId:
+  get:
+    tags:
+      - /comments
+    summary: 댓글 내용을 가져오는 요청을 보냅니다.
+    parameters:
+      - in: path
+        name: historyId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: history Id를 입력해야 합니다.
+    responses:
+      "200":
+        description: 댓글 내용 조회 성공
+        content:
+          application.json:
+            schema:
+              type: object
+              properties:
+                data:
+                  $ref: "../components/commentdata.yaml#/commentdata"
+                message:
+                  type: string
+                  example: 댓글 조회 완료!
+      "500":
+        $ref: "../components/error.yaml#/internalError"
+  post:
+    tags:
+      - /comments
+    summary: 히스토리에 댓글을 등록하는 요청을 보냅니다.
+    parameters:
+      - in: path
+        name: historyId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: history Id를 입력해야 합니다.
+    requestBody:
+      description: 댓글 등록 정보가 필요합니다.
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              comment_content:
+                type: string
+                exmaple: 댓글 내용입니다
+    responses:
+      "201":
+        description: 댓글 등록 성공
+        content:
+          application.json:
+            schema:
+              type: object
+              properties:
+                data:
+                  $ref: "../components/commentdata.yaml#/commentdata"
+                message:
+                  type: string
+                  example: 댓글 작성 완료!
+      "400":
+        description: bad requests
+      "401":
+        description: unauthorized
+      "404":
+        description: not found
+      "500":
+        $ref: "../components/error.yaml#/internalError"
+
+/comments/:commentId:
+  patch:
+    tags:
+      - /comments
+    summary: 댓글을 수정하는 요청을 보냅니다.
+    parameters:
+      - in: path
+        name: commentId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: comment Id를 입력해야 합니다.  
+    requestBody:
+      description: 댓글 등록 정보가 필요합니다.
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              comment_content:
+                type: string
+                exmaple: 댓글 내용입니다
+    responses:
+      "201":
+        description: 댓글 수정 성공
+        content:
+          application.json:
+            schema:
+              type: object
+              properties:
+                data:
+                  $ref: "../components/commentdata.yaml#/commentdata"
+                message:
+                  type: string
+                  example: 댓글 수정 완료!
+      "400":
+        description: bad requests
+      "401":
+        description: unauthorized
+      "403":
+        description: forbidden
+      "404":
+        description: not found
+      "500":
+        $ref: "../components/error.yaml#/internalError"
+  delete:
+    tags:
+      - /comments
+    summary: 댓글을 삭제하는 요청을 보냅니다.
+    parameters:
+      - in: path
+        name: commentId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: commentId를 입력해야 합니다.  
+    responses:
+      "200":
+        description: 댓글 삭제 성공
+        content:
+          application.json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    commentId:
+                      type: number
+                message:
+                  type: string
+                  example: 1001번 히스토리 정보 삭제 성공
+      "401":
+        description: unauthorized
+      "403":
+        description: forbidden
+      "404":
+        description: not found
+      "500":
+        $ref: "../components/error.yaml#/internalError"
+
+
