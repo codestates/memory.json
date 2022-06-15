@@ -37,7 +37,7 @@ module.exports = async (req, res) => {
     if (!match) {
       return res.status(401).json({
         data: null,
-        message: '허가되지 않은 로그인입니다!'
+        message: '비밀번호가 틀립니다!'
       });
     };
     

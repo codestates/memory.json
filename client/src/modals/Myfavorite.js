@@ -12,7 +12,7 @@ const ModalArea = styled.div`
 
 const MyfavoriteArea = styled.div`
   z-index: 999;
-  width: 100vmin;
+  width: 90vmin;
   height: 70%;
   min-height: 400px;
   background: #dadada;
@@ -28,12 +28,12 @@ const MyfavoriteArea = styled.div`
 
 
   .Item {
-    width: 600px;
+    width: 920px;
     height: 200px;
     display: flex;
     font-size: 1.3em;
     font-weight: 700;
-    text-align: left;
+    text-align: center;
     flex-direction: column;
     background-image: url("../img/my1.png");
     background-size: cover;
