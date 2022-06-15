@@ -382,8 +382,8 @@ export default function Map() {
   // 커맨트 입력 값
   const [commentInput, setCommentInput] = useState("");
   // console.log("input",commentInput)
-  const [isFavorite, setIsFavorite] = useState({});
-  console.log(isFavorite)
+  const [isFavorite, setIsFavorite] = useState([]);
+  console.log(isFavorite);
 
   // 커맨트 수정 입력값
   const [commentFixInput, setCommentFixInput] = useState("");
@@ -534,7 +534,7 @@ export default function Map() {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     };
-    if (!accessToken) { 
+    if (!accessToken) {
       headers = { "Content-Type": "application/json" };
     }
     axios
@@ -556,7 +556,7 @@ export default function Map() {
   }, [historyIdArr]);
 
   function favoriteHandler(historyId) {
-    console.log(historyId)
+    console.log(historyId);
     if (!accessToken) {
       return alert("회원만 좋아요 할 수 있습니다.");
     }
@@ -572,9 +572,21 @@ export default function Map() {
         }
       )
       .then((data) => {
-        console.log("favor",data)
-        console.log(data.data.data)
-        setIsFavorite(data.data.data);
+        // 결국에는 새로운 페이버리트 히스토리를 만들수는 없다 게시글이 있지 않은 이상
+        // 우선 히스토리 아이디가 있으면
+        console.log("favor", data);
+        console.log(data.data.data);
+        if (isFavorite) {
+          isFavorite.forEach((el) => {
+            if (el.history_id === historyId) {
+              let arr = isFavorite
+              let tempComment = arr.filter(
+                (element) => element.history_id !== historyId
+              );
+              setIsFavorite(() => [ ...tempComment, data.data.data]);
+            }
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -592,8 +604,8 @@ export default function Map() {
     axios
       .get(`${serverUrl}favorites/${historyId}`, { headers: headers })
       .then((data) => {
-        console.log("get",data)
-        setIsFavorite(data.data.data);
+        console.log("get", data);
+        setIsFavorite((prev) => [...prev, data.data.data]);
       })
       .catch((err) => {
         console.log(err);
@@ -601,10 +613,12 @@ export default function Map() {
   };
 
   useEffect(() => {
-    if (isFavorite.like === undefined) {
-      getFavorite();
-    }
-  }, []);
+    setIsFavorite([]);
+    historyIdArr.map((id) => {
+      // console.log("몇번실행됫니?");
+      getFavorite(id);
+    });
+  }, [historyIdArr]);
 
   return (
     <>
@@ -673,24 +687,37 @@ export default function Map() {
                           }}
                         >
                           <div>
-                            {isFavorite.like === "T" ? (
-                              <Button
-                                style={{ background: "red" }}
-                                onClick={() => favoriteHandler(el.id)}
-                              >
-                                좋아요
-                              </Button>
-                            ) : (
-                              <Button
-                                style={{ background: `white`, color: "black" }}
-                                onClick={() => favoriteHandler(el.id)}
-                              >
-                                ♥︎
-                              </Button>
-                            )}
-                            <span style={{ padding: "10px", color: "white" }}>
-                              {isFavorite.like_count}
-                            </span>
+                            {isFavorite.map((favor) => {
+                              if (
+                                favor.like === "T" &&
+                                favor.history_id === el.id
+                              ) {
+                                return (
+                                  <Button
+                                    style={{ background: "red" }}
+                                    onClick={() => favoriteHandler(el.id)}
+                                  >
+                                    좋아요 Count: {favor.like_count}
+                                  </Button>
+                                );
+                              }
+                              if (
+                                favor.like === "F" &&
+                                favor.history_id === el.id
+                              ) {
+                                return (
+                                  <Button
+                                    style={{
+                                      background: `white`,
+                                      color: "black",
+                                    }}
+                                    onClick={() => favoriteHandler(el.id)}
+                                  >
+                                    ♥︎ Count: {favor.like_count}
+                                  </Button>
+                                );
+                              }
+                            })}
                           </div>
                         </div>
                       </S.YearFavorite>
@@ -729,9 +756,7 @@ export default function Map() {
                             }}
                           >
                             {!accessToken ? (
-                              <Button
-                                style={{ display: "none" }}
-                              >
+                              <Button style={{ display: "none" }}>
                                 댓글 작성
                               </Button>
                             ) : (
@@ -826,6 +851,8 @@ const Commentarea = styled.div`
   margin: 5px 1px 5px 1px;
 `;
 
-
 // (1) 좋아요가 같이 표시 되는 문제
-// (2) 히스토리 아이디가 응답으로 와라
+//  -  map을 써서 다 뿌려준다.
+//  getFavrotie 함수는 무엇일까 ? setFavorite 함수는 무엇일까 ?
+// (2) 내가 쓴 댓글이 기록되어 있는데 저렇게 표시할 필요가 있을까 ? T 인지 F인지
+// 글이 같으면 좋아요 / 아니면 하트 표시
