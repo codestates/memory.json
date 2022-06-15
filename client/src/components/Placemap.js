@@ -377,7 +377,7 @@ export default function Map() {
 
   // 댓글 목록
   const [listComment, setListComment] = useState([]);
-  console.log("listComment", listComment);
+  // console.log("listComment", listComment);
 
   // 커맨트 입력 값
   const [commentInput, setCommentInput] = useState("");
@@ -442,8 +442,8 @@ export default function Map() {
   }
 
   function changeCommentHandler(commentId, historyId) {
-    console.log(historyId);
-    console.log(commentId);
+    // console.log(historyId);
+    // console.log(commentId);
     axios
       .patch(
         `${serverUrl}comments/${commentId}`,
@@ -465,7 +465,7 @@ export default function Map() {
   }
 
   const updateCommentHandler = (historyId) => {
-    console.log(historyId);
+    // console.log(historyId);
     let headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
@@ -492,7 +492,7 @@ export default function Map() {
           });
           const searchHistoryIdUnique = Object.keys(idUnique);
           const commentIdNumber = searchHistoryIdUnique.map((el) => Number(el));
-          console.log(commentIdNumber);
+          // console.log(commentIdNumber);
           let count = 0;
           for (let n = 0; n < commentIdNumber.length; n++) {
             let arr = listComment;
@@ -602,7 +602,7 @@ export default function Map() {
     axios
       .get(`${serverUrl}favorites/${historyId}`, { headers: headers })
       .then((data) => {
-        console.log("get", data);
+        // console.log("get", data);
         setIsFavorite((prev) => [...prev, data.data.data]);
       })
       .catch((err) => {
@@ -618,11 +618,8 @@ export default function Map() {
     });
   }, [historyIdArr]);
 
-  const favoriteId = () => {
-    isFavorite.filter((el) => el.history_id === el.id);
-  };
 
-  const displayFavoriteButton = (id, count, like, historyId) => {
+  const displayFavoriteButton = (count, like, historyId) => {
     if (like === "T") {
       return (
         <Button
@@ -714,7 +711,6 @@ export default function Map() {
                             {isFavorite.map((favor) => {
                               if (favor.history_id === el.id)
                                 return displayFavoriteButton(
-                                  favor.history_id,
                                   favor.like_count,
                                   favor.like,
                                   el.id
