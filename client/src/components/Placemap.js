@@ -442,8 +442,8 @@ export default function Map() {
   }
 
   function changeCommentHandler(commentId, historyId) {
-    console.log(historyId);
-    console.log(commentId);
+    // console.log(historyId);
+    // console.log(commentId);
     axios
       .patch(
         `${serverUrl}comments/${commentId}`,
@@ -465,7 +465,7 @@ export default function Map() {
   }
 
   const updateCommentHandler = (historyId) => {
-    console.log(historyId);
+    // console.log(historyId);
     let headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
@@ -492,7 +492,7 @@ export default function Map() {
           });
           const searchHistoryIdUnique = Object.keys(idUnique);
           const commentIdNumber = searchHistoryIdUnique.map((el) => Number(el));
-          console.log(commentIdNumber);
+          // console.log(commentIdNumber);
           let count = 0;
           for (let n = 0; n < commentIdNumber.length; n++) {
             let arr = listComment;
@@ -613,10 +613,33 @@ export default function Map() {
   useEffect(() => {
     setIsFavorite([]);
     historyIdArr.map((id) => {
-      // console.log("몇번실행됫니?");
+      // console.log("몇번실행됫니?");  
       getFavorite(id);
     });
   }, [historyIdArr]);
+
+
+  const displayFavoriteButton = (count, like, historyId) => {
+    if (like === "T") {
+      return (
+        <Button
+          style={{ backgroundColor: "red" }}
+          onClick={() => favoriteHandler(historyId)}
+        >
+          좋아요 Count:{count}
+        </Button>
+      );
+    } else if (like === "F") {
+      return (
+        <Button
+          style={{ backgroundColor: "red" }}
+          onClick={() => favoriteHandler(historyId)}
+        >
+          ♥ Count:{count}
+        </Button>
+      );
+    }
+  };
 
   return (
     <>
@@ -686,35 +709,12 @@ export default function Map() {
                         >
                           <div>
                             {isFavorite.map((favor) => {
-                              if (
-                                favor.like === "T" &&
-                                favor.history_id === el.id
-                              ) {
-                                return (
-                                  <Button
-                                    style={{ background: "red" }}
-                                    onClick={() => favoriteHandler(el.id)}
-                                  >
-                                    좋아요 Count: {favor.like_count}
-                                  </Button>
+                              if (favor.history_id === el.id)
+                                return displayFavoriteButton(
+                                  favor.like_count,
+                                  favor.like,
+                                  el.id
                                 );
-                              }
-                              if (
-                                favor.like === "F" &&
-                                favor.history_id === el.id
-                              ) {
-                                return (
-                                  <Button
-                                    style={{
-                                      background: `white`,
-                                      color: "black",
-                                    }}
-                                    onClick={() => favoriteHandler(el.id)}
-                                  >
-                                    ♥︎ Count: {favor.like_count}
-                                  </Button>
-                                );
-                              }
                             })}
                           </div>
                         </div>

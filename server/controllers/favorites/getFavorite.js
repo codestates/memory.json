@@ -36,7 +36,7 @@ module.exports = async (req, res) => {
       data: {
         like: isLike,
         like_count: likeCount,
-        history_id: history_id,
+        history_id: Number(history_id),
       },
       message: "좋아요 개수 조회 성공",
     });
