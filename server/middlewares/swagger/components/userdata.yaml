@@ -1,0 +1,48 @@
+usertokendata:
+  type: object
+  properties:
+    accessToken:
+      type: string
+      example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+    message:
+      type: string
+      example: login success
+
+userdata:
+  type: object
+  properties:
+    id:
+      type: number
+      example: 10001
+    user_name:
+      type: string
+    user_account:
+      type: string
+      example: test9911
+    profile:
+      type: string
+      example: "test.png"
+    social_id:
+      type: number
+      example: 1020201
+    provider:
+      type: string
+      example: kakao
+    email:
+      type: string
+      example: test@naver.com
+    address:
+      type: string
+      example: 서울특별시
+    age:
+      type: number
+      example: 25
+    sex:
+      type: string
+      example: F
+    createdAt:
+      type: string
+      example: 2022-06-09T04:54:20.000Z
+    updatedAt:
+      type: strings
+      example: 2022-06-09T04:54:20.000Z

@@ -15,7 +15,9 @@ const MyhistoryArea = styled.div`
   width: 100vmin;
   height: 70%;
   min-height: 400px;
-  background: #DADADA;
+  background: #dadada;
+  background-image: url("../img/my.png");
+  background-size: cover;
   box-shadow: 0 0 15px #333;
   position: fixed;
   margin: -0.9vh auto;
@@ -25,20 +27,21 @@ const MyhistoryArea = styled.div`
   overflow-y: auto;
 
   .Item {
-    width: 550px;
+    width: 600px;
     height: 200px;
     display: flex;
-    font-size: 1.2em;
+    font-size: 1.3em;
     font-weight: 700;
-    text-align: center;
+    text-align: left;
     flex-direction: column;
-    background-color: #929398;
+    background-image: url("../img/my1.png");
+    background-size: cover;
     margin: 1rem;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     border: 2px solid #2c394b;
+    border-radius: 1em;
     cursor: pointer;
 
-    background: #929398;
     :hover {
       border: 5px solid #2c394b;
     }
@@ -80,7 +83,7 @@ const Myhistory = ({ modalCloser }) => {
     };
     const observer = new IntersectionObserver(handleObserver, option);
     loader.current = observer;
-    console.log("넌 누구니", observer);
+    // console.log("넌 누구니", observer);
   }, []);
 
   useEffect(() => {

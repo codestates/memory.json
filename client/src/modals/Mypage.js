@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { userinfoAction } from "../store/actions";
@@ -40,20 +40,43 @@ const ModalView = styled.div`
   overflow: hidden;
 `;
 
+const FirstButtonWrapper = styled.div`
+  display: flex;
+  flex-direction: rows;
+  max-height: 160px;
+  justify-content: space-evenly;
+  border-top: 5px solid #333;
+  border-bottom: 5px solid #333;
+`;
+
 const Background = styled.article`
   background: #265353;
   width: max-content;
   padding: 30px;
-  margin-left: 40px; ;
 `;
 
 const Wrapper = styled.div`
   min-width: 300px;
   border-radius: 32px;
-  padding: 24px;
+  padding: 15px;
   background: white;
   box-shadow: 0px 2px 20px hsl(248deg 53% 40%);
   text-align: center;
+`;
+
+const ImageDiv = styled.div`
+  max-width: 150px;
+  min-height: 150px;
+  object-fit: cover;
+  background-color: #fafafa;
+  border: 5px solid #265353;
+  border-radius: 5em;
+
+  &:hover {
+    transform: scale(1.05);
+    overflow: hidden;
+    cursor: pointer;
+  }
 `;
 
 const IdDiv = styled.div`
@@ -68,11 +91,39 @@ const NickDiv = styled.div`
   color: hsl(0deg 0% 40%);
 `;
 
-const MyhistoryButton = styled.aside`
-  width: 30%;
+const ModifiedButton = styled.aside`
+  width: 150px;
   height: 1vh;
   padding: 10px 10px 20px 10px;
-  margin: 20px 40px 30px 70px;
+  margin-top: 50px;
+  color: white;
+  font-weight: 700;
+  font-size: 20px;
+  background-color: #fafafa;
+  border: 5px solid #265353;
+  border-radius: 5em;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+    overflow: hidden;
+    cursor: pointer;
+  }
+`;
+
+const SecondButtonWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 100%;
+  margin-top: 3%;
+  border-bottom: 5px solid #333;
+`;
+
+const MyhistoryButton = styled.aside`
+  width: 50%;
+  height: 1vh;
+  padding: 10px 10px 20px 10px;
+  margin: 20px 40px 30px 100px;
   color: white;
   font-weight: 700;
   font-size: 20px;
@@ -88,29 +139,10 @@ const MyhistoryButton = styled.aside`
 `;
 
 const MyfavoriteButton = styled.aside`
-  width: 30%;
+  width: 50%;
   height: 1vh;
   padding: 10px 10px 20px 10px;
-  margin: 20px 40px 30px 70px;
-  color: white;
-  font-weight: 700;
-  font-size: 20px;
-  background-color: #fafafa;
-  border: 5px solid #265353;
-  border-radius: 5em;
-  cursor: pointer;
-
-  &:hover {
-    transform: scale(1.05);
-    overflow: hidden;
-  }
-`;
-
-const ModifiedButton = styled.aside`
-  width: 30%;
-  height: 1vh;
-  padding: 10px 10px 20px 10px;
-  margin: 20px 40px 30px 70px;
+  margin: 20px 40px 30px 100px;
   color: white;
   font-weight: 700;
   font-size: 20px;
@@ -150,11 +182,47 @@ function Mypage({
 
   const { social_id, user_account, user_name } = userState;
 
+  // 프로필 사진
+
+  // useRef 사용해서 파일 업로드 띄우기
+  const fileInput = useRef(null);
+
+  const [image, setImage] = useState("../img/avartarimage.jpg");
+  console.log("image", image);
+
+  const profileImageHandler = async (e) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    console.log(reader);
+    reader.addEventListener("load", function () {
+      console.log(this.result);
+      setImage(this.result);
+    });
+    reader.readAsDataURL(file);
+
+    if (file) {
+      const formData = new FormData();
+      formData.append("profile", file);
+      const res = await axios({
+        method: "post",
+        url: `${serverUrl}users/profile`,
+        data: formData,
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      // console.log(res);
+    }
+  };
+
   useEffect(() => {
     bringUserinformation();
   }, []);
 
   const bringUserinformation = () => {
+    // console.log(accessToken)
     axios
       .get(`${serverUrl}users`, {
         headers: { authorization: `Bearer ${accessToken}` },
@@ -162,6 +230,8 @@ function Mypage({
       .then((res) => {
         if (res.status === 200) {
           const userInformation = res.data.data;
+          console.log(userInformation);
+          console.log(userInformation.profile)
           dispatch(
             userinfoAction(
               userInformation.address,
@@ -176,111 +246,136 @@ function Mypage({
               userInformation.user_name
             )
           );
+          if(userInformation.profile !== null){
+            setImage(userInformation.profile);
+          }
         }
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  // 카카오 로그인이나 구글 로그인일 경우에는 소셜 아이디로 보여준다.
+
   return (
     <ModalArea>
       <MarginDiv>
         <ModalView>
           <div>
             <h1>My Page</h1>
-            {social_id === null ? (
-              <Background>
-                <Wrapper>
-                  <IdDiv>
-                    <h2
-                      style={{
-                        color: "black",
-                        fontSize: "100%",
-                        fontWeight: "500",
-                        margin: "0px",
-                      }}
-                    >
-                      ID: {user_account}
-                    </h2>
-                  </IdDiv>
-                  <NickDiv>
-                    <h2
-                      style={{
-                        color: "black",
-                        fontSize: "100%",
-                        fontWeight: "500",
-                        margin: "0px",
-                      }}
-                    >
-                      NickName: {user_name}
-                    </h2>
-                  </NickDiv>
-                </Wrapper>
-              </Background>
-            ) : (
-              <Background>
-                <Wrapper>
-                  <IdDiv>
-                    <h2
-                      style={{
-                        color: "black",
-                        fontSize: "100%",
-                        fontWeight: "500",
-                        margin: "0px",
-                      }}
-                    >
-                      ID: {social_id}
-                    </h2>
-                  </IdDiv>
-                  <NickDiv>
-                    <h2
-                      style={{
-                        color: "black",
-                        fontSize: "100%",
-                        fontWeight: "500",
-                        margin: "0px",
-                      }}
-                    >
-                      NickName: {user_name}
-                    </h2>
-                  </NickDiv>
-                </Wrapper>
-              </Background>
-            )}
-            <ModifiedButton
-              type="button"
-              onClick={() => changeformToEditmyinfo()}
-              style={{
-                color: "#28282A",
-                fontSize: "120%",
-                fontWeight: "700",
-              }}
-            >
-              내 정보 수정
-            </ModifiedButton>
-            <MyhistoryButton
-              type="button"
-              onClick={() => changeformToMyhistory()}
-              style={{
-                color: "#28282A",
-                fontSize: "120%",
-                fontWeight: "700",
-              }}
-            >
-              My History
-            </MyhistoryButton>
-            <MyfavoriteButton
-              type="button"
-              onClick={() => changeformToMyfavorite()}
-              style={{
-                color: "#28282A",
-                fontSize: "120%",
-                fontWeight: "700",
-              }}
-            >
-              My Favorite
-            </MyfavoriteButton>
+            <FirstButtonWrapper>
+              <ImageDiv>
+                <input
+                  type="file"
+                  id="img"
+                  accept="image/jpg,impge/png,image/jpeg"
+                  style={{ display: "none" }}
+                  ref={fileInput}
+                  onChange={profileImageHandler}
+                />
+                <img
+                  alt="profile"
+                  onClick={() => fileInput.current.click()}
+                  src={image}
+                  width="150"
+                  height="150"
+                  style={{ borderRadius: "50%", objectFit: "cover" }}
+                ></img>
+              </ImageDiv>
+              {social_id === null ? (
+                <Background>
+                  <Wrapper>
+                    <IdDiv>
+                      <h2
+                        style={{
+                          color: "black",
+                          fontSize: "100%",
+                          fontWeight: "500",
+                          margin: "0px",
+                        }}
+                      >
+                        ID: {user_account}
+                      </h2>
+                    </IdDiv>
+                    <NickDiv>
+                      <h2
+                        style={{
+                          color: "black",
+                          fontSize: "100%",
+                          fontWeight: "500",
+                          margin: "0px",
+                        }}
+                      >
+                        닉네임: {user_name}
+                      </h2>
+                    </NickDiv>
+                  </Wrapper>
+                </Background>
+              ) : (
+                <Background>
+                  <Wrapper>
+                    <IdDiv>
+                      <h2
+                        style={{
+                          color: "black",
+                          fontSize: "100%",
+                          fontWeight: "500",
+                          margin: "0px",
+                        }}
+                      >
+                        ID: {social_id}
+                      </h2>
+                    </IdDiv>
+                    <NickDiv>
+                      <h2
+                        style={{
+                          color: "black",
+                          fontSize: "100%",
+                          fontWeight: "500",
+                          margin: "0px",
+                        }}
+                      >
+                        닉네임: {user_name}
+                      </h2>
+                    </NickDiv>
+                  </Wrapper>
+                </Background>
+              )}
+              <ModifiedButton
+                type="button"
+                onClick={() => changeformToEditmyinfo()}
+                style={{
+                  color: "#28282A",
+                  fontSize: "120%",
+                  fontWeight: "700",
+                }}
+              >
+                내 정보 수정
+              </ModifiedButton>
+            </FirstButtonWrapper>
+            <SecondButtonWrapper>
+              <MyhistoryButton
+                type="button"
+                onClick={() => changeformToMyhistory()}
+                style={{
+                  color: "#28282A",
+                  fontSize: "120%",
+                  fontWeight: "700",
+                }}
+              >
+                My History
+              </MyhistoryButton>
+              <MyfavoriteButton
+                type="button"
+                onClick={() => changeformToMyfavorite()}
+                style={{
+                  color: "#28282A",
+                  fontSize: "120%",
+                  fontWeight: "700",
+                }}
+              >
+                My Favorite
+              </MyfavoriteButton>
+            </SecondButtonWrapper>
           </div>
         </ModalView>
         <Modalback onClick={modalCloser}></Modalback>

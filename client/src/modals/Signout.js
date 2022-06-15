@@ -113,7 +113,7 @@ function Signout({ modalCloser, mypageModalOpener }) {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         alert("회원탈퇴가 정상적으로 처리되었습니다.");
         dispatch(signoutAction);
         dispatch(modalOff);

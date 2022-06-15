@@ -1,0 +1,22 @@
+tokenError:
+  description: 토큰인증 오류
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: 로그인을 확인해주세요!
+
+
+internalError:
+  description: 내부서버 오류
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: 내부서버 오류입니다!

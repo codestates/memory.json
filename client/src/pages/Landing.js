@@ -6,7 +6,7 @@ import "../App.css";
 function Landing() {
   return (
     <NavLink to="/main">
-      <img src="img/landing.png" alt="landing logo" className="landingLogo" />
+      <img src="img/landing.png" alt="landing logo" className="landingLogo" style={{height:"1000px", objectfit:"cover"}} />
     </NavLink>
   );
 }

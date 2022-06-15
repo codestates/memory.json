@@ -36,11 +36,15 @@ module.exports = async (req, res) => {
         })
         .then((data) => {
           return res.status(200).send({
-            data: { like: data.dataValues.like, like_count: likeCount + 1 },
+            data: {
+              like: data.dataValues.like,
+              like_count: likeCount + 1,
+              history_id: isFavorite.dataValues.history_id,
+            },
             message: "ok",
           });
         });
-        return
+      return;
     }
 
     const isLike = isFavorite.dataValues.like;
@@ -51,12 +55,14 @@ module.exports = async (req, res) => {
         },
         { where: { id: isFavorite.dataValues.id } }
       );
-      return res
-        .status(200)
-        .send({
-          data: { like: "F", like_count: likeCount - 1 },
-          message: "ok",
-        });
+      return res.status(200).send({
+        data: {
+          like: "F",
+          like_count: likeCount - 1,
+          history_id: isFavorite.dataValues.history_id,
+        },
+        message: "ok",
+      });
     }
 
     if (isLike === "F") {
@@ -66,12 +72,14 @@ module.exports = async (req, res) => {
         },
         { where: { id: isFavorite.dataValues.id } }
       );
-      return res
-        .status(200)
-        .send({
-          data: { like: "T", like_count: likeCount + 1 },
-          message: "ok",
-        });
+      return res.status(200).send({
+        data: {
+          like: "T",
+          like_count: likeCount + 1,
+          history_id: isFavorite.dataValues.history_id,
+        },
+        message: "ok",
+      });
     }
   } catch (err) {
     return res

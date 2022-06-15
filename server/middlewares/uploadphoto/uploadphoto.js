@@ -4,7 +4,6 @@ const multer = require("multer");
 const aws = require("aws-sdk");
 // aws.config.loadFromPath(__dirname + "/../../config/s3.js");
 const multerS3 = require("multer-s3");
-const { photo } = require("../../models");
 const s3 = new aws.S3({
   "accessKeyId": process.env.S3_ACCESS_KEY_ID,
   "secretAccessKey": process.env.S3_SECRET_KEY,
@@ -19,7 +18,7 @@ const upload = multer({
       if (!["png", "jpg", "jpeg", "gif", "bmp"].includes(ext)) {
         return cb(new Error("Only images are allowed"));
       }
-      cb(null, `imagesee/${Date.now()}${file.originalname.split(".").pop()}`);
+      cb(null, `images/${Date.now()}${file.originalname.split(".").pop()}`);
     },
   }),
   acl: "public-read-write",

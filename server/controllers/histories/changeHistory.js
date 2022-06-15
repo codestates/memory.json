@@ -72,7 +72,7 @@ module.exports = async (req, res) => {
     console.log(newHistoryInfo.dataValues);
 
     // 응답 보내기
-    return res.status(200).json({
+    return res.status(201).json({
       data: newHistoryInfo.dataValues,
       message: "history 정보 수정 성공!",
     });
