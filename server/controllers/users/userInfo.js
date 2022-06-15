@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
         .send({ data: null, message: "로그인을 확인해주세요!" });
     } else {
       delete userInfo.dataValues.password;
-      return res.status(200).send({ data: userInfo.dataValues, message: "ok" });
+      return res.status(200).send({ data: userInfo.dataValues, message: "유저 정보 조회 성공!" });
     }
   } catch (err) {
     return res
