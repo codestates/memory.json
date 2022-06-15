@@ -556,7 +556,7 @@ export default function Map() {
   }, [historyIdArr]);
 
   function favoriteHandler(historyId) {
-    console.log(historyId);
+    // console.log(historyId);
     if (!accessToken) {
       return alert("회원만 좋아요 할 수 있습니다.");
     }
@@ -572,10 +572,8 @@ export default function Map() {
         }
       )
       .then((data) => {
-        // 결국에는 새로운 페이버리트 히스토리를 만들수는 없다 게시글이 있지 않은 이상
-        // 우선 히스토리 아이디가 있으면
-        console.log("favor", data);
-        console.log(data.data.data);
+        // console.log("favor", data);
+        // console.log(data.data.data);
         if (isFavorite) {
           isFavorite.forEach((el) => {
             if (el.history_id === historyId) {
@@ -604,7 +602,7 @@ export default function Map() {
     axios
       .get(`${serverUrl}favorites/${historyId}`, { headers: headers })
       .then((data) => {
-        console.log("get", data);
+        // console.log("get", data);
         setIsFavorite((prev) => [...prev, data.data.data]);
       })
       .catch((err) => {
