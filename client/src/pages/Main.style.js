@@ -19,8 +19,27 @@ const MainContainer = styled.div`
   width: 100%;
   height: 100vh;
   background: white;
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  h1 {
+    font: normal 120px/1 "arial";
+    color: #111;
+    margin-bottom: 20px;
+  }
+  p {
+    font: 36px/1.4 "arial";
+    color: #111;
+    margin-bottom: 60px;
+  }
+  video {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+  }
 `;
 
 const MainSection = styled.section`
@@ -45,9 +64,8 @@ const ServiceContainer = styled.div`
   width: 100%;
   height: 100vh;
   background: white;
-  display: flex;
-  flex-direction: column;
-  overflow-y: hidden;
+  position: relative;
+  overflow: hidden;
 `;
 
 const ServiceSection = styled.section`
@@ -72,9 +90,8 @@ const ViewContainer = styled.div`
   width: 100%;
   height: 100vh;
   background: white;
-  display: flex;
-  flex-direction: column;
-  overflow-y: hidden;
+  position: relative;
+  overflow: hidden;
 `;
 
 const ViewSection = styled.section`

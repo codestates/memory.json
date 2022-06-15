@@ -579,11 +579,11 @@ export default function Map() {
         if (isFavorite) {
           isFavorite.forEach((el) => {
             if (el.history_id === historyId) {
-              let arr = isFavorite
+              let arr = isFavorite;
               let tempComment = arr.filter(
                 (element) => element.history_id !== historyId
               );
-              setIsFavorite(() => [ ...tempComment, data.data.data]);
+              setIsFavorite(() => [...tempComment, data.data.data]);
             }
           });
         }
@@ -850,4 +850,3 @@ const Commentarea = styled.div`
   }
   margin: 5px 1px 5px 1px;
 `;
-
