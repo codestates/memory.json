@@ -382,7 +382,7 @@ export default function Map() {
   // 커맨트 입력 값
   const [commentInput, setCommentInput] = useState("");
   // console.log("input",commentInput)
-  const [isFavorite, setIsFavorite] = useState({});
+  const [isFavorite, setIsFavorite] = useState([]);
   console.log(isFavorite);
 
   // 커맨트 수정 입력값
@@ -572,9 +572,21 @@ export default function Map() {
         }
       )
       .then((data) => {
+        // 결국에는 새로운 페이버리트 히스토리를 만들수는 없다 게시글이 있지 않은 이상
+        // 우선 히스토리 아이디가 있으면
         console.log("favor", data);
         console.log(data.data.data);
-        setIsFavorite(data.data.data);
+        if (isFavorite) {
+          isFavorite.forEach((el) => {
+            if (el.history_id === historyId) {
+              let arr = isFavorite;
+              let tempComment = arr.filter(
+                (element) => element.history_id !== historyId
+              );
+              setIsFavorite(() => [...tempComment, data.data.data]);
+            }
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -593,7 +605,7 @@ export default function Map() {
       .get(`${serverUrl}favorites/${historyId}`, { headers: headers })
       .then((data) => {
         console.log("get", data);
-        setIsFavorite(data.data.data);
+        setIsFavorite((prev) => [...prev, data.data.data]);
       })
       .catch((err) => {
         console.log(err);
@@ -601,10 +613,12 @@ export default function Map() {
   };
 
   useEffect(() => {
-    if (isFavorite.like === undefined) {
-      getFavorite();
-    }
-  }, []);
+    setIsFavorite([]);
+    historyIdArr.map((id) => {
+      // console.log("몇번실행됫니?");
+      getFavorite(id);
+    });
+  }, [historyIdArr]);
 
   return (
     <>
@@ -673,24 +687,37 @@ export default function Map() {
                           }}
                         >
                           <div>
-                            {isFavorite.like === "T" ? (
-                              <Button
-                                style={{ background: "red" }}
-                                onClick={() => favoriteHandler(el.id)}
-                              >
-                                좋아요
-                              </Button>
-                            ) : (
-                              <Button
-                                style={{ background: `white`, color: "black" }}
-                                onClick={() => favoriteHandler(el.id)}
-                              >
-                                ♥︎
-                              </Button>
-                            )}
-                            <span style={{ padding: "10px", color: "white" }}>
-                              {isFavorite.like_count}
-                            </span>
+                            {isFavorite.map((favor) => {
+                              if (
+                                favor.like === "T" &&
+                                favor.history_id === el.id
+                              ) {
+                                return (
+                                  <Button
+                                    style={{ background: "red" }}
+                                    onClick={() => favoriteHandler(el.id)}
+                                  >
+                                    좋아요 Count: {favor.like_count}
+                                  </Button>
+                                );
+                              }
+                              if (
+                                favor.like === "F" &&
+                                favor.history_id === el.id
+                              ) {
+                                return (
+                                  <Button
+                                    style={{
+                                      background: `white`,
+                                      color: "black",
+                                    }}
+                                    onClick={() => favoriteHandler(el.id)}
+                                  >
+                                    ♥︎ Count: {favor.like_count}
+                                  </Button>
+                                );
+                              }
+                            })}
                           </div>
                         </div>
                       </S.YearFavorite>
@@ -823,6 +850,3 @@ const Commentarea = styled.div`
   }
   margin: 5px 1px 5px 1px;
 `;
-
-// (1) 좋아요가 같이 표시 되는 문제
-// (2) 히스토리 아이디가 응답으로 와라
