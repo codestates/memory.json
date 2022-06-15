@@ -149,7 +149,6 @@ export default function Map() {
   };
   useEffect(() => {
     mapFirst();
-    console.log("1번째 렌더링");
   }, []);
 
   const mapSearch = () => {
@@ -219,7 +218,6 @@ export default function Map() {
   };
   useEffect(() => {
     mapscript();
-    console.log("2번째 렌더링");
   }, [placeList]);
 
   const mapscript = () => {
@@ -296,7 +294,6 @@ export default function Map() {
   };
   useEffect(() => {
     getImage();
-    console.log("3번째 렌더링");
   }, [historyList]);
 
   const [historyIdArr, setHistoryIdArr] = useState([]);
@@ -617,8 +614,7 @@ export default function Map() {
             <input
               style={{
                 width: "500px",
-                height: "px",
-                marginBottom: "5px",
+                height: "50px",
               }}
               placeholder="Search Place..."
               onChange={onChange}
@@ -627,16 +623,16 @@ export default function Map() {
             <button
               type="submit"
               onClick={mapSearch}
-              style={{ width: "50px", height: "50px" }}
+              style={{ width: "48px", height: "50px" }}
             >
               검색
             </button>
             <button
               type="submit"
               onClick={getPlaceList}
-              style={{ width: "100px", height: "50px" }}
+              style={{ width: "130px", height: "50px" }}
             >
-              주변 히스토리
+              검색동네 히스토리
             </button>
           </S.Inputbutton>
         </form>
@@ -644,8 +640,8 @@ export default function Map() {
           <div
             id="map"
             style={{
-              width: "52vw",
-              height: "60vh",
+              width: "1300px",
+              height: "600px",
               zIndex: "0",
             }}
             level={zoomLevel}
