@@ -182,7 +182,7 @@ function Navbar({
     );
     // console.log(res);
     if (res.status === 200) {
-      console.log(res);
+      // console.log(res);
       signupIndicator();
       alert(`${res.data.message}`);
       const accessToken = res.data.data;

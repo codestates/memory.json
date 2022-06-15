@@ -245,9 +245,9 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
       .then((res) => {
         // console.log(res)
         if (res.status === 200) {
-          console.log(res.data.data);
+          // console.log(res.data.data);
           const accessToken = res.data.data;
-          console.log(accessToken);
+          // console.log(accessToken);
           localStorage.setItem("accessToken", JSON.stringify(accessToken));
           dispatch(signinAction);
           modalCloser();

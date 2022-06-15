@@ -191,7 +191,7 @@ function Signup({
     age: 0,
     sex: "",
   });
-  console.log("signupInfo", signupInfo);
+  // console.log("signupInfo", signupInfo);
 
   //회원가입 데이터
   const handleInputValue = (key) => (e) => {
@@ -214,7 +214,7 @@ function Signup({
 
   //나이 데이터
   const handleInputAge = (key) => (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     let ageValue = parseInt(e.target.value);
     setSignupInfo({ ...signupInfo, [key]: ageValue });
   };
@@ -376,7 +376,7 @@ function Signup({
           }
         )
         .then((res) => {
-          console.log("res", res);
+          // console.log("res", res);
           signupIndicator();
           modalCloser();
           modalOpener();
