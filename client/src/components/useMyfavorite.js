@@ -30,6 +30,7 @@ function useMyhistory(page) {
           headers: { authorization: `Bearer ${accessToken}` },
         }
       );
+      console.log(res.data.data.rows)
       setFavoriteFeed((prev) => [...prev, ...res.data.data.rows]);
       setLoading(false);
     } catch (err) {

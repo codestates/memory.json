@@ -30,9 +30,9 @@ const Modalback = styled.div`
 const ModalView = styled.div`
   z-index: 999;
   width: 40vmin;
-  height: 50vmin;
+  height: 60vmin;
   min-height: 600px;
-  background: #BDBDBD;
+  background: #bdbdbd;
   box-shadow: 0 0 30px #333;
   border-radius: 3em;
   position: fixed;
@@ -40,6 +40,14 @@ const ModalView = styled.div`
   left: 0;
   right: 0;
   overflow: hidden;
+`;
+
+const ImageLog = styled.img`
+  width: 80%;
+  height: 40px;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  object-fit: cover;
 `;
 
 const Input = styled.input`
@@ -105,15 +113,28 @@ const InputPassword = styled.input`
 `;
 
 const SignInBtn = styled.div`
-  width: 65%;
-  height: 1vh;
-  padding: 10px 10px 20px 10px;
-  margin: 20px 40px 30px 60px;
-  color: #0E0E0E;
-  font-weight: 600;
-  font-size: 20px;
-  background-color: #eee;
+  font-size: 1.5rem;
+  font-weight: normal;
+  display: block;
+
+  width: 80%;
+  margin-bottom: 0.5rem;
+  margin-left: 10%;
+  margin-right: 10%;
+  height: 45px;
+
+  -webkit-transition: box-shadow 0.3s;
+  transition: box-shadow 0.3s;
+  transition: 0.25s linear;
+  text-align: center;
+
+  color: #0e0e0e;
   border-radius: 5em;
+  border: 0;
+  outline: 0;
+  background: #eee;
+  background-color: #eee;
+  box-shadow: 0 0 0 2px transparent;
   cursor: pointer;
 
   &:hover {
@@ -123,15 +144,28 @@ const SignInBtn = styled.div`
 `;
 
 const SignUpBtn = styled.div`
-  width: 65%;
-  height: 1vh;
-  padding: 10px 10px 20px 10px;
-  margin: 20px 40px 30px 60px;
-  font-weight: 600;
-  font-size: 20px;
-  color: #eee; 
-  background-color: #0E0E0E;
+  font-size: 1.5rem;
+  font-weight: normal;
+  display: block;
+
+  width: 80%;
+  margin-bottom: 0.5rem;
+  margin-left: 10%;
+  margin-right: 10%;
+  height: 45px;
+
+  -webkit-transition: box-shadow 0.3s;
+  transition: box-shadow 0.3s;
+  transition: 0.25s linear;
+  text-align: center;
+
+  color: #eee;
   border-radius: 5em;
+  border: 0;
+  outline: 0;
+  background: #eee;
+  background-color: #0e0e0e;
+  box-shadow: 0 0 0 2px transparent;
   cursor: pointer;
 
   &:hover {
@@ -143,7 +177,7 @@ const SignUpBtn = styled.div`
 const SocialSignInBtn = styled.div`
   width: 100%;
   height: 50px;
-  background: #BDBDBD;
+  background: #bdbdbd;
   display: flex;
   justify-content: space-evenly;
   flex-grow: 1;
@@ -296,6 +330,7 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
         <MarginDiv>
           <ModalView>
             <div>
+              <h1><ImageLog src="../img/memorylogo.png" alt="Image" /></h1>
               <h1>LOGIN</h1>
               <div>
                 <h3>ID</h3>

@@ -7,7 +7,7 @@ import styled from "styled-components";
 const ModalArea = styled.div`
   z-index: 999;
   position: relative;
-  height: 100%;
+  height: 90%;
   text-align: center;
   font-family: "Roboto";
 `;
@@ -15,7 +15,7 @@ const ModalArea = styled.div`
 const SignUpArea = styled.div`
   z-index: 999;
   width: 100vmin;
-  height: 90vmin;
+  height: 85vmin;
   min-height: 400px;
   background: #BDBDBD;
   box-shadow: 0 0 15px #333;
@@ -42,7 +42,7 @@ const Input = styled.input`
   margin-bottom: 0.5rem;
   margin-left: 10%;
   margin-right: 10%;
-  height: 45px;
+  height: 30px;
 
   -webkit-transition: box-shadow 0.3s;
   transition: box-shadow 0.3s;
@@ -75,7 +75,7 @@ const InputPassword = styled.input`
   margin-bottom: 0.5rem;
   margin-left: 10%;
   margin-right: 10%;
-  height: 45px;
+  height: 30px;
 
   -webkit-transition: box-shadow 0.3s;
   transition: box-shadow 0.3s;
