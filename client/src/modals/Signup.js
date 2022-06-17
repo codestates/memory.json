@@ -17,17 +17,24 @@ const SignUpArea = styled.div`
   width: 100vmin;
   height: 85vmin;
   min-height: 400px;
-  background: #BDBDBD;
+  background: #bdbdbd;
   box-shadow: 0 0 15px #333;
   position: fixed;
   margin: -0.9vh auto;
   padding-top: 1vh;
   border-radius: 0.5em;
-  font-size: 1.0em;
+  font-size: 1em;
   font-weight: 700;
   left: 0;
   right: 0;
   overflow-y: auto;
+`;
+
+const ImageLog = styled.img`
+  width: 40%;
+  height: 20%;
+  margin-top: 1%;
+  object-fit: cover;
 `;
 
 const Input = styled.input`
@@ -97,7 +104,7 @@ const InputPassword = styled.input`
 const Btndiv = styled.div`
   width: 100%;
   height: 50px;
-  background: #BDBDBD;
+  background: #bdbdbd;
   display: flex;
   justify-content: space-evenly;
   flex-grow: 1;
@@ -117,25 +124,27 @@ const SignUpBtn = styled.div`
   color: #eee;
   font-weight: 700;
   font-size: 20px;
-  padding-top: 10px ;
-  background-color: #0E0E0E;
+  margin-bottom: 5%;
+  padding-top: 10px;
+  background-color: #0e0e0e;
   border-radius: 5em;
   cursor: pointer;
 
-  background: #0E0E0E;
+  background: #0e0e0e;
   :hover {
-    border: 2px solid #0E0E0E;
+    border: 2px solid #0e0e0e;
   }
 `;
 
 const SignInBtn = styled.div`
-  z-index: 999; 
+  z-index: 999;
   height: 45px;
   width: 40%;
-  color: #0E0E0E;
+  color: #0e0e0e;
   font-weight: 700;
   font-size: 20px;
-  padding-top: 10px ;
+  margin-bottom: 5%;
+  padding-top: 10px;
   background-color: #eee;
   border-radius: 5em;
   cursor: pointer;
@@ -219,10 +228,10 @@ function Signup({
     setSignupInfo({ ...signupInfo, [key]: ageValue });
   };
 
-  const [validateUserAccount, setValidateUserAccount] = useState(false)
-  const [validateUserName, setValidateUserName] = useState(false)
-  const [validatePassword, setValidatePassword] = useState(false)
-  const [validatePasswordCheck, setValidatePasswordCheck] = useState(false)
+  const [validateUserAccount, setValidateUserAccount] = useState(false);
+  const [validateUserName, setValidateUserName] = useState(false);
+  const [validatePassword, setValidatePassword] = useState(false);
+  const [validatePasswordCheck, setValidatePasswordCheck] = useState(false);
 
   // 유효성 검사
   const validateCheck = (inputName) => {
@@ -245,26 +254,26 @@ function Signup({
 
     if (inputName === "user_account") {
       if (!idCheck.test(user_account)) {
-        setValidateUserAccount(false)
+        setValidateUserAccount(false);
         return "영문자로 시작하는 영문자 또는 숫자 6~20자로 해야 합니다.";
-      }else{
-        setValidateUserAccount(true)
+      } else {
+        setValidateUserAccount(true);
       }
     }
     if (inputName === "user_name") {
-      if(user_name.includes(" ") || user_name === ""){
-        setValidateUserName(false)
+      if (user_name.includes(" ") || user_name === "") {
+        setValidateUserName(false);
         return "닉네임에 공백이 있거나 비어 있으면 안됩니다.";
-      }else{
-        setValidateUserName(true)
-      };
+      } else {
+        setValidateUserName(true);
+      }
     }
     if (inputName === "password") {
-      if(!passwordCheck.test(password)){
-        setValidatePassword(false)
+      if (!passwordCheck.test(password)) {
+        setValidatePassword(false);
         return "비밀번호는 숫자와 특수문자가 포함된 6~12자리 여야 합니다.";
-      }else{
-        setValidatePassword(true)
+      } else {
+        setValidatePassword(true);
       }
     }
     if (inputName === "checkedPassword") {
@@ -272,10 +281,10 @@ function Signup({
         return "비밀번호는 숫자와 특수문자가 포함된 6~12자리 여야 합니다.";
       }
       if (password !== checkedPassword && checkedPassword !== "") {
-        setValidatePasswordCheck(false)
+        setValidatePasswordCheck(false);
         return "비밀번호가 같지 않습니다.";
-      }else{
-        setValidatePasswordCheck(true)
+      } else {
+        setValidatePasswordCheck(true);
       }
     }
     if (inputName === "mobile") {
@@ -332,28 +341,29 @@ function Signup({
       setValidateErr("");
     }
   };
-  //--------------------------------------------------------------------------------- 
+  //---------------------------------------------------------------------------------
 
   //회원가입 버튼을 눌렀을때 서버 교신
   const signupHandler = () => {
-    let { user_name, user_account, password, checkedPassword, age } = signupInfo;
-    if(validateUserAccount === false){
-      alert("영문자로 시작하는 영문자 또는 숫자 6~20자로 해야 합니다.")
+    let { user_name, user_account, password, checkedPassword, age } =
+      signupInfo;
+    if (validateUserAccount === false) {
+      alert("영문자로 시작하는 영문자 또는 숫자 6~20자로 해야 합니다.");
       return;
     }
-    if(validateUserName === false){
-      alert("닉네임에 공백이 있거나 비어 있으면 안됩니다.")
+    if (validateUserName === false) {
+      alert("닉네임에 공백이 있거나 비어 있으면 안됩니다.");
       return;
     }
-    if(validatePassword === false){
-      alert("비밀번호는 숫자와 특수문자가 포함된 6~12자리 여야 합니다.")
+    if (validatePassword === false) {
+      alert("비밀번호는 숫자와 특수문자가 포함된 6~12자리 여야 합니다.");
       return;
     }
-    if(validatePasswordCheck === false){
-      alert("비밀번호가 같지 않습니다.")
+    if (validatePasswordCheck === false) {
+      alert("비밀번호가 같지 않습니다.");
       return;
     }
-    if(typeof age !== 'number'){
+    if (typeof age !== "number") {
       alert("나이에 숫자를 입력해주세요");
       return;
     }
@@ -388,7 +398,9 @@ function Signup({
           setValidateErr("회원가입에 실패하였습니다!");
         });
     } else {
-      alert("아이디, 닉네임, 비밀번호는 반드시 기입해 주시고, 양식에 맞게 기입해 주세요");
+      alert(
+        "아이디, 닉네임, 비밀번호는 반드시 기입해 주시고, 양식에 맞게 기입해 주세요"
+      );
     }
   };
 
@@ -414,9 +426,14 @@ function Signup({
   return (
     <ModalArea>
       <SignUpArea>
+        <h1>
+          <ImageLog src="../img/memorylogo.png" alt="Image" />
+        </h1>
         <h1>회원가입</h1>
         <div>
-          <span>아이디(필수)</span>
+          <div style={{ textAlign: "left", marginLeft: "10%" }}>
+            <span>아이디(필수)</span>
+          </div>
           <Input
             type="text"
             onBlur={() => {
@@ -427,7 +444,9 @@ function Signup({
           />
         </div>
         <div>
-          <span>닉네임(필수)</span>
+          <div style={{ textAlign: "left", marginLeft: "10%" }}>
+            <span>닉네임(필수)</span>
+          </div>
           <Input
             type="text"
             onBlur={() => {
@@ -438,7 +457,9 @@ function Signup({
           />
         </div>
         <div>
-          <span>비밀번호(필수)</span>
+          <div style={{ textAlign: "left", marginLeft: "10%" }}>
+            <span>비밀번호(필수)</span>
+          </div>
           <InputPassword
             type="password"
             onBlur={() => {
@@ -449,7 +470,9 @@ function Signup({
           />
         </div>
         <div>
-          <span>비밀번호 확인(필수)</span>
+          <div style={{ textAlign: "left", marginLeft: "10%" }}>
+            <span>비밀번호 확인(필수)</span>
+          </div>
           <InputPassword
             type="password"
             onBlur={() => {
@@ -460,7 +483,9 @@ function Signup({
           />
         </div>
         <div>
-          <span>휴대폰 번호</span>
+          <div style={{ textAlign: "left", marginLeft: "10%" }}>
+            <span>휴대폰 번호</span>
+          </div>
           <Input
             type="text"
             onBlur={() => {
@@ -471,7 +496,9 @@ function Signup({
           />
         </div>
         <div>
-          <span>이메일</span>
+          <div style={{ textAlign: "left", marginLeft: "10%" }}>
+            <span>이메일</span>
+          </div>
           <Input
             type="email"
             onBlur={() => {
@@ -482,7 +509,9 @@ function Signup({
           />
         </div>
         <div>
-          <span>주소</span>
+          <div style={{ textAlign: "left", marginLeft: "10%" }}>
+            <span>주소</span>
+          </div>
           <Input
             type="text"
             value={`${addressDetail} ${zoneCode}`}
@@ -515,7 +544,9 @@ function Signup({
           </div>
         </div>
         <div>
-          <span>상세 주소</span>
+          <div style={{ textAlign: "left", marginLeft: "10%" }}>
+            <span>상세 주소</span>
+          </div>
           <Input
             type="text"
             value={text}
@@ -524,7 +555,9 @@ function Signup({
           />
         </div>
         <div>
-          <span>나이</span>
+          <div style={{ textAlign: "left", marginLeft: "10%" }}>
+            <span>나이</span>
+          </div>
           <Input
             type="text"
             pattern="^[0-9]+$"
@@ -533,7 +566,9 @@ function Signup({
           />
         </div>
         <div>
-          <span>성별</span>
+          <div style={{ textAlign: "left", marginLeft: "10%" }}>
+            <span>성별</span>
+          </div>
           <Input
             type="text"
             onBlur={() => {
@@ -546,13 +581,9 @@ function Signup({
 
         <div style={{ color: "red" }}>{validateErr}</div>
         <Btndiv>
-        <SignUpBtn onClick={() => signupHandler()}>
-          회원 가입 하기
-        </SignUpBtn>
+          <SignUpBtn onClick={() => signupHandler()}>회원 가입 하기</SignUpBtn>
 
-        <SignInBtn onClick={changeformToSignin}>
-          이미 회원이신가요?
-        </SignInBtn>
+          <SignInBtn onClick={changeformToSignin}>이미 회원이신가요?</SignInBtn>
         </Btndiv>
       </SignUpArea>
       <Modalback onClick={modalCloser}></Modalback>
