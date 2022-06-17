@@ -9,7 +9,7 @@ import { signinAction, getUserAction } from "../store/actions";
 const ModalArea = styled.div`
   z-index: 999;
   position: relative;
-  height: 100%;
+  height: 90%;
   text-align: center;
   font-family: "Roboto";
 `;
@@ -29,9 +29,9 @@ const Modalback = styled.div`
 
 const ModalView = styled.div`
   z-index: 999;
-  width: 40vmin;
-  height: 60vmin;
-  min-height: 600px;
+  width: 30%;
+  height: 70%;
+  min-height: 400px;
   background: #bdbdbd;
   box-shadow: 0 0 30px #333;
   border-radius: 3em;
@@ -39,12 +39,13 @@ const ModalView = styled.div`
   margin: 15vh auto;
   left: 0;
   right: 0;
+  top:0;
   overflow: hidden;
 `;
 
 const ImageLog = styled.img`
   width: 80%;
-  height: 40px;
+  height: 50%;
   margin-top: 1%;
   margin-bottom: 1%;
   object-fit: cover;
@@ -118,6 +119,7 @@ const SignInBtn = styled.div`
   display: block;
 
   width: 80%;
+  margin-top:0.5rem;
   margin-bottom: 0.5rem;
   margin-left: 10%;
   margin-right: 10%;
@@ -149,6 +151,7 @@ const SignUpBtn = styled.div`
   display: block;
 
   width: 80%;
+  margin-top:0.5rem;
   margin-bottom: 0.5rem;
   margin-left: 10%;
   margin-right: 10%;
@@ -187,6 +190,8 @@ const SocialSignInBtn = styled.div`
   box-sizing: border-box;
   position: relative;
   background-size: contain;
+  border-top: 2px solid #000000;
+  border-bottom: 2px solid #000000;
 `;
 
 const KakaoIcon = styled.img`
@@ -330,10 +335,14 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
         <MarginDiv>
           <ModalView>
             <div>
-              <h1><ImageLog src="../img/memorylogo.png" alt="Image" /></h1>
-              <h1>LOGIN</h1>
+              <h1>
+                <ImageLog src="../img/memorylogo.png" alt="Image" />
+              </h1>
+              <h1 style={{borderBottom: "2px solid #000000" }}>
+                LOGIN
+              </h1>
               <div>
-                <h3>ID</h3>
+                <h3 >ID</h3>
                 <Input
                   type="text"
                   autoComplete="on"
@@ -342,7 +351,7 @@ function Signin({ changeformToSignup, modalCloser, modalOpener }) {
                   placeholder="아이디를 입력해주세요"
                 />
               </div>
-              <div>
+              <div style={{borderBottom: "2px solid #000000" }}>
                 <h3>PASSWORD</h3>
                 <InputPassword
                   type="password"

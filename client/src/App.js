@@ -191,13 +191,12 @@ function Router() {
       <Modal
         style={{
           content: {
-            background: "#BBC5D5",
-            left: "35%",
-            right: "35%",
-            bottom: "5%",
-            top: "5%",
-            border: "5px solid #2c394b",
-            borderRadius: "1em",
+            background: "#FFD0AF",
+            left: "33%",
+            right: "33%",
+            bottom: "8%",
+            border: "5px solid #FFBB8C",
+            borderRadius: "2em",
           },
         }}
         isOpen={isSigninModal}
@@ -213,11 +212,12 @@ function Router() {
       <Modal
         style={{
           content: {
-            background: "#BBC5D5",
-            left: "20%",
-            right: "20%",
-            border: "5px solid #2c394b",
-            borderRadius: "1em",
+            background: "#FFD0AF",
+            left: "10%",
+            right: "10%",
+            bottom: "8%",
+            border: "5px solid #FFBB8C",
+            borderRadius: "2em",
           },
         }}
         isOpen={isSignupModal}
@@ -237,6 +237,8 @@ function Router() {
             background: "#BDBDBD",
             left: "20%",
             right: "20%",
+            bottom:"20%",
+            top:"5%",
             border: "5px solid #697F6E",
             borderRadius: "1em",
           },
@@ -256,12 +258,11 @@ function Router() {
       <Modal
         style={{
           content: {
-            background: "#BDBDBD",
-            left: "33%",
-            right: "33%",
-            bottom: "20%",
-            border: "5px solid #697F6E",
-            borderRadius: "1em",
+            background: "#FFD0AF",
+            left: "30%",
+            right: "30%",
+            border: "5px solid #FFBB8C",
+            borderRadius: "2em",
           },
         }}
         isOpen={isEditmyinfoModal}
