@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
     }
     const history_id = req.params.historyId;
     console.log(userInfo.id);
-    // console.log(history_id);
+    console.log(history_id);
 
     const isFavorite = await favorite.findOne({
       where: {
