@@ -1,8 +1,8 @@
 const { user } = require("../../models");
-import * as  bcrypt from "bcrypt";
+const  bcrypt = require( "bcrypt");
 const saltRounds = 10;
 
-module.exports = async (req: any, res: any) => {
+module.exports = async (req, res) => {
   try {
     // let {
     //   user_name,
@@ -15,7 +15,7 @@ module.exports = async (req: any, res: any) => {
     //   sex,
     // } = req.body;
 
-    interface Userbody {
+    /* interface Userbody {
       user_name: string;
       user_account: string;
       password: string;
@@ -24,7 +24,7 @@ module.exports = async (req: any, res: any) => {
       address?: string;
       age?: number;
       sex?: string;
-    }
+    } */
 
     let {
       user_name,
@@ -35,7 +35,7 @@ module.exports = async (req: any, res: any) => {
       address,
       age,
       sex,
-    }: Userbody = req.body;
+    } = req.body;
 
     if (user_name === "" || user_account === "" || password === "") {
       return res.status(400).send({
@@ -51,13 +51,13 @@ module.exports = async (req: any, res: any) => {
         .send({ data: null, message: "이미 존재하는 회원가입정보입니다!" });
     }
 
-    bcrypt.genSalt(saltRounds, async (err: any, salt: any) => {
+    bcrypt.genSalt(saltRounds, async (err, salt) => {
       if (err) {
         return res
           .status(500)
           .send({ data: null, message: "내부서버 오류입니다!" });
       }
-      await bcrypt.hash(password, salt, (err: any, hash: any) => {
+      await bcrypt.hash(password, salt, (err, hash) => {
         if (err) {
           return res
             .status(500)
@@ -77,14 +77,14 @@ module.exports = async (req: any, res: any) => {
             age,
             sex,
           })
-          .then((data: any) => {
+          .then((data) => {
             delete data.dataValues.password;
             return res.status(201).send({
               data: data.dataValues,
               message: `회원가입이 성공적으로 완료되었습니다!`,
             });
           })
-          .catch((err: any) => {
+          .catch((err) => {
             return res
               .status(400)
               .send({ data: null, message: "회원가입에 실패하였습니다." });
