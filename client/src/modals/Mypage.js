@@ -29,12 +29,13 @@ const ModalView = styled.div`
   z-index: 999;
   width: 100vmin;
   height: 50vmin;
-  min-height: 700px;
+  min-height: 300px;
   background: #696773;
   box-shadow: 0 0 30px #333;
   border-radius: 3em;
   position: fixed;
   margin: 15vh auto;
+  top: 0;
   left: 0;
   right: 0;
   overflow: hidden;
@@ -212,7 +213,7 @@ function Mypage({
           authorization: `Bearer ${accessToken}`,
           "Content-Type": "multipart/form-data",
         },
-      })
+      });
       // console.log(res);
     }
   };
@@ -231,7 +232,7 @@ function Mypage({
         if (res.status === 200) {
           const userInformation = res.data.data;
           console.log(userInformation);
-          console.log(userInformation.profile)
+          console.log(userInformation.profile);
           dispatch(
             userinfoAction(
               userInformation.address,
@@ -246,7 +247,7 @@ function Mypage({
               userInformation.user_name
             )
           );
-          if(userInformation.profile !== null){
+          if (userInformation.profile !== null) {
             setImage(userInformation.profile);
           }
         }
